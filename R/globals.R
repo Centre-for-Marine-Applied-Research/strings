@@ -13,7 +13,11 @@ utils::globalVariables(c(
   # compile_aquaMeasure_data()
   "Timestamp(UTC)",
   "Record Type",
-  "PLACEHOLDER"
+  "PLACEHOLDER",
+
+  # convert_to_tidydata
+  "DEPTH",
+  "VALUE"
 ))
 
 # to add packages to DESCRIPTION:

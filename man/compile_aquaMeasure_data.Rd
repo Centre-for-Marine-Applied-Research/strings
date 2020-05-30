@@ -40,12 +40,14 @@ This functions re-formats the data from an aquaMeasure deployment
  so it can be combined with the HOBO temperature data.
 }
 \details{
+Replaces negative DO values with \code{NA}.
 I haven't done anything with the DATES. Still need to un-account for
  daylight savings. To be discussed.
 }
 \seealso{
 Other compile: 
-\code{\link{compile_HOBO_data}()}
+\code{\link{compile_HOBO_data}()},
+\code{\link{convert_to_tidydata}()}
 }
 \author{
 Danielle Dempsey

@@ -2,7 +2,8 @@
 #'  aquaMeasure deployment
 #'@description This functions re-formats the data from an aquaMeasure deployment
 #'  so it can be combined with the HOBO temperature data.
-#'@details I haven't done anything with the DATES. Still need to un-account for
+#'@details Replaces negative DO values with \code{NA}.
+#'I haven't done anything with the DATES. Still need to un-account for
 #'  daylight savings. To be discussed.
 #'@param path.aM File path to the aquaMeasure data. Should end with
 #'  \code{/aquaMeasure}.
@@ -21,8 +22,7 @@
 #'  using the function \code{convert_to_tidydata()}.
 #'@family compile
 #'@author Danielle Dempsey
-#'@importFrom janitor convert_to_datetime
-#'@importFrom lubridate as_date
+#'@importFrom lubridate as_date parse_date_time
 #'@importFrom readxl read_excel
 #'@importFrom readr write_csv read_csv
 #'@importFrom tidyr separate
@@ -63,8 +63,12 @@ compile_aquaMeasure_data <- function(path.aM, area.name, vars.aM = c("Temperatur
 
   if(vars.aM[i] == "Dissolved Oxygen") aM.i <- aM.i %>% filter(PLACEHOLDER > 0)
 
+  #mutate(DATE = convert_to_datetime(DATE)) %>%       # convert DATE to datetime
+   # mutate(DATE = as.character(DATE)) %>%              # convert DATE to a character so can add in the column headings
+
   aM.i <- aM.i %>%
-    transmute(INDEX, DATE = as.character(`Timestamp(UTC)`), PLACEHOLDER = as.character(PLACEHOLDER)) %>%
+    mutate(DATE = parse_date_time(`Timestamp(UTC)`, orders = "Ymd HM")) %>%
+    transmute(INDEX, DATE = as.character(DATE), PLACEHOLDER = as.character(PLACEHOLDER)) %>%
     # add meta data rows (deployment date, serial number, variable-depth can be merged in Excel file)
     # Date and Time stay unmerged
     add_row(INDEX = as.character(-1),

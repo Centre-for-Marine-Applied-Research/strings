@@ -34,7 +34,8 @@ I haven't done anything with the DATES. Still need to un-account for
 }
 \seealso{
 Other compile: 
-\code{\link{compile_aquaMeasure_data}()}
+\code{\link{compile_aquaMeasure_data}()},
+\code{\link{convert_to_tidydata}()}
 }
 \author{
 Danielle Dempsey
