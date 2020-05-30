@@ -1,5 +1,5 @@
 #'@title Compiles temperature data from HOBO deployment
-#'@description This functions compiles the data from a HOBO deployment at
+#'@description This function compiles the data from a HOBO deployment at
 #'  different depths into a single spreadsheet.
 #'@details I haven't done anything with the DATES. Still need to un-account for
 #'  daylight savings. To be discussed.
@@ -15,7 +15,7 @@
 #'  the metadata, all values were converted to class \code{character}. To manipulate the data, the
 #'  values must be converted to the appropriate class (e.g., \code{POSIXct} for \code{DATE},
 #'  \code{numeric} for temperature values). This can be done using the function \code{convert_to_tidydata()}.
-#'@family compilation
+#'@family compile
 #'@author Danielle Dempsey
 #'@importFrom janitor convert_to_datetime
 #'@importFrom lubridate as_date
@@ -23,7 +23,6 @@
 #'@importFrom readr write_csv
 #'@importFrom tidyr separate
 #'@import dplyr
-
 #'@export
 
 

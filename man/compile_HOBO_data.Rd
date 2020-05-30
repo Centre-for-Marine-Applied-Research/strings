@@ -25,14 +25,18 @@ Returns a dataframe and exports a spreadsheet with the HOBO
  \code{numeric} for temperature values). This can be done using the function \code{convert_to_tidydata()}.
 }
 \description{
-This functions compiles the data from a HOBO deployment at
+This function compiles the data from a HOBO deployment at
  different depths into a single spreadsheet.
 }
 \details{
 I haven't done anything with the DATES. Still need to un-account for
  daylight savings. To be discussed.
 }
+\seealso{
+Other compile: 
+\code{\link{compile_aquaMeasure_data}()}
+}
 \author{
 Danielle Dempsey
 }
-\concept{compilation}
+\concept{compile}
