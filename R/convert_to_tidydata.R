@@ -13,7 +13,7 @@
 #'  number of NA values removed is printed to the console.
 #'@return Returns a tidy dataframe with six columns: \code{DATE} (POSIXct),
 #'  \code{VALUE}, (numeric), \code{DATE_RANGE} (character), \code{SENSOR},
-#'  \code{VARIABLE} (character), \code{DEPTH} (factor).
+#'  \code{VARIABLE} (character), \code{DEPTH} (ordered factor).
 #'@family compile
 #'@author Danielle Dempsey
 #'@importFrom lubridate parse_date_time
@@ -23,9 +23,6 @@
 #'@importFrom tidyr separate
 #'@import dplyr
 #'@export
-
-
-
 
 convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = TRUE){
   
@@ -62,6 +59,7 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = TR
         select(DATE = 1, VALUE = 2) %>%               # name column 1 DATE and column 2 VALUE
         mutate(DATE_RANGE = daterange,      
           DATE = parse_date_time(DATE, orders = "Ymd HMS"),
+          SENSOR = sensor,                       # Add SENSOR column 
           VARIABLE = variable,                   # Add VARIABLE column
           DEPTH = factor(depth),                 # Add DEPTH column (should be a factor or else the color scheme will be a gradient)
           VALUE = as.numeric(VALUE))

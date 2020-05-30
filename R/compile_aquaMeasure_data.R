@@ -5,6 +5,8 @@
 #'@details Replaces negative DO values with \code{NA}.
 #'I haven't done anything with the DATES. Still need to un-account for
 #'  daylight savings. To be discussed.
+#'
+#'  Parsing error is from the final line of the aquaMeasure data file.
 #'@param path.aM File path to the aquaMeasure data. Should end with
 #'  \code{/aquaMeasure}.
 #'@param area.name Area where aquaMeasure was deployed.
