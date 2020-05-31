@@ -17,7 +17,10 @@ utils::globalVariables(c(
 
   # convert_to_tidydata
   "DEPTH",
-  "VALUE"
+  "VALUE",
+
+  # plot_temp_DO_sal
+  "VARIABLE"
 ))
 
 # to add packages to DESCRIPTION:

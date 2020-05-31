@@ -16,4 +16,6 @@ Imports:
     readxl,
     readr,
     tidyr,
-    dplyr
+    dplyr,
+    ggplot2,
+    viridis

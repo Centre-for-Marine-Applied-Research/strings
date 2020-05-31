@@ -2,7 +2,8 @@
 #'  aquaMeasure deployment
 #'@description This functions re-formats the data from an aquaMeasure deployment
 #'  so it can be combined with the HOBO temperature data.
-#'@details Replaces negative DO values with \code{NA}.
+#'@details Negative DO values are replaced with \code{NA}.
+#'
 #'I haven't done anything with the DATES. Still need to un-account for
 #'  daylight savings. To be discussed.
 #'

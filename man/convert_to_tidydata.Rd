@@ -4,7 +4,7 @@
 \alias{convert_to_tidydata}
 \title{Converts compiled string data to a tidy format}
 \usage{
-convert_to_tidydata(dat.wide, remove.NA = TRUE, show.NA.message = TRUE)
+convert_to_tidydata(dat.wide, remove.NA = TRUE, show.NA.message = FALSE)
 }
 \arguments{
 \item{dat.wide}{Data in the format exported by \code{compile_HOBO_data} and
@@ -15,12 +15,13 @@ convert_to_tidydata(dat.wide, remove.NA = TRUE, show.NA.message = TRUE)
 \code{remove.NA = TRUE}.}
 
 \item{show.NA.message}{Logical value. If \code{show.NA.message = TRUE}, the
-number of NA values removed is printed to the console.}
+number of NA values removed is printed to the console. Default is
+\code{show.NA.message = FALSE}.}
 }
 \value{
 Returns a tidy dataframe with six columns: \code{DATE} (POSIXct),
  \code{VALUE}, (numeric), \code{DATE_RANGE} (character), \code{SENSOR},
- \code{VARIABLE} (character), \code{DEPTH} (factor).
+ \code{VARIABLE} (character), \code{DEPTH} (ordered factor).
 }
 \description{
 Converts compiled string data to a tidy format
