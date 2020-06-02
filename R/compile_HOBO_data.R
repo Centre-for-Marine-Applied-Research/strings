@@ -21,7 +21,8 @@
 #'  daylight savings ends. \code{dates_to_fix()} identifies these \code{n}
 #'  obervations (e.g. 1:00, 1:15, 1:30, 1:45, 1:00, 1:15, 1:30, 1:45), and
 #'  shifts the first \code{n/2} back by one hour (e.g. 00:00, 00:15, 00:30,
-#'  00:45, 1:00, 1:15, 1:30, 1:45).
+#'  00:45, 1:00, 1:15, 1:30, 1:45). Function can handing this from 2017 - 2021;
+#'  additional lines required for other years.
 #'
 #'  If for some reason, there is an ODD number of duplicates, the function might
 #'  break.
