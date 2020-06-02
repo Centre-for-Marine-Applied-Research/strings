@@ -29,6 +29,8 @@ plot_temp_DO_sal <- function(dat.tidy,
                              date.breaks.minor = "1 month"
 ){
 
+  theme_set(theme_light())
+
   # Error message in case trying to plot a variable that is not in the dataframe OR
   # a variable is spelled wrong
   if(any(!(vars.to.plot %in%  unique(dat.tidy$VARIABLE)))){
@@ -44,7 +46,7 @@ plot_temp_DO_sal <- function(dat.tidy,
   # format for the x-axis
   x_axis_date <- scale_x_datetime(name = "Date",
                                   date_breaks = date.breaks.major,             # major breaks
-                                  date_minor_breaks = date.breaks.major,       # minor breaks
+                                  date_minor_breaks = date.breaks.minor,       # minor breaks
                                   date_labels = "%b-%y",                       # format for showing date
                                   limits = c(x_date_min, x_date_max))          # date range
 

@@ -4,7 +4,13 @@
 \alias{compile_HOBO_data}
 \title{Compiles temperature data from HOBO deployment}
 \usage{
-compile_HOBO_data(path.HOBO, area.name, serial.table, deployment.range)
+compile_HOBO_data(
+  path.HOBO,
+  area.name,
+  serial.table,
+  deployment.range,
+  real_UTC = TRUE
+)
 }
 \arguments{
 \item{path.HOBO}{File path to the HOBO data. Should end with \code{/Hobo}.}
@@ -16,6 +22,8 @@ corresponding depth at which it was deployed (second column).}
 
 \item{deployment.range}{The start and end dates of deployment from the
 deployment log. Must be in format "2018-Nov-15 to 2020-Jan-24".}
+
+\item{real_UTC}{convert to acutal UTC}
 }
 \value{
 Returns a dataframe and exports a spreadsheet with the HOBO
@@ -29,8 +37,10 @@ This function compiles the data from a HOBO deployment at
  different depths into a single spreadsheet.
 }
 \details{
-I haven't done anything with the DATES. Still need to un-account for
- daylight savings. To be discussed.
+HOBO data should
+
+ Add notes here about how account for DST. Built in to deal with 2017 - 2021
+ names of functions used
 }
 \seealso{
 Other compile: 

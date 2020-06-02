@@ -9,6 +9,7 @@ utils::globalVariables(c(
   "VAR_DEPTH",
   "DATE",
   "INDEX",
+  "TEMPERATURE",
 
   # compile_aquaMeasure_data()
   "Timestamp(UTC)",
@@ -23,7 +24,18 @@ utils::globalVariables(c(
   "VALUE",
 
   # plot_temp_DO_sal
-  "VARIABLE"
+  "VARIABLE",
+
+  # convert_HOBO_datetime_to_real_UTC
+  "ADT_force",
+  "DAYLIGHT_SAVINGS",
+  "UTC",
+
+  # dates_to_fix
+  "inx_fix",
+  "n_fix"
+
+
 ))
 
 # to add packages to DESCRIPTION:
