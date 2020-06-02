@@ -13,34 +13,63 @@ compile_HOBO_data(
 )
 }
 \arguments{
-\item{path.HOBO}{File path to the HOBO data. Should end with \code{/Hobo}.}
+\item{path.HOBO}{File path to the HOBO data. Should end with \code{/Hobo}. All
+of the excel files in this folder should be data extracted from the HOBO
+software. The name of each excel file must be the serial number of the
+sensor.}
 
-\item{area.name}{Area where HOBO was deployed.}
+\item{area.name}{Area where the HOBO was deployed.}
 
-\item{serial.table}{A table with the serial number of each HOBO (first column) and
-corresponding depth at which it was deployed (second column).}
+\item{serial.table}{A table with the serial number of each HOBO (first column)
+and corresponding depth at which it was deployed (second column).}
 
 \item{deployment.range}{The start and end dates of deployment from the
 deployment log. Must be in format "2018-Nov-15 to 2020-Jan-24".}
 
-\item{real_UTC}{convert to acutal UTC}
+\item{real_UTC}{Logical value indicating whether to convert timestamp to UTC
+from GMT+00. Note that the HOBO timestamp accounts for daylight savings
+time, but true UTC does not. \code{real_UTC = FALSE} will return the
+timestamps as exported from the HOBO software. \code{real_UTC = TRUE}
+converts the timestamp to true UTC time. Default is \code{real_UTC = TRuE}.}
 }
 \value{
-Returns a dataframe and exports a spreadsheet with the HOBO
- temperature data, including the appropriate metadata. Note that to include
- the metadata, all values were converted to class \code{character}. To manipulate the data, the
- values must be converted to the appropriate class (e.g., \code{POSIXct} for \code{DATE},
- \code{numeric} for temperature values). This can be done using the function \code{convert_to_tidydata()}.
+Exports a spreadsheet with the HOBO temperature data, including the
+ appropriate metadata. Note that to include the metadata, all values were
+ converted to class \code{character}. To manipulate the data, the values must
+ be converted to the appropriate class (e.g., \code{POSIXct} for \code{DATE},
+ \code{numeric} for temperature values). This can be done using the function
+ \code{convert_to_tidydata()}.
 }
 \description{
 This function compiles the data from a HOBO deployment at
  different depths into a single spreadsheet.
 }
 \details{
-HOBO data should
+HOBO data should be exported in GMT+00. Note that the HOBO timestamp
+ accounts for daylight savings time, but true UTC does not. This function
+ gives the option to convert to true UTC time with the \code{real_UTC}
+ argument.
 
- Add notes here about how account for DST. Built in to deal with 2017 - 2021
- names of functions used
+ The functions used to convert to true UTC are
+ \code{convert_HOBO_datetime_to_real_UTC()} and \code{dates_to_fix()}, which
+ are NOT exported to the \code{strings} package (i.e., they are only used
+ internally).
+
+ \code{convert_HOBO_datetime_to_real_UTC()} identifies which times are during
+ daylight savings by creating two additional columns: \code{ADT_force =
+ force_tz(DATE, tzone = "America/Halifax")}, and \code{DAYLIGHT_SAVINGS =
+ dst(ADT_force)}. Where \code{DAYLIGHT_SAVINGS == TRUE}, the \code{DATE} is
+ shifted back by 1 hour.
+
+ This leaves apparent duplications for the hour of 1 am on the day that
+ daylight savings ends. \code{dates_to_fix()} identifies these \code{n}
+ obervations (e.g. 1:00, 1:15, 1:30, 1:45, 1:00, 1:15, 1:30, 1:45), and
+ shifts the first \code{n/2} back by one hour (e.g. 00:00, 00:15, 00:30,
+ 00:45, 1:00, 1:15, 1:30, 1:45). Function can handing this from 2017 - 2021;
+ additional lines required for other years.
+
+ If for some reason, there is an ODD number of duplicates, the function might
+ break.
 }
 \seealso{
 Other compile: 
