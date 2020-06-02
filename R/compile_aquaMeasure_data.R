@@ -25,9 +25,11 @@
 #'  using the function \code{convert_to_tidydata()}.
 #'@family compile
 #'@author Danielle Dempsey
+#'@importFrom janitor convert_to_datetime
 #'@importFrom lubridate as_date parse_date_time
 #'@importFrom readxl read_excel
 #'@importFrom readr write_csv read_csv
+#'@importFrom stringr str_detect
 #'@importFrom tidyr separate
 #'@import dplyr
 #'@export
@@ -41,7 +43,34 @@ compile_aquaMeasure_data <- function(path.aM, area.name, vars.aM = c("Temperatur
 
   # list files in the data folder
   dat.files <- list.files(path.aM, all.files = FALSE)
-  aM_dat_raw <- read_csv(paste(path.aM, dat.files[1], sep = "/"), col_names = TRUE)
+
+  # remove files that start with "~"
+  if(any(substring(dat.files, 1, 1)== "~")) {
+
+    dat.files <- dat.files[-which(substring(dat.files, 1, 1)== "~")]
+    print(paste("Note:", sum((substring(dat.files, 1, 1)== "~")),
+                "files on the path begin with ~ and were not imported.", sep = " "))
+  }
+
+
+  if(length(dat.files) > 1){
+    print(paste("Warning: there is more than one file in ", path.aM, ". Only the first file will be imported.", sep = ""))
+  }
+
+  dat.files <- dat.files[1]
+  file.extension <- separate(data.frame(dat.files), col = dat.files,
+                             into = c(NA, "EXT"), sep = "\\.")
+  file.extension <- file.extension$EXT
+
+
+  # find a way to filter out rows without dates: 1242s after startup (time not set)
+  if(file.extension == "csv") {
+    aM_dat_raw <- read_csv(paste(path.aM, dat.files, sep = "/"), col_names = TRUE)
+  }
+
+  if(file.extension == "xlsx") {
+    aM_dat_raw <- read_excel(paste(path.aM, dat.files, sep = "/"), col_names = TRUE)
+  }
 
   # Error message in case trying to extract a variable that is not in the dataset OR
   # a variable is spelled wrong
@@ -56,21 +85,36 @@ compile_aquaMeasure_data <- function(path.aM, area.name, vars.aM = c("Temperatur
   # extract date column header (includes UTC offset)
   date_ref <- names(aM_dat_raw)[2]
 
+  # filter out DATES that sensor was not set up
+  # "undefined" or "(time not set)"
+  aM_dat_raw <- aM_dat_raw %>%
+    select(DATE = `Timestamp(UTC)`, `Record Type`, `Dissolved Oxygen`, Temperature) %>%
+    mutate(DATE_VALUES = str_detect(DATE, "(time not set)")) %>%
+    filter(DATE != "undefined", DATE_VALUES == FALSE) %>%
+    select(-DATE_VALUES)
+
+
+  date_format <- aM_dat_raw$DATE[1]
+  if(!is.na(suppressWarnings(as.numeric(date_format)))) {
+
+    aM_dat_raw <- aM_dat_raw %>%
+      mutate(DATE = convert_to_datetime(as.numeric(DATE)))
+  } # could add an else statement here for the parge_datetime foo
+
+
   for(i in 1:length(vars.aM)){
 
   aM.i <- aM_dat_raw %>%
-    select(`Timestamp(UTC)`, `Record Type`, vars.aM[i]) %>%
+    select(DATE, `Record Type`, vars.aM[i]) %>%
     filter(`Record Type` == vars.aM[i]) %>%
     rename(PLACEHOLDER = 3) %>%
     mutate(INDEX = as.character(c(1:n())))
 
   if(vars.aM[i] == "Dissolved Oxygen") aM.i <- aM.i %>% filter(PLACEHOLDER > 0)
 
-  #mutate(DATE = convert_to_datetime(DATE)) %>%       # convert DATE to datetime
-   # mutate(DATE = as.character(DATE)) %>%              # convert DATE to a character so can add in the column headings
-
   aM.i <- aM.i %>%
-    mutate(DATE = parse_date_time(`Timestamp(UTC)`, orders = "Ymd HM")) %>%
+    mutate(DATE = parse_date_time(DATE,
+                                  orders = c("Ymd HM", "Ymd HMS"))) %>%
     transmute(INDEX, DATE = as.character(DATE), PLACEHOLDER = as.character(PLACEHOLDER)) %>%
     # add meta data rows (deployment date, serial number, variable-depth can be merged in Excel file)
     # Date and Time stay unmerged

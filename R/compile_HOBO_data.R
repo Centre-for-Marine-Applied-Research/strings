@@ -98,5 +98,6 @@ compile_HOBO_data <- function(path.HOBO, area.name, serial.table, deployment.ran
 
   write_csv(HOBO_dat, path = paste(path.HOBO, "/", file.name, ".csv", sep = ""), col_names = FALSE)
 
+
 }
 

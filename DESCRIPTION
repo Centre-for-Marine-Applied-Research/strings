@@ -18,4 +18,5 @@ Imports:
     tidyr,
     dplyr,
     ggplot2,
-    viridis
+    viridis,
+    stringr

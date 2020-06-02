@@ -14,6 +14,9 @@ utils::globalVariables(c(
   "Timestamp(UTC)",
   "Record Type",
   "PLACEHOLDER",
+  "DATE_VALUES",
+  "Dissolved Oxygen",
+  "Temperature",
 
   # convert_to_tidydata
   "DEPTH",
