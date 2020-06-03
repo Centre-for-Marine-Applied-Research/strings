@@ -131,7 +131,7 @@ compile_HOBO_data <- function(path.HOBO, area.name, serial.table, deployment.ran
     format('%Y-%m-%d')
 
   # name of output file
-  file.name <- paste(area.name, file.date, sep = " ")
+  file.name <- paste(area.name, file.date, sep = "_")
 
   write_csv(HOBO_dat, path = paste(path.HOBO, "/", file.name, ".csv", sep = ""), col_names = FALSE)
 
