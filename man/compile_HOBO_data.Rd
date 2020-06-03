@@ -13,10 +13,9 @@ compile_HOBO_data(
 )
 }
 \arguments{
-\item{path.HOBO}{File path to the HOBO data. Should end with \code{/Hobo}. All
-of the excel files in this folder should be data extracted from the HOBO
-software. The name of each excel file must be the serial number of the
-sensor.}
+\item{path.HOBO}{File path to the Hobo folder. All of the excel files in the
+Hobo folder should be data extracted from the HOBO software. The name of
+each excel file must be the serial number of the sensor.}
 
 \item{area.name}{Area where the HOBO was deployed.}
 

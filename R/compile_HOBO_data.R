@@ -27,10 +27,9 @@
 #'  If for some reason, there is an ODD number of duplicates, the function might
 #'  break.
 #'
-#'@param path.HOBO File path to the HOBO data. Should end with \code{/Hobo}. All
-#'  of the excel files in this folder should be data extracted from the HOBO
-#'  software. The name of each excel file must be the serial number of the
-#'  sensor.
+#'@param path.HOBO File path to the Hobo folder. All of the excel files in the
+#'  Hobo folder should be data extracted from the HOBO software. The name of
+#'  each excel file must be the serial number of the sensor.
 #'@param area.name Area where the HOBO was deployed.
 #'@param serial.table A table with the serial number of each HOBO (first column)
 #'  and corresponding depth at which it was deployed (second column).
@@ -64,6 +63,9 @@ compile_HOBO_data <- function(path.HOBO, area.name, serial.table, deployment.ran
 
   # initialize dateframe for storing the output
   HOBO_dat <- data.frame(INDEX = as.character())
+
+  # finish path
+  path.HOBO <- file.path(paste(path.HOBO, "/Hobo", sep = ""))
 
   # list files .xlsx files in the data folder
   dat.files <- list.files(path.HOBO, all.files = FALSE, pattern = "*.xlsx")

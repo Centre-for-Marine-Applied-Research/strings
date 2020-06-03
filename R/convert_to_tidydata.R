@@ -44,7 +44,7 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FA
 
       daterange <- as.character(dat.i[1,1])    # extract the date range
 
-      sensor <- as.character(dat.i[2,1])       # extract the sensor
+      sensor <- as.character(dat.i[2,1])       # extract the sensor (type and serial number)
 
       # extract the variable and depth and split into two colummns
       var_depth <- dat.i[3,1] %>%
@@ -55,15 +55,30 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FA
       variable <- as.character(var_depth[1])
       depth <-  parse_number(as.character(var_depth[2]))
 
-
+      # compile the tidy data
       dat.i.tidy <- dat.i %>% slice(-c(1:4)) %>%      # remove first four rows of data
-        select(DATE = 1, VALUE = 2) %>%               # name column 1 DATE and column 2 VALUE
-        mutate(DATE_RANGE = daterange,
-          DATE = parse_date_time(DATE, orders = "Ymd HMS"),
-          SENSOR = sensor,                       # Add SENSOR column
-          VARIABLE = variable,                   # Add VARIABLE column
-          DEPTH = factor(depth),                 # Add DEPTH column (should be a factor or else the color scheme will be a gradient)
-          VALUE = as.numeric(VALUE))
+        select(DATE = 1, VALUE = 2)                   # name column 1 DATE and column 2 VALUE
+
+      # if the date can be converted to class numeric, then it is stored as a number in Excel
+      ## and we have to use janitor::convert_to_datetime to convert to POSIXct.
+      # Otherwise the date should be a character string that can be converted to POSIXct using
+      ## lubridate::parse_date_time (might have to add orders = c("Ymd HM", "Ymd HMS")))
+      date_format <- dat.i.tidy$DATE[1]
+      if(!is.na(suppressWarnings(as.numeric(date_format)))) {
+
+        dat.i.tidy <-  dat.i.tidy %>%
+          mutate(DATE = convert_to_datetime(as.numeric(DATE)))
+      } else {
+        dat.i.tidy <-  dat.i.tidy %>%
+          mutate(DATE = parse_date_time(DATE, orders = "Ymd HMS"))
+      }
+
+      dat.i.tidy <- dat.i.tidy %>%
+        mutate(DATE_RANGE = daterange,        # add DATE_RANGE column
+               SENSOR = sensor,               # Add SENSOR column
+               VARIABLE = variable,           # Add VARIABLE column
+               DEPTH = factor(depth),         # Add DEPTH column (should be a factor or else the color scheme will be a gradient)
+               VALUE = as.numeric(VALUE))
     }
 
     dat.tidy <- rbind(dat.tidy, dat.i.tidy)         # bind dat.tidy with dat.i.tidy

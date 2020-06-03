@@ -2,15 +2,14 @@
 #'  aquaMeasure deployment
 #'@description This functions re-formats the data from an aquaMeasure deployment
 #'  so it can be combined with the HOBO temperature data.
-#'@details Rows with \code{"undefined"} and \code{"... (time not set)"} values
-#'  in the Timestamp(UTC) column are filtered out.
+#'@details Rows with \code{undefined} and \code{... (time not set)} values in
+#'  the Timestamp(UTC) column are filtered out.
 #'
 #'  Negative DO values are replaced with \code{NA}.
 #'
-#'@param path.aM File path to the aquaMeasure data. Should end with
-#'  \code{/aquaMeasure}. There should only be one file in this folder. A warning
-#'  will be printed to the console if there is more than one file. The function can accept
-#'  .csv or .xlsx files.
+#'@param path.aM File path to the aquaMeasure folder. There should only be one
+#'  file in the aquaMeasure folder. A warning will be printed to the console if
+#'  there is more than one file. The function can accept .csv or .xlsx files.
 #'@param area.name Area where aquaMeasure was deployed.
 #'@param vars.aM The variables to extract. (Could possibly replace with
 #'  unique(Record Type))
@@ -41,6 +40,9 @@ compile_aquaMeasure_data <- function(path.aM, area.name, vars.aM = c("Temperatur
 
   # initialize dateframe for storing the output
   aM_dat <- data.frame(INDEX = as.character())
+
+  # finish path
+  path.aM <- file.path(paste(path.aM, "/aquaMeasure", sep = ""))
 
   # list files in the data folder
   dat.files <- list.files(path.aM, all.files = FALSE)
@@ -94,13 +96,21 @@ compile_aquaMeasure_data <- function(path.aM, area.name, vars.aM = c("Temperatur
     filter(DATE != "undefined", DATE_VALUES == FALSE) %>%
     select(-DATE_VALUES)
 
-
+  # if the date can be converted to class numeric, then it is stored as a number in Excel
+  ## and we have to use janitor::convert_to_datetime to convert to POSIXct.
+  # Otherwise the date should be a character string that can be converted to POSIXct using
+  ## lubridate::parse_date_time
   date_format <- aM_dat_raw$DATE[1]
   if(!is.na(suppressWarnings(as.numeric(date_format)))) {
 
     aM_dat_raw <- aM_dat_raw %>%
       mutate(DATE = convert_to_datetime(as.numeric(DATE)))
-  } # could add an else statement here for the parge_datetime foo
+  } else{
+
+    aM_dat_raw <- aM_dat_raw %>%
+      mutate(DATE = parse_date_time(DATE,
+                                    orders = c("Ymd HM", "Ymd HMS")))
+  }
 
 
   for(i in 1:length(vars.aM)){
@@ -114,8 +124,6 @@ compile_aquaMeasure_data <- function(path.aM, area.name, vars.aM = c("Temperatur
   if(vars.aM[i] == "Dissolved Oxygen") aM.i <- aM.i %>% filter(PLACEHOLDER > 0)
 
   aM.i <- aM.i %>%
-    mutate(DATE = parse_date_time(DATE,
-                                  orders = c("Ymd HM", "Ymd HMS"))) %>%
     transmute(INDEX, DATE = as.character(DATE), PLACEHOLDER = as.character(PLACEHOLDER)) %>%
     add_metadata(row1 = deployment.range,
                  row2 = serial,
