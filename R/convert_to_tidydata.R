@@ -27,6 +27,11 @@
 
 convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FALSE){
 
+  if(ncol(dat.wide) %% 2 != 0) {
+    stop(
+    "ERROR: dat.wide has an odd number of columns. dat.wide should have an even number of columns, alternating between a column of dates and a corresponding column of values.")
+  }
+
   ind <- seq(1, ncol(dat.wide), 2)    # index for every second column
   dat.tidy <- data.frame(NULL)        # initialize dat.tidy
 
@@ -50,7 +55,7 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FA
       var_depth <- dat.i[3,1] %>%
         data.frame() %>%
         rename(var_depth = 1)  %>%
-        separate(var_depth, into = c("variable", "depth"), sep = "-")
+        separate(var_depth, into = c("variable", "depth"), sep = "-| - ") # can handle "variable-depth" OR "variable - depth"
 
       variable <- as.character(var_depth[1])
       depth <-  parse_number(as.character(var_depth[2]))
@@ -68,9 +73,12 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FA
 
         dat.i.tidy <-  dat.i.tidy %>%
           mutate(DATE = convert_to_datetime(as.numeric(DATE)))
-      } else {
+
+        } else {
+
         dat.i.tidy <-  dat.i.tidy %>%
           mutate(DATE = parse_date_time(DATE, orders = "Ymd HMS"))
+
       }
 
       dat.i.tidy <- dat.i.tidy %>%
