@@ -1,10 +1,11 @@
 #'@title Compiles temperature data from HOBO deployment
 #'@description This function compiles the data from a HOBO deployment at
-#'  different depths into a single spreadsheet.
-#'@details HOBO data should be exported in GMT+00. Note that the HOBO timestamp
-#'  accounts for daylight savings time, but true UTC does not. This function
-#'  gives the option to convert to true UTC time with the \code{real_UTC}
-#'  argument.
+#'  different depths into a single dataframe or spreadsheet.
+#'@details
+#'  HOBO data should be exported in GMT+00. Note that the HOBO
+#'  timestamp accounts for daylight savings time, but true UTC does not. This
+#'  function gives the option to convert to true UTC time with the
+#'  \code{real_UTC} argument.
 #'
 #'  The functions used to convert to true UTC are
 #'  \code{convert_HOBO_datetime_to_real_UTC()} and \code{dates_to_fix()}, which
@@ -35,21 +36,28 @@
 #'  and corresponding depth at which it was deployed (second column).
 #'@param deployment.range The start and end dates of deployment from the
 #'  deployment log. Must be in format "2018-Nov-15 to 2020-Jan-24".
-#'@param real_UTC Logical value indicating whether to convert timestamp to UTC
-#'  from GMT+00. Note that the HOBO timestamp accounts for daylight savings
-#'  time, but true UTC does not. \code{real_UTC = FALSE} will return the
-#'  timestamps as exported from the HOBO software. \code{real_UTC = TRUE}
-#'  converts the timestamp to true UTC time. Default is \code{real_UTC = TRuE}.
-#'@return Exports a spreadsheet with the HOBO temperature data, including the
-#'  appropriate metadata. Note that to include the metadata, all values were
-#'  converted to class \code{character}. To manipulate the data, the values must
-#'  be converted to the appropriate class (e.g., \code{POSIXct} for \code{DATE},
-#'  \code{numeric} for temperature values). This can be done using the function
-#'  \code{convert_to_tidydata()}.
+#'@param trim Logical value indicating whether to trim the data to the dates
+#'  specified in \code{deployment.range}. (Note: four hours are added to the
+#'  retrieval date to account for AST, e.g., in case the sensor was retrieved
+#'  after 20:00 AST, which is 00:00 UTC the next day.) Default is \code{trim = TRUE}.
+#'@param tz.UTC Logical value indicating whether to convert timestamp to UTC.
+#'  Note that the HOBO timestamp GMT+00 accounts for daylight savings time, but
+#'  true UTC does not. \code{true_UTC = FALSE} will return the timestamps as
+#'  exported from the HOBO software. \code{true_UTC = TRUE} converts the
+#'  timestamp to true UTC time. Default is \code{real_UTC = TRuE}.
+#'@param export.csv Logical value indicating whether to export the compiled data
+#'  as a .csv file. If \code{export.csv = TRUE}, the compiled data will not be
+#'  returned to the global environment. Default is \code{export.csv = FALSE}.
+#'@return Exports a dataframe or spreadsheet with the HOBO temperature data,
+#'  including the appropriate metadata. Note that to include the metadata, all
+#'  values were converted to class \code{character}. To manipulate the data, the
+#'  values must be converted to the appropriate class (e.g., \code{POSIXct} for
+#'  \code{DATE}, \code{numeric} for temperature values). This can be done using
+#'  the function \code{convert_to_tidydata()}.
 #'@family compile
 #'@author Danielle Dempsey
 #'@importFrom janitor convert_to_datetime
-#'@importFrom lubridate as_date
+#'@importFrom lubridate as_datetime
 #'@importFrom readxl read_excel
 #'@importFrom readr write_csv
 #'@importFrom tidyr separate
@@ -57,9 +65,23 @@
 #'@export
 
 
-compile_HOBO_data <- function(path.HOBO, area.name, serial.table, deployment.range, real_UTC = TRUE){
+compile_HOBO_data <- function(path.HOBO,
+                              area.name,
+                              serial.table,
+                              deployment.range,
+                              trim = TRUE,
+                              tz.UTC = TRUE,
+                              export.csv = FALSE){
 
   names(serial.table) <- c("SERIAL", "VAR_DEPTH")
+
+  # extract the deployment start and end dates from deployment.range
+  start_end_date <- separate(data = data.frame(deployment.range),
+                             col = deployment.range,
+                             into = c("start.date", NA, "end.date"), sep  = " " )
+
+  start.date <- as_datetime(paste(start_end_date$start.date, "00:00:00"))
+  end.date <- as_datetime(paste(start_end_date$end.date, "23:59:59"))
 
   # initialize dateframe for storing the output
   HOBO_dat <- data.frame(INDEX = as.character())
@@ -107,10 +129,20 @@ compile_HOBO_data <- function(path.HOBO, area.name, serial.table, deployment.ran
       mutate(DATE = convert_to_datetime(DATE),                          # convert DATE to datetime
              TEMPERATURE = round(as.numeric(TEMPERATURE), digits = 3))  # round temperature data to 3 decimal places
 
-    if(real_UTC == TRUE) hobo.i <- hobo.i %>% convert_HOBO_datetime_to_real_UTC()
+    # un-account for daylight savings time
+    # (subtract 1 hour from each datetime within the range of DST)
+    if(tz.UTC == TRUE) hobo.i <- hobo.i %>% convert_HOBO_datetime_to_true_UTC()
 
+    # trim to the dates in deployment.range
+    # added four hours to end.date to account for AST
+    # (e.g., in case the sensor was retrieved after 20:00 AST, which is 00:00 UTC **The next day**)
+    if(trim == TRUE) {
+      hobo.i <- hobo.i %>%
+        filter(DATE >= start.date, DATE <= (end.date + hours(4)))
+    }
+
+    # convert columns to class character so can add in the column headings
     hobo.i <- hobo.i %>%
-      # convert columns to class character so can add in the column headings
       mutate(DATE = as.character(DATE),
              INDEX = as.character(round(as.numeric(INDEX), digits = 0)), # make sure INDEX will have the same class and format for each sheet
              PLACEHOLDER = as.character(TEMPERATURE))  %>%
@@ -120,22 +152,25 @@ compile_HOBO_data <- function(path.HOBO, area.name, serial.table, deployment.ran
     # merge data on the INDEX row
     HOBO_dat <- full_join(HOBO_dat, hobo.i, by = "INDEX")
 
+  } # end for loop
+
+  if(export.csv == TRUE){
+    # format start date for file name
+    file.date <-  format(start.date, '%Y-%m-%d')
+
+    # name of output file
+    file.name <- paste(area.name, file.date, sep = "_")
+
+    write_csv(HOBO_dat, path = paste(path.HOBO, "/", file.name, ".csv", sep = ""), col_names = FALSE)
+
+    print(paste("Check in ", path.HOBO, " for file ", file.name, ".csv", sep = ""))
+  } else{
+
+    print("Note: to export csv file, set export.csv = TRUE")
+
+    HOBO_dat
   }
 
-  # extract the deployment date from deployment.range
-  file.date <- separate(data = data.frame(deployment.range),
-                        col = deployment.range,
-                        into = c("file.date", NA, NA), sep  = " " ) %>%
-    as.character() %>%
-    as_date() %>%
-    format('%Y-%m-%d')
-
-  # name of output file
-  file.name <- paste(area.name, file.date, sep = "_")
-
-  write_csv(HOBO_dat, path = paste(path.HOBO, "/", file.name, ".csv", sep = ""), col_names = FALSE)
-
-  print(paste("Check in ", path.HOBO, " for file ", file.name, ".csv", sep = ""))
 
 }
 
