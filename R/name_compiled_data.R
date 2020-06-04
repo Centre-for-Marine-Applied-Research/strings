@@ -1,0 +1,28 @@
+#'@title Generates name for output file with HOBO and aquaMeasure data from a single
+#'  deployment
+#'@description Generates a name for output file based on the arguments to
+#'  \code{compile_aquaMeasure_data()} in the format "area name_deployment date_variables",
+#'  e.g. "Shad Bay_2018_11-15_TEMP_DO".
+#'@inheritParams compile_aquaMeasure_data
+#'@importFrom tidyr separate
+#'@export
+
+name_compiled_data <- function(area.name, deployment.range, vars.aM){
+
+  # format start date for file name
+  file.date <- separate(data = data.frame(deployment.range), col = deployment.range,
+                        into = c("file.date", NA, NA), sep  = " " ) %>%
+    as.character() %>%
+    as_date() %>%
+    format('%Y-%m-%d')
+
+  # vars
+  TEMP <- ifelse(any(vars.aM %in% "Temperature"), temp <- "_TEMP", "")
+  DO <- ifelse(any(vars.aM %in% "Dissolved Oxygen"), "_DO", "")
+  SAL <- ifelse(any(vars.aM %in% "Salinity"), "_SAL", "")
+
+  # name of output file
+  paste(area.name, "_", file.date, TEMP, DO, SAL, "_ALL", sep = "")
+
+
+}

@@ -9,7 +9,9 @@ compile_HOBO_data(
   area.name,
   serial.table,
   deployment.range,
-  real_UTC = TRUE
+  trim = TRUE,
+  tz.UTC = TRUE,
+  export.csv = FALSE
 )
 }
 \arguments{
@@ -25,29 +27,38 @@ and corresponding depth at which it was deployed (second column).}
 \item{deployment.range}{The start and end dates of deployment from the
 deployment log. Must be in format "2018-Nov-15 to 2020-Jan-24".}
 
-\item{real_UTC}{Logical value indicating whether to convert timestamp to UTC
-from GMT+00. Note that the HOBO timestamp accounts for daylight savings
-time, but true UTC does not. \code{real_UTC = FALSE} will return the
-timestamps as exported from the HOBO software. \code{real_UTC = TRUE}
-converts the timestamp to true UTC time. Default is \code{real_UTC = TRuE}.}
+\item{trim}{Logical value indicating whether to trim the data to the dates
+specified in \code{deployment.range}. (Note: four hours are added to the
+retrieval date to account for AST, e.g., in case the sensor was retrieved
+after 20:00 AST, which is 00:00 UTC the next day.) Default is \code{trim = TRUE}.}
+
+\item{tz.UTC}{Logical value indicating whether to convert timestamp to UTC.
+Note that the HOBO timestamp GMT+00 accounts for daylight savings time, but
+true UTC does not. \code{true_UTC = FALSE} will return the timestamps as
+exported from the HOBO software. \code{true_UTC = TRUE} converts the
+timestamp to true UTC time. Default is \code{real_UTC = TRuE}.}
+
+\item{export.csv}{Logical value indicating whether to export the compiled data
+as a .csv file. If \code{export.csv = TRUE}, the compiled data will not be
+returned to the global environment. Default is \code{export.csv = FALSE}.}
 }
 \value{
-Exports a spreadsheet with the HOBO temperature data, including the
- appropriate metadata. Note that to include the metadata, all values were
- converted to class \code{character}. To manipulate the data, the values must
- be converted to the appropriate class (e.g., \code{POSIXct} for \code{DATE},
- \code{numeric} for temperature values). This can be done using the function
- \code{convert_to_tidydata()}.
+Exports a dataframe or spreadsheet with the HOBO temperature data,
+ including the appropriate metadata. Note that to include the metadata, all
+ values were converted to class \code{character}. To manipulate the data, the
+ values must be converted to the appropriate class (e.g., \code{POSIXct} for
+ \code{DATE}, \code{numeric} for temperature values). This can be done using
+ the function \code{convert_to_tidydata()}.
 }
 \description{
 This function compiles the data from a HOBO deployment at
- different depths into a single spreadsheet.
+ different depths into a single dataframe or spreadsheet.
 }
 \details{
-HOBO data should be exported in GMT+00. Note that the HOBO timestamp
- accounts for daylight savings time, but true UTC does not. This function
- gives the option to convert to true UTC time with the \code{real_UTC}
- argument.
+HOBO data should be exported in GMT+00. Note that the HOBO
+ timestamp accounts for daylight savings time, but true UTC does not. This
+ function gives the option to convert to true UTC time with the
+ \code{real_UTC} argument.
 
  The functions used to convert to true UTC are
  \code{convert_HOBO_datetime_to_real_UTC()} and \code{dates_to_fix()}, which

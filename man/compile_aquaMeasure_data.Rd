@@ -10,7 +10,9 @@ compile_aquaMeasure_data(
   area.name,
   vars.aM = c("Temperature", "Dissolved Oxygen", "Salinity"),
   depth.aM,
-  deployment.range
+  deployment.range,
+  trim = TRUE,
+  export.csv = FALSE
 )
 }
 \arguments{
@@ -27,6 +29,15 @@ unique(Record Type))}
 
 \item{deployment.range}{The start and end dates of deployment from the
 deployment log. Must be in format "2018-Nov-15 to 2020-Jan-24".}
+
+\item{trim}{Logical value indicating whether to trim the data to the dates
+specified in \code{deployment.range}. (Note: four hours are added to the
+retrieval date to account for AST, e.g., in case the sensor was retrieved
+after 20:00 AST, which is 00:00 UTC the next day.) Default is \code{trim = TRUE}.}
+
+\item{export.csv}{Logical value indicating whether to export the compiled data
+as a .csv file. If \code{export.csv = TRUE}, the compiled data will not be
+returned to the global environment. Default is \code{export.csv = FALSE}.}
 }
 \value{
 Returns a dataframe and exports a spreadsheet with the aquaMeasure

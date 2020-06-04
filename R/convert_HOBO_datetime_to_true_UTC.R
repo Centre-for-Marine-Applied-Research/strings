@@ -27,7 +27,7 @@ dates_to_fix <- function(hobo.data, year.DST, day.DST) {
 #'@import dplyr
 
 
-convert_HOBO_datetime_to_real_UTC <- function(HOBO.DATA) {
+convert_HOBO_datetime_to_true_UTC <- function(HOBO.DATA) {
 
   hobo <- HOBO.DATA %>%
     mutate(ADT_force = force_tz(DATE, tzone = "America/Halifax"),
