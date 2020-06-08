@@ -65,7 +65,7 @@ HOBO data should be exported in GMT+00. Note that the HOBO
  are NOT exported to the \code{strings} package (i.e., they are only used
  internally).
 
- \code{convert_HOBO_datetime_to_real_UTC()} identifies which times are during
+ \code{convert_HOBO_datetime_to_true_UTC()} identifies which times are during
  daylight savings by creating two additional columns: \code{ADT_force =
  force_tz(DATE, tzone = "America/Halifax")}, and \code{DAYLIGHT_SAVINGS =
  dst(ADT_force)}. Where \code{DAYLIGHT_SAVINGS == TRUE}, the \code{DATE} is

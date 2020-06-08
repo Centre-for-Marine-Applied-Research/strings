@@ -12,7 +12,7 @@
 #'  are NOT exported to the \code{strings} package (i.e., they are only used
 #'  internally).
 #'
-#'  \code{convert_HOBO_datetime_to_real_UTC()} identifies which times are during
+#'  \code{convert_HOBO_datetime_to_true_UTC()} identifies which times are during
 #'  daylight savings by creating two additional columns: \code{ADT_force =
 #'  force_tz(DATE, tzone = "America/Halifax")}, and \code{DAYLIGHT_SAVINGS =
 #'  dst(ADT_force)}. Where \code{DAYLIGHT_SAVINGS == TRUE}, the \code{DATE} is
@@ -91,6 +91,15 @@ compile_HOBO_data <- function(path.HOBO,
 
   # list files .xlsx files in the data folder
   dat.files <- list.files(path.HOBO, all.files = FALSE, pattern = "*.xlsx")
+
+  # remove files that start with "~"
+  if(any(substring(dat.files, 1, 1)== "~")) {
+
+    dat.files <- dat.files[-which(substring(dat.files, 1, 1)== "~")]
+    print(paste("Note:", sum((substring(dat.files, 1, 1)== "~")),
+                "files on the path begin with ~ and were not imported.", sep = " "))
+  }
+
 
   # loop over each HOBO file
   for(i in 1:length(dat.files)) {
