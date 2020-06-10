@@ -9,6 +9,7 @@
 #'
 #'  Negative DO values are replaced with \code{NA}.
 #'
+#'@inheritParams compile_HOBO_data
 #'@param path.aM File path to the aquaMeasure folder. There should only be one
 #'  file in the aquaMeasure folder. A warning will be printed to the console if
 #'  there is more than one file. The function can accept .csv or .xlsx files.
@@ -16,8 +17,7 @@
 #'@param vars.aM The variables to extract. (Could possibly replace with
 #'  unique(Record Type))
 #'@param depth.aM The depth at which the sensor was deployed.
-#'@inheritParams compile_HOBO_data
-#'@return Returns a dataframe and exports a spreadsheet with the aquaMeasure
+#'@return Returns a dataframe or exports a spreadsheet with the aquaMeasure
 #'  data, including the appropriate metadata. Note that to include the metadata,
 #'  all values were converted to class \code{character}. To manipulate the data,
 #'  the values must be converted to the appropriate class (e.g., \code{POSIXct}
@@ -26,7 +26,7 @@
 #'@family compile
 #'@author Danielle Dempsey
 #'@importFrom janitor convert_to_datetime
-#'@importFrom lubridate as_date parse_date_time
+#'@importFrom lubridate parse_date_time
 #'@importFrom readxl read_excel
 #'@importFrom readr write_csv read_csv
 #'@importFrom stringr str_detect
@@ -43,17 +43,10 @@ compile_aquaMeasure_data <- function(path.aM,
                                      trim = TRUE,
                                      export.csv = FALSE){
 
-  # extract the deployment start and end dates from deployment.range
-  start_end_date <- separate(data = data.frame(deployment.range),
-                             col = deployment.range,
-                             into = c("start.date", NA, "end.date"), sep  = " " )
-
-  start.date <- as_datetime(paste(start_end_date$start.date, "00:00:00"))
-  end.date <- as_datetime(paste(start_end_date$end.date, "23:59:59"))
-
-  # initialize dateframe for storing the output
-  aM_dat <- data.frame(INDEX = as.character())
-
+  # extract the deployment start and end dates from deployment.dates
+  dates <- extract_deployment_dates(deployment.range)
+  start.date <- dates$start
+  end.date <- dates$end
 
 # Import data -------------------------------------------------------------
 

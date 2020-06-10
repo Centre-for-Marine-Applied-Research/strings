@@ -41,7 +41,7 @@ as a .csv file. If \code{export.csv = TRUE}, the compiled data will not be
 returned to the global environment. Default is \code{export.csv = FALSE}.}
 }
 \value{
-Returns a dataframe and exports a spreadsheet with the aquaMeasure
+Returns a dataframe or exports a spreadsheet with the aquaMeasure
  data, including the appropriate metadata. Note that to include the metadata,
  all values were converted to class \code{character}. To manipulate the data,
  the values must be converted to the appropriate class (e.g., \code{POSIXct}
@@ -63,6 +63,7 @@ Rows with \code{undefined} and \code{... (time not set)} values in
 \seealso{
 Other compile: 
 \code{\link{compile_HOBO_data}()},
+\code{\link{compile_vemco_data}()},
 \code{\link{convert_to_tidydata}()}
 }
 \author{

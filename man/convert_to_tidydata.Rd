@@ -36,7 +36,8 @@ I haven't done anything with the DATES. Still need to un-account for
 \seealso{
 Other compile: 
 \code{\link{compile_HOBO_data}()},
-\code{\link{compile_aquaMeasure_data}()}
+\code{\link{compile_aquaMeasure_data}()},
+\code{\link{compile_vemco_data}()}
 }
 \author{
 Danielle Dempsey

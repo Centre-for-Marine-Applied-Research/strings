@@ -2,7 +2,7 @@
 % Please edit documentation in R/name_compiled_data.R
 \name{name_compiled_data}
 \alias{name_compiled_data}
-\title{Generates name for output file with HOBO and aquaMeasure data from a single
+\title{Generates name for output file with HOBO, aquaMeasure, and Vemco data from a single
  deployment}
 \usage{
 name_compiled_data(area.name, deployment.range, vars.aM)

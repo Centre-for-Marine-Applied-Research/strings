@@ -1,25 +1,35 @@
-#'@title Exports ggplot2 objects for temperauture, dissolved oxygen, and
-#'  salinity on separate panes
-#'@details can only do 4 vars
+#'@title Exports ggplot2 object(s) of variables at depth over time
 #'@param dat.tidy Data in tidy format, as returned by the function
 #'  \code{convert_to_tidydata()}. Must include four columns: \code{DATE}
-#'  (POSIXct), \code{VALUE}, (numeric), \code{VARIABLE} (character),
-#'  \code{DEPTH} (ordered factor).
-#'@param plot.title Title for plot. Default "" (will this work for loop?)
-#'@param vars.to.plot A character vector of variables for which to return plots.
-#'  Options are any combination of "Temperature", "Dissolved Oxygen", and
-#'  "Salinity". Default is \code{vars.to.plot = c("Temperature", "Dissolved
-#'  Oxygen", "Salinity")}.
-#'@param ylab.units Character vector of units. Must be in correct order!
+#'  (POSIXct), \code{VARIABLE} (character), \code{DEPTH} (ordered factor), and
+#'  \code{VALUE} (numeric).
+#'@param plot.title Title for plot. Default is blank: \code{plot.title = ""}.
+#'@param vars.to.plot A character vector of variables to plot. Each string must
+#'  match an entry in the \code{VARIABLE} column of \code{dat.tidy}. Default is
+#'  \code{vars.to.plot = c("Temperature", "Dissolved Oxygen", "Salinity")}.
+#'@param ylab.units Character vector of units as they will appear in the y-axis
+#'  title. Must be in the same order as the associated variable in
+#'  \code{vars.to.plot}. Note: the units for \code{vars.to.plot = "Temperature"} are
+#'  hard-coded to ensure the degree symbol renders.
 #'@param color.palette Color palette of hex colors onto which \code{DEPTH} will
 #'  be mapped. Default is \code{color.palette = rev(viridis(6, option = "D"))}.
 #'@param date.breaks.major Intervals for major breaks. Default is
 #'  \code{date.breaks.major = "2 month"}.
 #'@param date.breaks.minor Intervals for minor breaks. Default is
 #'  \code{date.breaks.minor = "1 month"}.
-#'@param stacked If true;  returns 1 figure; if FALSE, returns each separately
-#'@return Returns a list of ggplot2 plots of Temperature, Dissolved Oxygen,
-#'  and/or Salinity.
+#'@param stacked Logical value indicating what figures to return.  If
+#'  \code{stacked = TRUE}, a single figure with the plots for each variable in
+#'  \code{vars.to.plot} stacked in a column is returned. Plots will be stacked
+#'  in the order the variables appear in \code{vars.to.plot}. \code{plot.title}
+#'  will be placed on the top plot. If \code{stacked = FALSE}, a list of the
+#'  individual plot for each variable will be returned. Default is \code{stacked
+#'  = TRUE}.
+#'@return Returns ggplot2 object(s). If \code{stacked = TRUE}, a single figure
+#'  with the plots for each variable in \code{vars.to.plot} stacked in a column
+#'  is returned. Plots will be stacked in the order the variables appear in
+#'  \code{vars.to.plot}. \code{plot.title} will be placed on the top plot. If
+#'  \code{stacked = FALSE}, a list of the individual plot for each variable will
+#'  be returned.
 #'@family plot
 #'@author Danielle Dempsey
 #'@importFrom viridis viridis

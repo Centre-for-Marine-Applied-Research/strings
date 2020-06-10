@@ -19,6 +19,11 @@ utils::globalVariables(c(
   "Dissolved Oxygen",
   "Temperature",
 
+  # compile_vemco_data()
+  "Description",
+  "Date and Time (UTC)",
+  "Data",
+
   # convert_to_tidydata
   "DEPTH",
   "VALUE",

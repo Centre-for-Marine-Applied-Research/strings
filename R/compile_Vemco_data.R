@@ -1,0 +1,122 @@
+#'@title Formats temperature data from Vemco deployment
+#'@description This function formats data from a Vemco deployment so it can be
+#'  compiled with the HOBO and aquaMeasure data.
+#'@inheritParams compile_HOBO_data
+#'@param path.vemco File path to the Vemco folder. This folder should have one
+#'  csv file that was extracted using Vue software. Other file types in the
+#'  folder will be ignored.
+#'@param area.name Area where the Vemco was deployed.
+#'@param depth.vemco Depth at which the Vemco was deployed.
+#'@return Returns a dataframe or spreadsheet with the formatted Vemco datain two
+#'  columns: the timestamp (UTC, in the format "Y-m-d H:M:S") and temperature
+#'  value (degree celsius, rounded to three decimal places). Metadata at the top
+#'  of each column indicates the deployment range, the sensor serial number, and
+#'  the depth of the sensor. Each datetime column shows the timezone as
+#'  extracted from the Vue software.
+#'
+#'  To include the metadata, all values were converted to class
+#'  \code{character}. To manipulate the data, the values must be converted to
+#'  the appropriate class (e.g., \code{POSIXct} for the datetimes and
+#'  \code{numeric} for temperature values). This can be done using the function
+#'  \code{convert_to_tidydata()}.
+#'@family compile
+#'@author Danielle Dempsey
+#'
+#'@importFrom lubridate parse_date_time
+#'@importFrom readr read_csv write_csv
+#'@import dplyr
+#'@export
+#'
+
+compile_vemco_data <- function(path.vemco,
+                              area.name,
+                              depth.vemco,
+                              deployment.range,
+                              trim = TRUE,
+                              export.csv = FALSE){
+
+
+  # extract the deployment start and end dates from deployment.dates
+  dates <- extract_deployment_dates(deployment.range)
+  start.date <- dates$start
+  end.date <- dates$end
+
+# List file to be compiled -----------------------------------------------
+
+  # finish path
+  path.vemco <- file.path(paste(path.vemco, "Vemco", sep = "/"))
+
+  dat.files <- list.files(path.vemco, all.files = FALSE, pattern = "*.csv")
+
+  # remove files that start with "~"
+  if(any(substring(dat.files, 1, 1)== "~")) {
+
+    dat.files <- dat.files[-which(substring(dat.files, 1, 1)== "~")]
+    print(paste("Note:", sum((substring(dat.files, 1, 1)== "~")),
+                "files on the path begin with ~ and were not imported.", sep = " "))
+  }
+
+  vemco_dat <- read_csv(paste(path.vemco,  dat.files[1], sep = "/"), col_names = TRUE,
+                        col_types = "ccccc")
+
+  # Extract metadata --------------------------------------------------------
+
+  # sensor and serial number
+  serial <-vemco_dat$Receiver[1]
+
+  # extract date column header (includes UTC offset)
+  date_ref <- names(vemco_dat)[1]
+
+  # Format data -------------------------------------------------------------
+
+  # select the first three columns
+  vemco <- vemco_dat %>%
+    filter(Description == "Temperature") %>%
+    transmute(INDEX = c(1:n()),
+              DATE = parse_date_time(`Date and Time (UTC)`, orders = "Ymd HM"),
+              TEMPERATURE = Data)
+
+  # trim to the dates in deployment.range
+  # added four hours to end.date to account for AST
+  # (e.g., in case the sensor was retrieved after 20:00 AST, which is 00:00 UTC **The next day**)
+  if(trim == TRUE) {
+    vemco <- vemco %>%
+      filter(DATE >= start.date, DATE <= (end.date + hours(4))) %>%
+      mutate(INDEX = c(1:n()))
+  }
+
+  # convert columns to class character so can add in the meta data
+  vemco <- vemco %>%
+    mutate(INDEX = as.character(round(as.numeric(INDEX), digits = 0)), # make sure INDEX will have the same class and format for each sheet
+           DATE = format(DATE,  "%Y-%m-%d %H:%M:%S"),
+           PLACEHOLDER = as.character(round(as.numeric(TEMPERATURE), digits = 3)))  %>%
+    select(INDEX, DATE, PLACEHOLDER) %>%
+    add_metadata(row1 = deployment.range,
+                 row2 = serial,
+                 row3 = paste("Temperature", depth.vemco, sep = "-"),
+                 row4 = c(date_ref, "Temperature"))
+
+
+# Return compiled data ----------------------------------------------------
+
+  if(export.csv == TRUE){
+    # format start date for file name
+    file.date <-  format(start.date, '%Y-%m-%d')
+
+    # name of output file
+    file.name <- paste(area.name, file.date, sep = "_")
+
+    write_csv(vemco, path = paste(path.vemco, "/", file.name, ".csv", sep = ""), col_names = FALSE)
+
+    print(paste("Check in ", path.vemco, " for file ", file.name, ".csv", sep = ""))
+
+  } else{
+
+    print("Note: to export csv file, set export.csv = TRUE")
+
+    vemco
+  }
+
+
+}
+

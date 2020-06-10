@@ -99,6 +99,7 @@ HOBO data should be exported in GMT+00 as a csv file so that the
 \seealso{
 Other compile: 
 \code{\link{compile_aquaMeasure_data}()},
+\code{\link{compile_vemco_data}()},
 \code{\link{convert_to_tidydata}()}
 }
 \author{
