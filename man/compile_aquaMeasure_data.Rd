@@ -33,7 +33,8 @@ deployment log. Must be in format "2018-Nov-15 to 2020-Jan-24".}
 \item{trim}{Logical value indicating whether to trim the data to the dates
 specified in \code{deployment.range}. (Note: four hours are added to the
 retrieval date to account for AST, e.g., in case the sensor was retrieved
-after 20:00 AST, which is 00:00 UTC the next day.) Default is \code{trim = TRUE}.}
+after 20:00 AST, which is 00:00 UTC the next day.) Default is \code{trim =
+TRUE}.}
 
 \item{export.csv}{Logical value indicating whether to export the compiled data
 as a .csv file. If \code{export.csv = TRUE}, the compiled data will not be
@@ -52,6 +53,8 @@ This functions re-formats the data from an aquaMeasure deployment
  so it can be combined with the HOBO temperature data.
 }
 \details{
+**ADD round() here
+
 Rows with \code{undefined} and \code{... (time not set)} values in
  the Timestamp(UTC) column are filtered out.
 

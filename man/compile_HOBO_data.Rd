@@ -10,14 +10,15 @@ compile_HOBO_data(
   serial.table,
   deployment.range,
   trim = TRUE,
-  tz.UTC = TRUE,
+  file.type = "csv",
   export.csv = FALSE
 )
 }
 \arguments{
 \item{path.HOBO}{File path to the Hobo folder. All of the excel files in the
 Hobo folder should be data extracted from the HOBO software. The name of
-each excel file must be the serial number of the sensor.}
+each excel file must be the serial number of the sensor, and the excel files
+must all have the same extension (either .csv or .xlsx)}
 
 \item{area.name}{Area where the HOBO was deployed.}
 
@@ -30,13 +31,15 @@ deployment log. Must be in format "2018-Nov-15 to 2020-Jan-24".}
 \item{trim}{Logical value indicating whether to trim the data to the dates
 specified in \code{deployment.range}. (Note: four hours are added to the
 retrieval date to account for AST, e.g., in case the sensor was retrieved
-after 20:00 AST, which is 00:00 UTC the next day.) Default is \code{trim = TRUE}.}
+after 20:00 AST, which is 00:00 UTC the next day.) Default is \code{trim =
+TRUE}.}
 
-\item{tz.UTC}{Logical value indicating whether to convert timestamp to UTC.
-Note that the HOBO timestamp GMT+00 accounts for daylight savings time, but
-true UTC does not. \code{true_UTC = FALSE} will return the timestamps as
-exported from the HOBO software. \code{true_UTC = TRUE} converts the
-timestamp to true UTC time. Default is \code{real_UTC = TRuE}.}
+\item{file.type}{Character string indicating whether the HOBO data is in .csv
+or .xlsx format. All data files that are being compiled must have the same
+file extension. Note that the HOBO software exports csv files in true UTC,
+but xlsx files account for daylight savings time. This function will
+automatically convert the datetimes in xlsx files to true UTC. Default is
+\code{file.type = "csv"}. Alternative is \code{file.type = "xlsx"}.}
 
 \item{export.csv}{Logical value indicating whether to export the compiled data
 as a .csv file. If \code{export.csv = TRUE}, the compiled data will not be
@@ -55,10 +58,12 @@ This function compiles the data from a HOBO deployment at
  different depths into a single dataframe or spreadsheet.
 }
 \details{
-HOBO data should be exported in GMT+00. Note that the HOBO
- timestamp accounts for daylight savings time, but true UTC does not. This
- function gives the option to convert to true UTC time with the
- \code{real_UTC} argument.
+# add wanring if dup datetimes
+      could make date format an argument
+HOBO data should be exported in GMT+00. Note that the HOBO timestamp
+ accounts for daylight savings time, but true UTC does not. This function
+ gives the option to convert to true UTC time with the \code{real_UTC}
+ argument.
 
  The functions used to convert to true UTC are
  \code{convert_HOBO_datetime_to_real_UTC()} and \code{dates_to_fix()}, which

@@ -2,7 +2,9 @@
 #'  aquaMeasure deployment
 #'@description This functions re-formats the data from an aquaMeasure deployment
 #'  so it can be combined with the HOBO temperature data.
-#'@details Rows with \code{undefined} and \code{... (time not set)} values in
+#'@details **ADD round() here
+#'
+#'Rows with \code{undefined} and \code{... (time not set)} values in
 #'  the Timestamp(UTC) column are filtered out.
 #'
 #'  Negative DO values are replaced with \code{NA}.
@@ -52,6 +54,9 @@ compile_aquaMeasure_data <- function(path.aM,
   # initialize dateframe for storing the output
   aM_dat <- data.frame(INDEX = as.character())
 
+
+# Import data -------------------------------------------------------------
+
   # finish path
   path.aM <- file.path(paste(path.aM, "/aquaMeasure", sep = ""))
 
@@ -65,7 +70,6 @@ compile_aquaMeasure_data <- function(path.aM,
     print(paste("Note:", sum((substring(dat.files, 1, 1)== "~")),
                 "files on the path begin with ~ and were not imported.", sep = " "))
   }
-
 
   if(length(dat.files) > 1){
     print(paste("Warning: there is more than one file in ", path.aM, ". Only the first file will be imported.", sep = ""))
@@ -93,11 +97,17 @@ compile_aquaMeasure_data <- function(path.aM,
     stop("At least one of the variables in vars.aM is not in this dataframe. Check spelling in vars.aM")
   }
 
+
+# Extract metadata --------------------------------------------------------
+
   # sensor and serial number
   serial <- aM_dat_raw$Sensor[1]
 
   # extract date column header (includes UTC offset)
   date_ref <- names(aM_dat_raw)[2]
+
+
+# Clean and format data ---------------------------------------------------
 
   # filter out DATES that sensor was not set up
   # "undefined" or "(time not set)"
@@ -153,6 +163,8 @@ compile_aquaMeasure_data <- function(path.aM,
 
   } # end for loop
 
+
+# Return compiled data ----------------------------------------------------
 
   if(export.csv == TRUE){
     # format start date for file name
