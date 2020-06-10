@@ -1,16 +1,16 @@
 #'@title Compiles temperature data from HOBO deployment
 #'@description This function compiles the data from a HOBO deployment at
 #'  different depths into a single dataframe or spreadsheet.
-#'@details
-#'       # add wanring if dup datetimes
-#'       could make date format an argument
-#'HOBO data should be exported in GMT+00. Note that the HOBO timestamp
-#'  accounts for daylight savings time, but true UTC does not. This function
-#'  gives the option to convert to true UTC time with the \code{real_UTC}
-#'  argument.
+#'@details HOBO data should be exported in GMT+00 as a csv file so that the
+#'  timestamp is in UTC.
+#'
+#'  If exported as an xlsx, the timestamp accounts for daylight savings time.
+#'  \code{compile_HOBO_data()} will automatically convert xlsx files to true UTC
+#'  by subtracting 1 hour from each datetime that occurs during daylight
+#'  savings. This feature will be removed as we solidify our workflow.
 #'
 #'  The functions used to convert to true UTC are
-#'  \code{convert_HOBO_datetime_to_real_UTC()} and \code{dates_to_fix()}, which
+#'  \code{convert_HOBO_datetime_to_true_UTC()} and \code{dates_to_fix()}, which
 #'  are NOT exported to the \code{strings} package (i.e., they are only used
 #'  internally).
 #'
@@ -33,10 +33,12 @@
 #'@param path.HOBO File path to the Hobo folder. All of the excel files in the
 #'  Hobo folder should be data extracted from the HOBO software. The name of
 #'  each excel file must be the serial number of the sensor, and the excel files
-#'  must all have the same extension (either .csv or .xlsx)
+#'  must all have the same extension (either .csv or .xlsx). The datetime
+#'  columns must be in the order "ymd IMS p", "Ymd HM", or "Ymd HMS".
 #'@param area.name Area where the HOBO was deployed.
-#'@param serial.table A table with the serial number of each HOBO (first column)
-#'  and corresponding depth at which it was deployed (second column).
+#'@param serial.table A table with the serial number of each HOBO in the form
+#'  "HOBO-xxxxxxxx" (first column) and corresponding variable it measured at the
+#'  depth it was deployed in the form "Temperature-2m" (second column).
 #'@param deployment.range The start and end dates of deployment from the
 #'  deployment log. Must be in format "2018-Nov-15 to 2020-Jan-24".
 #'@param trim Logical value indicating whether to trim the data to the dates
@@ -53,18 +55,26 @@
 #'@param export.csv Logical value indicating whether to export the compiled data
 #'  as a .csv file. If \code{export.csv = TRUE}, the compiled data will not be
 #'  returned to the global environment. Default is \code{export.csv = FALSE}.
-#'@return Exports a dataframe or spreadsheet with the HOBO temperature data,
-#'  including the appropriate metadata. Note that to include the metadata, all
-#'  values were converted to class \code{character}. To manipulate the data, the
-#'  values must be converted to the appropriate class (e.g., \code{POSIXct} for
-#'  \code{DATE}, \code{numeric} for temperature values). This can be done using
-#'  the function \code{convert_to_tidydata()}.
+#'@return Returns a dataframe or spreadsheet with the data compiled from each of
+#'  the HOBO sensors. Columns alternate between datetime (UTC, in the format
+#'  "Y-m-d H:M:S") and temperature value (degree celsius, rounded to three
+#'  decimal places). Metadata at the top of each column indicates the deployment
+#'  range, the sensor serial number, and the depth of the sensor. Each datetime
+#'  column shows the timezone as extracted from the HOBOware, and each
+#'  temperature column shows the units extracted from HOBO.
+#'
+#'  To include the metadata, all values were converted to class
+#'  \code{character}. To manipulate the data, the values must be converted to
+#'  the appropriate class (e.g., \code{POSIXct} for the datetimes and
+#'  \code{numeric} for temperature values). This can be done using the function
+#'  \code{convert_to_tidydata()}.
 #'@family compile
 #'@author Danielle Dempsey
+#'
 #'@importFrom janitor convert_to_datetime
 #'@importFrom lubridate as_datetime
 #'@importFrom readxl read_excel
-#'@importFrom readr write_csv
+#'@importFrom readr read_csv write_csv
 #'@importFrom tidyr separate
 #'@import dplyr
 #'@export
@@ -117,10 +127,8 @@ compile_HOBO_data <- function(path.HOBO,
                 "files on the path begin with ~ and were not imported.", sep = " "))
   }
 
-
   # loop over each HOBO file
   for(i in 1:length(dat.files)) {
-
 
 # Import Data -------------------------------------------------------------
 
@@ -130,7 +138,7 @@ compile_HOBO_data <- function(path.HOBO,
     if(file.type == "xlsx") {
       hobo.i_dat <- read_excel(paste(path.HOBO, file.name, sep = "/"), col_names = FALSE)
 
-      if(hobo.i[1,1] != "#")  hobo.i <- hobo.i_dat %>% slice(-1)
+      if(hobo.i_dat[1,1] != "#")  hobo.i <- hobo.i_dat %>% slice(-1)
     }
     if(file.type == "csv") {
       hobo.i_dat <- read_csv(paste(path.HOBO,  file.name, sep = "/"), col_names = FALSE, skip = 1)
@@ -143,7 +151,6 @@ compile_HOBO_data <- function(path.HOBO,
     # select the first three columns
     hobo.i <- hobo.i_dat %>%
       select(c(1:3))
-
 
 # Extract metadata --------------------------------------------------------
 
@@ -159,14 +166,13 @@ compile_HOBO_data <- function(path.HOBO,
     variable_depth <- variable_depth$VAR_DEPTH
 
     # extract date column header (includes GMT offset)
-    #date_ref <- hobo.i[1,2]$...2
-    date_ref <- hobo.i[1,2]$X2
+    if(file.type == "xlsx") date_ref <- hobo.i[1,2]$...2
+    if(file.type == "csv") date_ref <- hobo.i[1,2]$X2
     # extract temperature column header (includes units)
     temp_ref <- data.frame(hobo.i[1,3]) %>%
       rename("temp_ref" = 1) %>%
       separate(col = "temp_ref", into = c("temp_ref", NA), sep = 8)
     temp_ref <- temp_ref$temp_ref
-
 
 # Format data -------------------------------------------------------------
 
@@ -178,7 +184,7 @@ compile_HOBO_data <- function(path.HOBO,
     ## and we have to use janitor::convert_to_datetime to convert to POSIXct.
     # Otherwise the date should be a character string that can be converted to POSIXct using
     ## lubridate::parse_date_time()
-
+    # Consider turning this into a function (also used in compile_auqaMeasure_data())
     date_format <- hobo.i$DATE[1]
     if(!is.na(suppressWarnings(as.numeric(date_format)))) {
 
@@ -191,11 +197,6 @@ compile_HOBO_data <- function(path.HOBO,
         mutate(DATE = parse_date_time(DATE,
                                       orders = c("ymd IMS p", "Ymd HM", "Ymd HMS")))
     }
-
-    #hobo.i <- hobo.i %>%
-     # mutate(DATE = format(DATE,  "%Y-%m-%d %H:%M:%S"),                # format date to "2020-06-09 20:16:30"
-      #       TEMPERATURE = round(as.numeric(TEMPERATURE), digits = 3)) # round temperature data to 3 decimal places
-
 
     # un-account for daylight savings time
     # (subtract 1 hour from each datetime within the range of DST)
@@ -226,7 +227,6 @@ compile_HOBO_data <- function(path.HOBO,
 
 # Return compiled data ----------------------------------------------------
 
-
   if(export.csv == TRUE){
     # format start date for file name
     file.date <-  format(start.date, '%Y-%m-%d')
@@ -237,6 +237,7 @@ compile_HOBO_data <- function(path.HOBO,
     write_csv(HOBO_dat, path = paste(path.HOBO, "/", file.name, ".csv", sep = ""), col_names = FALSE)
 
     print(paste("Check in ", path.HOBO, " for file ", file.name, ".csv", sep = ""))
+
   } else{
 
     print("Note: to export csv file, set export.csv = TRUE")
