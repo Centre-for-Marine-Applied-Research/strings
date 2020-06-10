@@ -8,7 +8,8 @@
 
 add_metadata <- function(data.char, row1, row2, row3, row4){
 
-  data.char %>%  add_row(INDEX = as.character(-1), DATE = row4[1], PLACEHOLDER = row4[2], .before = 1) %>%
+  data.char %>%
+    add_row(INDEX = as.character(-1), DATE = row4[1], PLACEHOLDER = row4[2], .before = 1) %>%
     add_row(INDEX = as.character(-2), DATE = row3, PLACEHOLDER = row3, .before = 1) %>%
     add_row(INDEX = as.character(-3), DATE = row2, PLACEHOLDER = row2, .before = 1) %>%
     add_row(INDEX = as.character(-4), DATE = row1, PLACEHOLDER = row1, .before = 1)
