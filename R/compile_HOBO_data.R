@@ -90,13 +90,10 @@ compile_HOBO_data <- function(path.HOBO,
 
   names(serial.table) <- c("SERIAL", "VAR_DEPTH")
 
-  # extract the deployment start and end dates from deployment.range
-  start_end_date <- separate(data = data.frame(deployment.range),
-                             col = deployment.range,
-                             into = c("start.date", NA, "end.date"), sep  = " " )
-
-  start.date <- as_datetime(paste(start_end_date$start.date, "00:00:00"))
-  end.date <- as_datetime(paste(start_end_date$end.date, "23:59:59"))
+  # extract the deployment start and end dates from deployment.dates
+  dates <- extract_deployment_dates(deployment.range)
+  start.date <- dates$start
+  end.date <- dates$end
 
   # initialize dateframe for storing the output
   HOBO_dat <- data.frame(INDEX = as.character())
@@ -136,15 +133,21 @@ compile_HOBO_data <- function(path.HOBO,
 
     # import HOBO file i. Remove the first row if the first cell is the Plot Title
     if(file.type == "xlsx") {
-      hobo.i_dat <- read_excel(paste(path.HOBO, file.name, sep = "/"), col_names = FALSE)
+      hobo.i_dat <- read_excel(paste(path.HOBO, file.name, sep = "/"),
+                               col_names = FALSE,
+                               col_types = "text")
 
       if(hobo.i_dat[1,1] != "#")  hobo.i <- hobo.i_dat %>% slice(-1)
     }
     if(file.type == "csv") {
-      hobo.i_dat <- read_csv(paste(path.HOBO,  file.name, sep = "/"), col_names = FALSE, skip = 1)
+      hobo.i_dat <- read_csv(paste(path.HOBO,  file.name, sep = "/"),
+                             col_names = FALSE, skip = 1,
+                             col_types = "cccccccc")
 
       if(hobo.i_dat[1,1] != "#") {
-        hobo.i_dat <- read_csv(paste(path.HOBO,  file.name, sep = "/"), col_names = FALSE)
+        hobo.i_dat <- read_csv(paste(path.HOBO,  file.name, sep = "/"),
+                               col_names = FALSE,
+                               col_types = "cccccccc")
       }
     }
 
@@ -159,6 +162,12 @@ compile_HOBO_data <- function(path.HOBO,
       tidyr::separate(col = file.name, into = c("SERIAL", NA), sep = "\\.", remove = TRUE)
     serial.i <- paste("HOBO-", serial.i$SERIAL, sep = "")
 
+
+    # if the name of the file doesn't match any of the entries in serial.table: stop with message
+    if(!(serial.i %in% serial.table$SERIAL)){
+      stop(paste("The name of file", i, "does not match any serial numbers in serial.table"))
+    }
+
     # use serial number to identify the variable and depth (from serial.table)
     variable_depth <- serial.table %>%
       dplyr::filter(SERIAL == serial.i)  %>%
@@ -168,11 +177,13 @@ compile_HOBO_data <- function(path.HOBO,
     # extract date column header (includes GMT offset)
     if(file.type == "xlsx") date_ref <- hobo.i[1,2]$...2
     if(file.type == "csv") date_ref <- hobo.i[1,2]$X2
+
     # extract temperature column header (includes units)
     temp_ref <- data.frame(hobo.i[1,3]) %>%
       rename("temp_ref" = 1) %>%
       separate(col = "temp_ref", into = c("temp_ref", NA), sep = 8)
     temp_ref <- temp_ref$temp_ref
+
 
 # Format data -------------------------------------------------------------
 
@@ -217,7 +228,10 @@ compile_HOBO_data <- function(path.HOBO,
              DATE = format(DATE,  "%Y-%m-%d %H:%M:%S"),
              PLACEHOLDER = as.character(round(as.numeric(TEMPERATURE), digits = 3)))  %>%
       select(INDEX, DATE, PLACEHOLDER) %>%
-      add_metadata(row1 = deployment.range, row2 = serial.i, row3 = variable_depth, row4 = c(date_ref, temp_ref))
+      add_metadata(row1 = deployment.range,
+                   row2 = serial.i,
+                   row3 = variable_depth,
+                   row4 = c(date_ref, temp_ref))
 
     # merge data on the INDEX row
     HOBO_dat <- full_join(HOBO_dat, hobo.i, by = "INDEX")
@@ -240,7 +254,7 @@ compile_HOBO_data <- function(path.HOBO,
 
   } else{
 
-    print("Note: to export csv file, set export.csv = TRUE")
+    print("COMPLETE. Note: to export csv file, set export.csv = TRUE")
 
     HOBO_dat
   }
