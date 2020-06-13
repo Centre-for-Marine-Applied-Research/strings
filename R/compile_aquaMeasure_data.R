@@ -60,6 +60,7 @@ compile_aquaMeasure_data <- function(path.aM,
                                      trim = TRUE,
                                      export.csv = FALSE){
 
+
   # initialize dateframe for storing the output
   aM_dat <- data.frame(INDEX = as.character())
 
