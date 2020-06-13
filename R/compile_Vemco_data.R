@@ -1,18 +1,24 @@
 #'@title Formats temperature data from Vemco deployment
 #'@description This function formats data from a Vemco deployment so it can be
 #'  compiled with the HOBO and aquaMeasure data.
+#'@details Only accepts csv files.
+#'
+#'  All columns are read in as class character to ensure the timestamp is parsed
+#'  correctly. Not all dates were parsed with automatic imputation because the
+#'  date format changes (some include seconds and others do not).
 #'@inheritParams compile_HOBO_data
 #'@param path.vemco File path to the Vemco folder. This folder should have one
 #'  csv file that was extracted using Vue software. Other file types in the
 #'  folder will be ignored.
 #'@param area.name Area where the Vemco was deployed.
-#'@param depth.vemco Depth at which the Vemco was deployed.
-#'@return Returns a dataframe or spreadsheet with the formatted Vemco datain two
-#'  columns: the timestamp (UTC, in the format "Y-m-d H:M:S") and temperature
-#'  value (degree celsius, rounded to three decimal places). Metadata at the top
-#'  of each column indicates the deployment range, the sensor serial number, and
-#'  the depth of the sensor. Each datetime column shows the timezone as
-#'  extracted from the Vue software.
+#'@param depth.vemco Character string describing the depth at which the Vemco
+#'  was deployed, in the format "10m".
+#'@return Returns a dataframe or exports a spreadsheet with the formatted Vemco
+#'  data in two columns: the timestamp (UTC, in the format "Y-m-d H:M:S") and
+#'  temperature value (degree celsius, rounded to three decimal places).
+#'  Metadata at the top of each column indicates the deployment range, the
+#'  sensor serial number, and the depth of the sensor. Each datetime column
+#'  shows the timezone as extracted from the Vue software.
 #'
 #'  To include the metadata, all values were converted to class
 #'  \code{character}. To manipulate the data, the values must be converted to
@@ -56,8 +62,9 @@ compile_vemco_data <- function(path.vemco,
                 "files on the path begin with ~ and were not imported.", sep = " "))
   }
 
-  vemco_dat <- read_csv(paste(path.vemco,  dat.files[1], sep = "/"), col_names = TRUE,
-                        col_types = "ccccc")
+  vemco_dat <- read_csv(paste(path.vemco,  dat.files[1], sep = "/"),
+                        col_names = TRUE,
+                        col_types = cols(.default = col_character()))
 
   # Extract metadata --------------------------------------------------------
 
@@ -73,7 +80,7 @@ compile_vemco_data <- function(path.vemco,
   vemco <- vemco_dat %>%
     filter(Description == "Temperature") %>%
     transmute(INDEX = c(1:n()),
-              DATE = parse_date_time(`Date and Time (UTC)`, orders = "Ymd HM"),
+              DATE = parse_date_time(`Date and Time (UTC)`, orders = c("Ymd HMS", "Ymd HM")),
               TEMPERATURE = Data)
 
   # trim to the dates in deployment.range
@@ -112,7 +119,7 @@ compile_vemco_data <- function(path.vemco,
 
   } else{
 
-    print("Note: to export csv file, set export.csv = TRUE")
+    print("Vemco data compiled")
 
     vemco
   }

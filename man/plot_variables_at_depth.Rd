@@ -8,7 +8,7 @@ plot_variables_at_depth(
   dat.tidy,
   plot.title = "",
   vars.to.plot = c("Temperature", "Dissolved Oxygen", "Salinity"),
-  ylab.units = c(expression(paste("(", degree, "C)")), "(\%)", "(ppt)"),
+  ylab.units = c("deg C)", "(\%)", "(ppt)"),
   color.palette = rev(viridis(6, option = "D")),
   date.breaks.major = "2 month",
   date.breaks.minor = "1 month",

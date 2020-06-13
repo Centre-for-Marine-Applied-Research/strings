@@ -41,13 +41,15 @@
 plot_variables_at_depth <- function(dat.tidy,
                                     plot.title = "",
                                     vars.to.plot = c("Temperature", "Dissolved Oxygen", "Salinity"),
-                                    ylab.units = c(expression(paste("(",degree,"C)")),
+                                    ylab.units = c("deg C)",
                                                    "(%)",
                                                    "(ppt)"),
                                     color.palette = rev(viridis(6, option = "D")),
                                     date.breaks.major = "2 month",
                                     date.breaks.minor = "1 month",
                                     stacked = TRUE){
+
+  #plot.new()
 
   theme_set(theme_light())
 

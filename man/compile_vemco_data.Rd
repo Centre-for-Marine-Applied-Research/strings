@@ -20,7 +20,8 @@ folder will be ignored.}
 
 \item{area.name}{Area where the Vemco was deployed.}
 
-\item{depth.vemco}{Depth at which the Vemco was deployed.}
+\item{depth.vemco}{Character string describing the depth at which the Vemco
+was deployed, in the format "10m".}
 
 \item{deployment.range}{The start and end dates of deployment from the
 deployment log. Must be in format "2018-Nov-15 to 2020-Jan-24".}
@@ -36,12 +37,12 @@ as a .csv file. If \code{export.csv = TRUE}, the compiled data will not be
 returned to the global environment. Default is \code{export.csv = FALSE}.}
 }
 \value{
-Returns a dataframe or spreadsheet with the formatted Vemco datain two
- columns: the timestamp (UTC, in the format "Y-m-d H:M:S") and temperature
- value (degree celsius, rounded to three decimal places). Metadata at the top
- of each column indicates the deployment range, the sensor serial number, and
- the depth of the sensor. Each datetime column shows the timezone as
- extracted from the Vue software.
+Returns a dataframe or exports a spreadsheet with the formatted Vemco
+ data in two columns: the timestamp (UTC, in the format "Y-m-d H:M:S") and
+ temperature value (degree celsius, rounded to three decimal places).
+ Metadata at the top of each column indicates the deployment range, the
+ sensor serial number, and the depth of the sensor. Each datetime column
+ shows the timezone as extracted from the Vue software.
 
  To include the metadata, all values were converted to class
  \code{character}. To manipulate the data, the values must be converted to
@@ -53,9 +54,17 @@ Returns a dataframe or spreadsheet with the formatted Vemco datain two
 This function formats data from a Vemco deployment so it can be
  compiled with the HOBO and aquaMeasure data.
 }
+\details{
+Only accepts csv files.
+
+ All columns are read in as class character to ensure the timestamp is parsed
+ correctly. Not all dates were parsed with automatic imputation because the
+ date format changes (some include seconds and others do not).
+}
 \seealso{
 Other compile: 
 \code{\link{compile_HOBO_data}()},
+\code{\link{compile_all_data}()},
 \code{\link{compile_aquaMeasure_data}()},
 \code{\link{convert_to_tidydata}()}
 }

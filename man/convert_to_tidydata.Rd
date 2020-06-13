@@ -7,8 +7,8 @@
 convert_to_tidydata(dat.wide, remove.NA = TRUE, show.NA.message = FALSE)
 }
 \arguments{
-\item{dat.wide}{Data in the format exported by \code{compile_HOBO_data} and
-\code{compile_aquaMeasure_data}.}
+\item{dat.wide}{Data in the format exported by the \code{compile_xxx_data}
+functions.}
 
 \item{remove.NA}{Logical value. If \code{remove.NA = TRUE}, observations where
 \code{DATE} or \code{VALUE} = \code{NA} are removed. Default is
@@ -26,16 +26,10 @@ Returns a tidy dataframe with six columns: \code{DATE} (POSIXct),
 \description{
 Converts compiled string data to a tidy format
 }
-\details{
-I haven't done anything with the DATES. Still need to un-account for
- daylight savings. To be discussed. if there is no data in the Date column
- (e.g., column 15 for Beaver Point), this column and the corresponding
- variable column are skipped (these NAs are NOT included in the NA count
- provided by the message)
-}
 \seealso{
 Other compile: 
 \code{\link{compile_HOBO_data}()},
+\code{\link{compile_all_data}()},
 \code{\link{compile_aquaMeasure_data}()},
 \code{\link{compile_vemco_data}()}
 }

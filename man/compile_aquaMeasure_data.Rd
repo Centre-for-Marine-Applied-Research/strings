@@ -2,7 +2,7 @@
 % Please edit documentation in R/compile_aquaMeasure_data.R
 \name{compile_aquaMeasure_data}
 \alias{compile_aquaMeasure_data}
-\title{Compiles temperature, dissolved oxygen, and salinity data from
+\title{Compiles temperature, dissolved oxygen, and/or salinity data from
  aquaMeasure deployment}
 \usage{
 compile_aquaMeasure_data(
@@ -22,10 +22,11 @@ there is more than one file. The function can accept .csv or .xlsx files.}
 
 \item{area.name}{Area where aquaMeasure was deployed.}
 
-\item{vars.aM}{The variables to extract. (Could possibly replace with
-unique(Record Type))}
+\item{vars.aM}{The variables to extract. Default is \code{vars.aM =
+c("Temperature", "Dissolved Oxygen", "Salinity")}.}
 
-\item{depth.aM}{The depth at which the sensor was deployed.}
+\item{depth.aM}{Character string describing the depth at which the sensor was
+deployed, in the format "10m".}
 
 \item{deployment.range}{The start and end dates of deployment from the
 deployment log. Must be in format "2018-Nov-15 to 2020-Jan-24".}
@@ -41,28 +42,41 @@ as a .csv file. If \code{export.csv = TRUE}, the compiled data will not be
 returned to the global environment. Default is \code{export.csv = FALSE}.}
 }
 \value{
-Returns a dataframe or exports a spreadsheet with the aquaMeasure
- data, including the appropriate metadata. Note that to include the metadata,
- all values were converted to class \code{character}. To manipulate the data,
- the values must be converted to the appropriate class (e.g., \code{POSIXct}
- for \code{DATE}, \code{numeric} for temperature values). This can be done
- using the function \code{convert_to_tidydata()}.
+Returns a dataframe or exports a spreadsheet with the data compiled
+ from each of the aquaMeasure sensors. Columns alternate between datetime
+ (UTC, in the format "Y-m-d H:M:S") and variable value (rounded to three
+ decimal places). Metadata at the top of each column indicates the deployment
+ range, the sensor serial number, and the variable and depth of the sensor.
+ Each datetime column shows the timezone as extracted from the aquaMeasure.
+
+ To include the metadata, all values were converted to class
+ \code{character}. To manipulate the data, the values must be converted to
+ the appropriate class (e.g., \code{POSIXct} for the datetimes and
+ \code{numeric} for variable values). This can be done using the function
+ \code{convert_to_tidydata()}.
 }
 \description{
 This functions re-formats the data from an aquaMeasure deployment
- so it can be combined with the HOBO temperature data.
+ so it can be combined with the HOBO and Vemco temperature data.
 }
 \details{
-**ADD round() here
+Can handle .csv or .xlsx files.
 
-Rows with \code{undefined} and \code{... (time not set)} values in
- the Timestamp(UTC) column are filtered out.
+ All columns in .xlsx files will be imported as characters to ensure dates
+ are parsed correctly.
 
- Negative DO values are replaced with \code{NA}.
+ The first 7 columns in .csv files will be imported as characters. There
+ still may be parsing errors because there are not entries in every column.
+
+ Rows with \code{undefined} and \code{... (time not set)} values in the
+ \code{Timestamp(UTC)} column are filtered out.
+
+ Negative Dissolved Oxygen values are replaced with \code{NA}.
 }
 \seealso{
 Other compile: 
 \code{\link{compile_HOBO_data}()},
+\code{\link{compile_all_data}()},
 \code{\link{compile_vemco_data}()},
 \code{\link{convert_to_tidydata}()}
 }

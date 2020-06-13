@@ -48,13 +48,13 @@ as a .csv file. If \code{export.csv = TRUE}, the compiled data will not be
 returned to the global environment. Default is \code{export.csv = FALSE}.}
 }
 \value{
-Returns a dataframe or spreadsheet with the data compiled from each of
- the HOBO sensors. Columns alternate between datetime (UTC, in the format
- "Y-m-d H:M:S") and temperature value (degree celsius, rounded to three
- decimal places). Metadata at the top of each column indicates the deployment
- range, the sensor serial number, and the depth of the sensor. Each datetime
- column shows the timezone as extracted from the HOBOware, and each
- temperature column shows the units extracted from HOBO.
+Returns a dataframe or exports a spreadsheet with the data compiled
+ from each of the HOBO sensors. Columns alternate between datetime (UTC, in
+ the format "Y-m-d H:M:S") and temperature value (degree celsius, rounded to
+ three decimal places). Metadata at the top of each column indicates the
+ deployment range, the sensor serial number, and the depth of the sensor.
+ Each datetime column shows the timezone as extracted from the HOBOware, and
+ each temperature column shows the units extracted from HOBO.
 
  To include the metadata, all values were converted to class
  \code{character}. To manipulate the data, the values must be converted to
@@ -67,8 +67,13 @@ This function compiles the data from a HOBO deployment at
  different depths into a single dataframe or spreadsheet.
 }
 \details{
-HOBO data should be exported in GMT+00 as a csv file so that the
- timestamp is in UTC.
+All columns are read in as characters to ensure the timestamp is
+ parsed correctly.
+
+ Can handle .csv or .xlsx files, but .csv files are preferred (see below).
+
+ HOBO data should be exported in GMT+00 as a csv file so that the timestamp
+ is in UTC.
 
  If exported as an xlsx, the timestamp accounts for daylight savings time.
  \code{compile_HOBO_data()} will automatically convert xlsx files to true UTC
@@ -86,9 +91,9 @@ HOBO data should be exported in GMT+00 as a csv file so that the
  dst(ADT_force)}. Where \code{DAYLIGHT_SAVINGS == TRUE}, the \code{DATE} is
  shifted back by 1 hour.
 
- This leaves apparent duplications for the hour of 1 am on the day that
+ This leaves apparent duplicates for the hour of 1 am on the day that
  daylight savings ends. \code{dates_to_fix()} identifies these \code{n}
- obervations (e.g. 1:00, 1:15, 1:30, 1:45, 1:00, 1:15, 1:30, 1:45), and
+ observations (e.g. 1:00, 1:15, 1:30, 1:45, 1:00, 1:15, 1:30, 1:45), and
  shifts the first \code{n/2} back by one hour (e.g. 00:00, 00:15, 00:30,
  00:45, 1:00, 1:15, 1:30, 1:45). Function can handing this from 2017 - 2021;
  additional lines required for other years.
@@ -98,6 +103,7 @@ HOBO data should be exported in GMT+00 as a csv file so that the
 }
 \seealso{
 Other compile: 
+\code{\link{compile_all_data}()},
 \code{\link{compile_aquaMeasure_data}()},
 \code{\link{compile_vemco_data}()},
 \code{\link{convert_to_tidydata}()}

@@ -1,34 +1,51 @@
-#'@title Compiles temperature, dissolved oxygen, and salinity data from
+#'@title Compiles temperature, dissolved oxygen, and/or salinity data from
 #'  aquaMeasure deployment
 #'@description This functions re-formats the data from an aquaMeasure deployment
-#'  so it can be combined with the HOBO temperature data.
-#'@details **ADD round() here
+#'  so it can be combined with the HOBO and Vemco temperature data.
+#'@details Might be able to get rid of parsing error by deleting Text column. IF
+#'  you do this, make another folder inside aquaMeaure named Raw Data and save
+#'  the unaltered data there
 #'
-#'Rows with \code{undefined} and \code{... (time not set)} values in
-#'  the Timestamp(UTC) column are filtered out.
+#'  Can handle .csv or .xlsx files.
 #'
-#'  Negative DO values are replaced with \code{NA}.
+#'  All columns in .xlsx files will be imported as characters to ensure dates
+#'  are parsed correctly.
+#'
+#'  The first 7 columns in .csv files will be imported as characters. There
+#'  still may be parsing errors because there are not entries in every column.
+#'
+#'  Rows with \code{undefined} and \code{... (time not set)} values in the
+#'  \code{Timestamp(UTC)} column are filtered out.
+#'
+#'  Negative Dissolved Oxygen values are replaced with \code{NA}.
 #'
 #'@inheritParams compile_HOBO_data
 #'@param path.aM File path to the aquaMeasure folder. There should only be one
 #'  file in the aquaMeasure folder. A warning will be printed to the console if
 #'  there is more than one file. The function can accept .csv or .xlsx files.
 #'@param area.name Area where aquaMeasure was deployed.
-#'@param vars.aM The variables to extract. (Could possibly replace with
-#'  unique(Record Type))
-#'@param depth.aM The depth at which the sensor was deployed.
-#'@return Returns a dataframe or exports a spreadsheet with the aquaMeasure
-#'  data, including the appropriate metadata. Note that to include the metadata,
-#'  all values were converted to class \code{character}. To manipulate the data,
-#'  the values must be converted to the appropriate class (e.g., \code{POSIXct}
-#'  for \code{DATE}, \code{numeric} for temperature values). This can be done
-#'  using the function \code{convert_to_tidydata()}.
+#'@param vars.aM The variables to extract. Default is \code{vars.aM =
+#'  c("Temperature", "Dissolved Oxygen", "Salinity")}.
+#'@param depth.aM Character string describing the depth at which the sensor was
+#'  deployed, in the format "10m".
+#'@return Returns a dataframe or exports a spreadsheet with the data compiled
+#'  from each of the aquaMeasure sensors. Columns alternate between datetime
+#'  (UTC, in the format "Y-m-d H:M:S") and variable value (rounded to three
+#'  decimal places). Metadata at the top of each column indicates the deployment
+#'  range, the sensor serial number, and the variable and depth of the sensor.
+#'  Each datetime column shows the timezone as extracted from the aquaMeasure.
+#'
+#'  To include the metadata, all values were converted to class
+#'  \code{character}. To manipulate the data, the values must be converted to
+#'  the appropriate class (e.g., \code{POSIXct} for the datetimes and
+#'  \code{numeric} for variable values). This can be done using the function
+#'  \code{convert_to_tidydata()}.
 #'@family compile
 #'@author Danielle Dempsey
 #'@importFrom janitor convert_to_datetime
 #'@importFrom lubridate parse_date_time
 #'@importFrom readxl read_excel
-#'@importFrom readr write_csv read_csv
+#'@importFrom readr write_csv read_csv cols col_character
 #'@importFrom stringr str_detect
 #'@importFrom tidyr separate
 #'@import dplyr
@@ -43,6 +60,9 @@ compile_aquaMeasure_data <- function(path.aM,
                                      trim = TRUE,
                                      export.csv = FALSE){
 
+  # initialize dateframe for storing the output
+  aM_dat <- data.frame(INDEX = as.character())
+
   # extract the deployment start and end dates from deployment.dates
   dates <- extract_deployment_dates(deployment.range)
   start.date <- dates$start
@@ -53,8 +73,8 @@ compile_aquaMeasure_data <- function(path.aM,
   # finish path
   path.aM <- file.path(paste(path.aM, "/aquaMeasure", sep = ""))
 
-  # list files in the data folder
-  dat.files <- list.files(path.aM, all.files = FALSE)
+  # list csv and xlsx files in the data folder
+  dat.files <- list.files(path.aM, all.files = FALSE, pattern = "*csv|*xlsx")
 
   # remove files that start with "~"
   if(any(substring(dat.files, 1, 1)== "~")) {
@@ -76,11 +96,15 @@ compile_aquaMeasure_data <- function(path.aM,
 
   # use appropriate function to import data
   if(file.extension == "csv") {
-    aM_dat_raw <- read_csv(paste(path.aM, dat.files, sep = "/"), col_names = TRUE)
+    aM_dat_raw <- read_csv(paste(path.aM, dat.files, sep = "/"),
+                           col_names = TRUE,
+                           col_types = cols(.default = col_character()))
   }
 
   if(file.extension == "xlsx") {
-    aM_dat_raw <- read_excel(paste(path.aM, dat.files, sep = "/"), col_names = TRUE)
+    aM_dat_raw <- read_excel(paste(path.aM, dat.files, sep = "/"),
+                             col_names = TRUE,
+                             col_types = "text")
   }
 
   # Error message in case trying to extract a variable that is not in the dataset OR
@@ -140,12 +164,15 @@ compile_aquaMeasure_data <- function(path.aM,
       select(DATE, `Record Type`, vars.aM[i]) %>%
       filter(`Record Type` == vars.aM[i]) %>%
       rename(PLACEHOLDER = 3) %>%
-      mutate(INDEX = as.character(c(1:n())))
+      mutate(INDEX = as.character(c(1:n())),
+             PLACEHOLDER = round(as.numeric(PLACEHOLDER), digits = 3))
 
     if(vars.aM[i] == "Dissolved Oxygen") aM.i <- aM.i %>% filter(PLACEHOLDER > 0)
 
     aM.i <- aM.i %>%
-      transmute(INDEX, DATE = as.character(DATE), PLACEHOLDER = as.character(PLACEHOLDER)) %>%
+      transmute(INDEX,
+                DATE = as.character(DATE),
+                PLACEHOLDER = as.character(PLACEHOLDER)) %>%
       add_metadata(row1 = deployment.range,
                    row2 = serial,
                    row3 = paste(vars.aM[i], depth.aM, sep = "-"),
@@ -176,7 +203,7 @@ compile_aquaMeasure_data <- function(path.aM,
     print(paste("Check in ", path.aM, " for file ", file.name, ".csv", sep = ""))
   }else{
 
-    print("Note: to export csv file, set export.csv = TRUE")
+    print("aquaMeasure data compiled")
 
     aM_dat
   }
