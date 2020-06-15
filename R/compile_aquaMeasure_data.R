@@ -153,22 +153,8 @@ compile_aquaMeasure_data <- function(path.aM,
       select(DATE = `Timestamp(UTC)`, `Record Type`, all_of(vars.to.select)) %>%
       mutate(DATE_VALUES = str_detect(DATE, "(time not set)")) %>%
       filter(DATE != "undefined", DATE_VALUES == FALSE) %>%
-      select(-DATE_VALUES)
-
-    # if the date can be converted to class numeric, then it is stored as a number in Excel
-    ## and we have to use janitor::convert_to_datetime to convert to POSIXct.
-    # Otherwise the date should be a character string that can be converted to POSIXct using
-    ## lubridate::parse_date_time
-    date_format <- dat.i$DATE[1]
-    if(!is.na(suppressWarnings(as.numeric(date_format)))) {
-
-      dat.i <- dat.i %>%
-        mutate(DATE = convert_to_datetime(as.numeric(DATE)))
-    } else{
-
-      dat.i <- dat.i %>%
-        mutate(DATE = parse_date_time(DATE, orders = c("Ymd HM", "Ymd HMS")))
-    }
+      select(-DATE_VALUES) %>%
+      convert_timestamp_to_datetime()  # convert the timestamp to a POSIXct object
 
     # trim to the dates in deployment.range
     # added four hours to end.date to account for AST

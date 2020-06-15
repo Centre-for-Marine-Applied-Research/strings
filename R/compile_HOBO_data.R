@@ -197,24 +197,8 @@ compile_HOBO_data <- function(path.HOBO,
 
     hobo.i <- hobo.i %>%
       slice(-1) %>%                                       # remove column headings
-      select(INDEX = 1, DATE = 2, TEMPERATURE = 3)        # rename columns (will be dropped for export)
-
-    # if the date can be converted to class numeric, then it is stored as a number in Excel
-    ## and we have to use janitor::convert_to_datetime to convert to POSIXct.
-    # Otherwise the date should be a character string that can be converted to POSIXct using
-    ## lubridate::parse_date_time()
-    # Consider turning this into a function (also used in compile_auqaMeasure_data())
-    date_format <- hobo.i$DATE[1]
-    if(!is.na(suppressWarnings(as.numeric(date_format)))) {
-
-      hobo.i <- hobo.i %>%
-        mutate(DATE = convert_to_datetime(as.numeric(DATE)))
-
-    } else{
-
-      hobo.i <- hobo.i %>%
-        mutate(DATE = parse_date_time(DATE, orders = c("ymd IMS p", "Ymd HM", "Ymd HMS")))
-    }
+      select(INDEX = 1, DATE = 2, TEMPERATURE = 3) %>%    # rename columns (will be dropped for export)
+      convert_timestamp_to_datetime()                     # convert the timestamp to a POSIXct object
 
     # un-account for daylight savings time
     # (subtract 1 hour from each datetime within the range of DST)
