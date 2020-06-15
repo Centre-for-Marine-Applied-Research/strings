@@ -20,4 +20,5 @@ Imports:
     ggplot2,
     viridis,
     stringr,
-    ggpubr
+    ggpubr,
+    tidyselect

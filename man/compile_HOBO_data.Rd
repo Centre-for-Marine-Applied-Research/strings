@@ -7,7 +7,7 @@
 compile_HOBO_data(
   path.HOBO,
   area.name,
-  serial.table,
+  serial.table.HOBO,
   deployment.range,
   trim = TRUE,
   file.type = "csv",
@@ -23,9 +23,10 @@ columns must be in the order "ymd IMS p", "Ymd HM", or "Ymd HMS".}
 
 \item{area.name}{Area where the HOBO was deployed.}
 
-\item{serial.table}{A table with the serial number of each HOBO in the form
-"HOBO-xxxxxxxx" (first column) and corresponding variable it measured at the
-depth it was deployed in the form "Temperature-2m" (second column).}
+\item{serial.table.HOBO}{A table with the serial number of each HOBO sensor on the
+string, in the form "HOBO-xxxxxxxx" (first column) and corresponding
+variable it measured at the depth it was deployed in the form
+"Temperature-2m" (second column).}
 
 \item{deployment.range}{The start and end dates of deployment from the
 deployment log. Must be in format "2018-Nov-15 to 2020-Jan-24".}

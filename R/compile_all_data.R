@@ -29,22 +29,21 @@ compile_all_data <- function(path,
                              deployment.range,
                              trim,
                              # hobo
-                             serial.table = NULL,
+                             serial.table.HOBO = NULL,
                              file.type = NULL,
                              # aquaMeaure
-                             vars.aM = NULL,
-                             depth.aM = NULL,
+                             serial.table.aM = NULL,
                              # vemco
                              depth.vemco = NULL){
 
   ALL <- data.frame(INDEX = as.character())
 
   # compile HOBO data
-  if(length(serial.table) > 0){
+  if(length(serial.table.HOBO) > 0){
 
     HOBO <- compile_HOBO_data(path.HOBO = path,
                               area.name = area.name,
-                              serial.table = serial.table,
+                              serial.table.HOBO = serial.table.HOBO,
                               deployment.range = deployment.range,
                               trim = trim,
                               file.type = file.type)
@@ -54,12 +53,11 @@ compile_all_data <- function(path,
 
 
   # compile aquaMeasure data
-  if(length(depth.aM) > 0){
+  if(length(serial.table.aM) > 0){
 
     aM <- compile_aquaMeasure_data(path.aM = path,
                                    area.name = area.name,
-                                   vars.aM = vars.aM,
-                                   depth.aM = depth.aM,
+                                   serial.table.aM = serial.table.aM,
                                    deployment.range = deployment.range,
                                    trim = TRUE)
 

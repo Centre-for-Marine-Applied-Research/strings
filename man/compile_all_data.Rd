@@ -9,10 +9,9 @@ compile_all_data(
   area.name,
   deployment.range,
   trim,
-  serial.table = NULL,
+  serial.table.HOBO = NULL,
   file.type = NULL,
-  vars.aM = NULL,
-  depth.aM = NULL,
+  serial.table.aM = NULL,
   depth.vemco = NULL
 )
 }
@@ -30,9 +29,10 @@ retrieval date to account for AST, e.g., in case the sensor was retrieved
 after 20:00 AST, which is 00:00 UTC the next day.) Default is \code{trim =
 TRUE}.}
 
-\item{serial.table}{A table with the serial number of each HOBO in the form
-"HOBO-xxxxxxxx" (first column) and corresponding variable it measured at the
-depth it was deployed in the form "Temperature-2m" (second column).}
+\item{serial.table.HOBO}{A table with the serial number of each HOBO sensor on the
+string, in the form "HOBO-xxxxxxxx" (first column) and corresponding
+variable it measured at the depth it was deployed in the form
+"Temperature-2m" (second column).}
 
 \item{file.type}{Character string indicating whether the HOBO data is in .csv
 or .xlsx format. All data files that are being compiled must have the same
@@ -41,11 +41,9 @@ but xlsx files account for daylight savings time. This function will
 automatically convert the datetimes in xlsx files to true UTC. Default is
 \code{file.type = "csv"}. Alternative is \code{file.type = "xlsx"}.}
 
-\item{vars.aM}{The variables to extract. Default is \code{vars.aM =
-c("Temperature", "Dissolved Oxygen", "Salinity")}.}
-
-\item{depth.aM}{Character string describing the depth at which the sensor was
-deployed, in the format "10m".}
+\item{serial.table.aM}{A table with the serial number of each aquaMeasure on the
+string, in the form "aquaMeasure-xxxxxx" (first column; note the capital
+"M") and its corresponding depth in the form "2m" (second column).}
 
 \item{depth.vemco}{Character string describing the depth at which the Vemco
 was deployed, in the format "10m".}

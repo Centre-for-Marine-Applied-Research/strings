@@ -5,7 +5,7 @@
 \title{Generates name for output file with HOBO, aquaMeasure, and Vemco data from a single
  deployment}
 \usage{
-name_compiled_data(area.name, deployment.range, vars.aM)
+name_compiled_data(area.name, deployment.range, vars)
 }
 \arguments{
 \item{area.name}{Area where aquaMeasure was deployed.}
@@ -13,8 +13,7 @@ name_compiled_data(area.name, deployment.range, vars.aM)
 \item{deployment.range}{The start and end dates of deployment from the
 deployment log. Must be in format "2018-Nov-15 to 2020-Jan-24".}
 
-\item{vars.aM}{The variables to extract. Default is \code{vars.aM =
-c("Temperature", "Dissolved Oxygen", "Salinity")}.}
+\item{vars}{Text}
 }
 \description{
 Generates a name for output file based on the arguments to

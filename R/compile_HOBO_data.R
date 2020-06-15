@@ -41,9 +41,10 @@
 #'  must all have the same extension (either .csv or .xlsx). The datetime
 #'  columns must be in the order "ymd IMS p", "Ymd HM", or "Ymd HMS".
 #'@param area.name Area where the HOBO was deployed.
-#'@param serial.table A table with the serial number of each HOBO in the form
-#'  "HOBO-xxxxxxxx" (first column) and corresponding variable it measured at the
-#'  depth it was deployed in the form "Temperature-2m" (second column).
+#'@param serial.table.HOBO A table with the serial number of each HOBO sensor on the
+#'  string, in the form "HOBO-xxxxxxxx" (first column) and corresponding
+#'  variable it measured at the depth it was deployed in the form
+#'  "Temperature-2m" (second column).
 #'@param deployment.range The start and end dates of deployment from the
 #'  deployment log. Must be in format "2018-Nov-15 to 2020-Jan-24".
 #'@param trim Logical value indicating whether to trim the data to the dates
@@ -87,13 +88,14 @@
 
 compile_HOBO_data <- function(path.HOBO,
                               area.name,
-                              serial.table,
+                              serial.table.HOBO,
                               deployment.range,
                               trim = TRUE,
                               file.type = "csv",
                               export.csv = FALSE){
 
-  names(serial.table) <- c("SERIAL", "VAR_DEPTH")
+  # make sure columns of serial.table are named correctly
+  names(serial.table.HOBO) <- c("SERIAL", "VAR_DEPTH")
 
   # extract the deployment start and end dates from deployment.dates
   dates <- extract_deployment_dates(deployment.range)
@@ -169,12 +171,13 @@ compile_HOBO_data <- function(path.HOBO,
 
 
     # if the name of the file doesn't match any of the entries in serial.table: stop with message
-    if(!(serial.i %in% serial.table$SERIAL)){
-      stop(paste("The name of file", i, "does not match any serial numbers in serial.table"))
+    if(!(serial.i %in% serial.table.HOBO$SERIAL)){
+      stop(paste("The name of file", i, "does not match any serial numbers in serial.table.HOBO"))
     }
 
     # use serial number to identify the variable and depth (from serial.table)
-    variable_depth <- serial.table %>%
+    # could simplify this because variable will always be Temperature
+    variable_depth <- serial.table.HOBO %>%
       dplyr::filter(SERIAL == serial.i)  %>%
       select(VAR_DEPTH)
     variable_depth <- variable_depth$VAR_DEPTH
@@ -210,8 +213,7 @@ compile_HOBO_data <- function(path.HOBO,
     } else{
 
       hobo.i <- hobo.i %>%
-        mutate(DATE = parse_date_time(DATE,
-                                      orders = c("ymd IMS p", "Ymd HM", "Ymd HMS")))
+        mutate(DATE = parse_date_time(DATE, orders = c("ymd IMS p", "Ymd HM", "Ymd HMS")))
     }
 
     # un-account for daylight savings time

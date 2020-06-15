@@ -8,8 +8,7 @@
 compile_aquaMeasure_data(
   path.aM,
   area.name,
-  vars.aM = c("Temperature", "Dissolved Oxygen", "Salinity"),
-  depth.aM,
+  serial.table.aM,
   deployment.range,
   trim = TRUE,
   export.csv = FALSE
@@ -22,11 +21,9 @@ there is more than one file. The function can accept .csv or .xlsx files.}
 
 \item{area.name}{Area where aquaMeasure was deployed.}
 
-\item{vars.aM}{The variables to extract. Default is \code{vars.aM =
-c("Temperature", "Dissolved Oxygen", "Salinity")}.}
-
-\item{depth.aM}{Character string describing the depth at which the sensor was
-deployed, in the format "10m".}
+\item{serial.table.aM}{A table with the serial number of each aquaMeasure on the
+string, in the form "aquaMeasure-xxxxxx" (first column; note the capital
+"M") and its corresponding depth in the form "2m" (second column).}
 
 \item{deployment.range}{The start and end dates of deployment from the
 deployment log. Must be in format "2018-Nov-15 to 2020-Jan-24".}
@@ -60,7 +57,11 @@ This functions re-formats the data from an aquaMeasure deployment
  so it can be combined with the HOBO and Vemco temperature data.
 }
 \details{
-Can handle .csv or .xlsx files.
+Might be able to get rid of parsing error by deleting Text column. IF
+ you do this, make another folder inside aquaMeaure named Raw Data and save
+ the unaltered data there
+
+ Can handle .csv or .xlsx files.
 
  All columns in .xlsx files will be imported as characters to ensure dates
  are parsed correctly.

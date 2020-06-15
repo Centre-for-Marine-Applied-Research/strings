@@ -24,10 +24,9 @@
 #'  file in the aquaMeasure folder. A warning will be printed to the console if
 #'  there is more than one file. The function can accept .csv or .xlsx files.
 #'@param area.name Area where aquaMeasure was deployed.
-#'@param vars.aM The variables to extract. Default is \code{vars.aM =
-#'  c("Temperature", "Dissolved Oxygen", "Salinity")}.
-#'@param depth.aM Character string describing the depth at which the sensor was
-#'  deployed, in the format "10m".
+#'@param serial.table.aM A table with the serial number of each aquaMeasure on the
+#'  string, in the form "aquaMeasure-xxxxxx" (first column; note the capital
+#'  "M") and its corresponding depth in the form "2m" (second column).
 #'@return Returns a dataframe or exports a spreadsheet with the data compiled
 #'  from each of the aquaMeasure sensors. Columns alternate between datetime
 #'  (UTC, in the format "Y-m-d H:M:S") and variable value (rounded to three
@@ -48,28 +47,30 @@
 #'@importFrom readr write_csv read_csv cols col_character
 #'@importFrom stringr str_detect
 #'@importFrom tidyr separate
+#'@importFrom tidyselect all_of
 #'@import dplyr
 #'@export
 
 
 compile_aquaMeasure_data <- function(path.aM,
                                      area.name,
-                                     vars.aM = c("Temperature", "Dissolved Oxygen", "Salinity"),
-                                     depth.aM,
+                                     serial.table.aM,
                                      deployment.range,
                                      trim = TRUE,
                                      export.csv = FALSE){
 
-
-  # initialize dateframe for storing the output
-  aM_dat <- data.frame(INDEX = as.character())
+  # make sure columns of serial.table are named correctly
+  names(serial.table.aM) <- c("SERIAL", "DEPTH")
 
   # extract the deployment start and end dates from deployment.dates
   dates <- extract_deployment_dates(deployment.range)
   start.date <- dates$start
   end.date <- dates$end
 
-# Import data -------------------------------------------------------------
+  # initialize dateframe for storing the output
+  aM_dat <- data.frame(INDEX = as.character())
+
+# List files to be compiled -----------------------------------------------
 
   # finish path
   path.aM <- file.path(paste(path.aM, "/aquaMeasure", sep = ""))
@@ -85,123 +86,145 @@ compile_aquaMeasure_data <- function(path.aM,
                 "files on the path begin with ~ and were not imported.", sep = " "))
   }
 
-  if(length(dat.files) > 1){
-    print(paste("Warning: there is more than one file in ", path.aM, ". Only the first file will be imported.", sep = ""))
-  }
+# Import data -------------------------------------------------------------
 
-  # check whether file is .csv or .xlsx
-  dat.files <- dat.files[1]
-  file.extension <- separate(data.frame(dat.files), col = dat.files,
-                             into = c(NA, "EXT"), sep = "\\.")
-  file.extension <- file.extension$EXT
+  # loop over each aM file
+  for(i in 1:length(dat.files)) {
 
-  # use appropriate function to import data
-  if(file.extension == "csv") {
-    aM_dat_raw <- read_csv(paste(path.aM, dat.files, sep = "/"),
-                           col_names = TRUE,
-                           col_types = cols(.default = col_character()))
-  }
+    # check whether file is .csv or .xlsx
+    file.i <- dat.files[i]
+    file.extension.i <- separate(data.frame(file.i), col = file.i,
+                               into = c(NA, "EXT"), sep = "\\.")
+    file.extension.i <- file.extension.i$EXT
 
-  if(file.extension == "xlsx") {
-    aM_dat_raw <- read_excel(paste(path.aM, dat.files, sep = "/"),
+    # use appropriate function to import data
+    if(file.extension.i == "csv") {
+      dat.i <- read_csv(paste(path.aM, file.i, sep = "/"),
                              col_names = TRUE,
-                             col_types = "text")
-  }
+                             col_types = cols(.default = col_character()))
+    }
 
-  # Error message in case trying to extract a variable that is not in the dataset OR
-  # a variable is spelled wrong
-  if(any(!(vars.aM %in%  unique(aM_dat_raw$`Record Type`)))){
-
-    stop("At least one of the variables in vars.aM is not in this dataframe. Check spelling in vars.aM")
-  }
-
-
-# Extract metadata --------------------------------------------------------
-
-  # sensor and serial number
-  serial <- aM_dat_raw$Sensor[1]
-
-  # extract date column header (includes UTC offset)
-  date_ref <- names(aM_dat_raw)[2]
+    if(file.extension.i == "xlsx") {
+      dat.i <- read_excel(paste(path.aM, file.i, sep = "/"),
+                               col_names = TRUE,
+                               col_types = "text")
+    }
 
 
-# Clean and format data ---------------------------------------------------
+    # Extract metadata --------------------------------------------------------
 
-  # filter out DATES that sensor was not set up
-  # "undefined" or "(time not set)"
-  aM_dat_raw <- aM_dat_raw %>%
-    select(DATE = `Timestamp(UTC)`, `Record Type`, `Dissolved Oxygen`, Temperature) %>%
-    mutate(DATE_VALUES = str_detect(DATE, "(time not set)")) %>%
-    filter(DATE != "undefined", DATE_VALUES == FALSE) %>%
-    select(-DATE_VALUES)
+    # sensor and serial number
+    serial.i <- dat.i$Sensor[1]
 
-  # if the date can be converted to class numeric, then it is stored as a number in Excel
-  ## and we have to use janitor::convert_to_datetime to convert to POSIXct.
-  # Otherwise the date should be a character string that can be converted to POSIXct using
-  ## lubridate::parse_date_time
-  date_format <- aM_dat_raw$DATE[1]
-  if(!is.na(suppressWarnings(as.numeric(date_format)))) {
+    # use serial number to identify the depth (from serial.table)
+    depth.i <- serial.table.aM %>%
+      dplyr::filter(SERIAL == serial.i)  %>%
+      select(DEPTH)
+    depth.i <- depth.i$DEPTH
 
-    aM_dat_raw <- aM_dat_raw %>%
-      mutate(DATE = convert_to_datetime(as.numeric(DATE)))
-  } else{
+    # if the name of the file doesn't match any of the entries in serial.table: stop with message
+    if(!(serial.i %in% serial.table.aM$SERIAL)){
+      stop(paste("Serial number", serial.i, "does not match any serial numbers in serial.table.aM"))
+    }
 
-    aM_dat_raw <- aM_dat_raw %>%
-      mutate(DATE = parse_date_time(DATE,
-                                    orders = c("Ymd HM", "Ymd HMS")))
-  }
+    # extract date column header (includes UTC offset)
+    # use pattern match for "stamp" to look for column named "timestamp"
+    date_ref.i <- names(dat.i)[grep("stamp", names(dat.i))]
 
-  # trim to the dates in deployment.range
-  # added four hours to end.date to account for AST
-  # (e.g., in case the sensor was retrieved after 20:00 AST, which is 00:00 UTC **The next day**)
-  if(trim == TRUE) {
-    aM_dat_raw <- aM_dat_raw %>%
-      filter(DATE >= start.date, DATE <= (end.date + hours(4)))
-  }
 
-  for(i in 1:length(vars.aM)){
+    # Clean and format data ---------------------------------------------------
 
-    aM.i <- aM_dat_raw %>%
-      select(DATE, `Record Type`, vars.aM[i]) %>%
-      filter(`Record Type` == vars.aM[i]) %>%
-      rename(PLACEHOLDER = 3) %>%
-      mutate(INDEX = as.character(c(1:n())),
-             PLACEHOLDER = round(as.numeric(PLACEHOLDER), digits = 3))
+    ## check colnames of dat.i for "Temperature", "Dissolved Oxygen", and "Salinity"
+    temp <- ifelse("Temperature" %in% colnames(dat.i), "Temperature", NA)
+    DO <- ifelse("Dissolved Oxygen" %in% colnames(dat.i), "Dissolved Oxygen", NA)
+    sal <- ifelse("Salinity" %in% colnames(dat.i), "Salinity", NA)
 
-    if(vars.aM[i] == "Dissolved Oxygen") aM.i <- aM.i %>% filter(PLACEHOLDER > 0)
+    # create vector of the variables in this file by removing NA
+    vars.to.select <- c(temp, DO, sal)
+    vars.to.select <- vars.to.select[which(!is.na(vars.to.select))]
 
-    aM.i <- aM.i %>%
-      transmute(INDEX,
-                DATE = as.character(DATE),
-                PLACEHOLDER = as.character(PLACEHOLDER)) %>%
-      add_metadata(row1 = deployment.range,
-                   row2 = serial,
-                   row3 = paste(vars.aM[i], depth.aM, sep = "-"),
-                   row4 = c(date_ref, vars.aM[i]))
 
-    # merge data on the INDEX row
-    aM_dat <- full_join(aM_dat, aM.i, by = "INDEX")
+    print(paste("found", vars.to.select, "in file", file.i), sep = " ")
 
-  } # end for loop
 
+    # filter out DATES that sensor was not set up
+    # "undefined" or "(time not set)"
+    dat.i <- dat.i %>%
+      select(DATE = `Timestamp(UTC)`, `Record Type`, all_of(vars.to.select)) %>%
+      mutate(DATE_VALUES = str_detect(DATE, "(time not set)")) %>%
+      filter(DATE != "undefined", DATE_VALUES == FALSE) %>%
+      select(-DATE_VALUES)
+
+    # if the date can be converted to class numeric, then it is stored as a number in Excel
+    ## and we have to use janitor::convert_to_datetime to convert to POSIXct.
+    # Otherwise the date should be a character string that can be converted to POSIXct using
+    ## lubridate::parse_date_time
+    date_format <- dat.i$DATE[1]
+    if(!is.na(suppressWarnings(as.numeric(date_format)))) {
+
+      dat.i <- dat.i %>%
+        mutate(DATE = convert_to_datetime(as.numeric(DATE)))
+    } else{
+
+      dat.i <- dat.i %>%
+        mutate(DATE = parse_date_time(DATE, orders = c("Ymd HM", "Ymd HMS")))
+    }
+
+    # trim to the dates in deployment.range
+    # added four hours to end.date to account for AST
+    # (e.g., in case the sensor was retrieved after 20:00 AST, which is 00:00 UTC **The next day**)
+    if(trim == TRUE) {
+      dat.i <- dat.i %>%
+        filter(DATE >= start.date, DATE <= (end.date + hours(4)))
+    }
+
+    for(j in 1:length(vars.to.select)){
+
+      var.j <- vars.to.select[j]
+
+      aM.j <- dat.i %>%
+        select(DATE, `Record Type`, all_of(var.j)) %>%
+        filter(`Record Type` == var.j) %>%
+        rename(PLACEHOLDER = 3) %>%
+        mutate(INDEX = as.character(c(1:n())),
+               PLACEHOLDER = round(as.numeric(PLACEHOLDER), digits = 3))
+
+      if(var.j == "Dissolved Oxygen") aM.j <- aM.j %>% filter(PLACEHOLDER > 0)
+
+      aM.j <- aM.j %>%
+        transmute(INDEX,
+                  DATE = as.character(DATE),
+                  PLACEHOLDER = as.character(PLACEHOLDER)) %>%
+        add_metadata(row1 = deployment.range,
+                     row2 = serial.i,
+                     row3 = paste(var.j, depth.i, sep = "-"),
+                     row4 = c(date_ref.i, var.j))
+
+      # merge data on the INDEX row
+      aM_dat <- full_join(aM_dat, aM.j, by = "INDEX")
+
+    } # end loop over variables
+
+
+  } # end loop over files
 
 # Return compiled data ----------------------------------------------------
 
   if(export.csv == TRUE){
-    # format start date for file name
-    file.date <-  format(start.date, '%Y-%m-%d')
-
-    # vars
-    TEMP <- ifelse(any(vars.aM %in% "Temperature"), temp <- "_TEMP", "")
-    DO <- ifelse(any(vars.aM %in% "Dissolved Oxygen"), "_DO", "")
-    SAL <- ifelse(any(vars.aM %in% "Salinity"), "_SAL", "")
-
-    # name of output file
-    file.name <- paste(area.name, "_", file.date, TEMP, DO, SAL, sep = "")
-
-    write_csv(aM_dat, path = paste(path.aM, "/", file.name, ".csv", sep = ""), col_names = FALSE)
-
-    print(paste("Check in ", path.aM, " for file ", file.name, ".csv", sep = ""))
+    # # format start date for file name
+    # file.date <-  format(start.date, '%Y-%m-%d')
+    #
+    # # vars
+    # TEMP <- ifelse(any(vars.aM %in% "Temperature"), temp <- "_TEMP", "")
+    # DO <- ifelse(any(vars.aM %in% "Dissolved Oxygen"), "_DO", "")
+    # SAL <- ifelse(any(vars.aM %in% "Salinity"), "_SAL", "")
+    #
+    # # name of output file
+    # file.name <- paste(area.name, "_", file.date, TEMP, DO, SAL, sep = "")
+    #
+    # write_csv(aM_dat, path = paste(path.aM, "/", file.name, ".csv", sep = ""), col_names = FALSE)
+    #
+    # print(paste("Check in ", path.aM, " for file ", file.name, ".csv", sep = ""))
   }else{
 
     print("aquaMeasure data compiled")
