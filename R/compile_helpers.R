@@ -42,6 +42,7 @@ extract_deployment_dates <- function(deployment.dates){
 #' @importFrom janitor convert_to_datetime
 #' @importFrom lubridate parse_date_time
 
+# function to convert the timestamp to a POSIXct object
 # if the date can be converted to class numeric, then it was stored as a number in Excel
 ## and we have to use janitor::convert_to_datetime to convert to POSIXct.
 # Otherwise the date should be a character string that can be converted to POSIXct using
