@@ -4,19 +4,23 @@
 #'@details Only accepts csv files.
 #'
 #'  All columns are read in as class character to ensure the timestamp is parsed
-#'  correctly. Not all dates were parsed with automatic imputation because the
+#'  correctly. **Not all dates were parsed with automatic imputation because the
 #'  date format changes (some include seconds and others do not).
+#'
+#'  Timestamp must be a character in the order "Ymd HMS" or "Ymd HM".
+#'
+#'
 #'@inheritParams compile_HOBO_data
 #'@param path.vemco File path to the Vemco folder. This folder should have one
 #'  csv file that was extracted using Vue software. Other file types in the
 #'  folder will be ignored.
 #'@param area.name Area where the Vemco was deployed.
-#'@param depth.vemco Character string describing the depth at which the Vemco
+#'@param depth.vemco Character string indicating the depth at which the Vemco
 #'  was deployed, in the format "10m".
 #'@return Returns a dataframe or exports a spreadsheet with the formatted Vemco
 #'  data in two columns: the timestamp (UTC, in the format "Y-m-d H:M:S") and
 #'  temperature value (degree celsius, rounded to three decimal places).
-#'  Metadata at the top of each column indicates the deployment range, the
+#'  Metadata at the top of each column indicates the deployment dates, the
 #'  sensor serial number, and the depth of the sensor. Each datetime column
 #'  shows the timezone as extracted from the Vue software.
 #'

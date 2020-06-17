@@ -2,7 +2,7 @@
 % Please edit documentation in R/compile_HOBO_data.R
 \name{compile_HOBO_data}
 \alias{compile_HOBO_data}
-\title{Compiles temperature data from HOBO deployment}
+\title{Compiles temperature data from HOBO sensors}
 \usage{
 compile_HOBO_data(
   path.HOBO,
@@ -23,13 +23,13 @@ columns must be in the order "ymd IMS p", "Ymd HM", or "Ymd HMS".}
 
 \item{area.name}{Area where the HOBO was deployed.}
 
-\item{serial.table.HOBO}{A table with the serial number of each HOBO sensor on the
-string, in the form "HOBO-xxxxxxxx" (first column) and corresponding
+\item{serial.table.HOBO}{A table with the serial number of each HOBO sensor on
+the string, in the form "HOBO-xxxxxxxx" (first column) and corresponding
 variable it measured at the depth it was deployed in the form
 "Temperature-2m" (second column).}
 
-\item{deployment.range}{The start and end dates of deployment from the
-deployment log. Must be in format "2018-Nov-15 to 2020-Jan-24".}
+\item{deployment.range}{The start and end dates of deployment. Must be in
+format "2018-Nov-15 to 2020-Jan-24".}
 
 \item{trim}{Logical value indicating whether to trim the data to the dates
 specified in \code{deployment.range}. (Note: four hours are added to the
@@ -38,11 +38,16 @@ after 20:00 AST, which is 00:00 UTC the next day.) Default is \code{trim =
 TRUE}.}
 
 \item{file.type}{Character string indicating whether the HOBO data is in .csv
-or .xlsx format. All data files that are being compiled must have the same
-file extension. Note that the HOBO software exports csv files in true UTC,
-but xlsx files account for daylight savings time. This function will
-automatically convert the datetimes in xlsx files to true UTC. Default is
-\code{file.type = "csv"}. Alternative is \code{file.type = "xlsx"}.}
+ or .xlsx format. All data files that are being compiled must have the same
+ file extension.  Default is \code{file.type = "csv"}. Alternative is
+ \code{file.type = "xlsx"}.
+
+ Note that the HOBO software exports csv files in true UTC, but xlsx files
+ account for daylight savings time. This function will automatically convert
+ the datetimes in xlsx files to true UTC.
+
+ Future versions of the package will provide an option to convert from ADT to
+ AST.}
 
 \item{export.csv}{Logical value indicating whether to export the compiled data
 as a .csv file. If \code{export.csv = TRUE}, the compiled data will not be
@@ -53,7 +58,7 @@ Returns a dataframe or exports a spreadsheet with the data compiled
  from each of the HOBO sensors. Columns alternate between datetime (UTC, in
  the format "Y-m-d H:M:S") and temperature value (degree celsius, rounded to
  three decimal places). Metadata at the top of each column indicates the
- deployment range, the sensor serial number, and the depth of the sensor.
+ deployment dates, the sensor serial number, and the depth of the sensor.
  Each datetime column shows the timezone as extracted from the HOBOware, and
  each temperature column shows the units extracted from HOBO.
 
@@ -64,22 +69,26 @@ Returns a dataframe or exports a spreadsheet with the data compiled
  \code{convert_to_tidydata()}.
 }
 \description{
-This function compiles the data from a HOBO deployment at
- different depths into a single dataframe or spreadsheet.
+Compiles and formats data from HOBO sensors deployed at different
+ depths on the same string.
 }
 \details{
 All columns are read in as characters to ensure the timestamp is
- parsed correctly.
+ parsed correctly. Timestamp must be saved in excel as a number or a
+ character in the order "ymd IMS p", "Ymd HM", or "Ymd HMS".
 
- Can handle .csv or .xlsx files, but .csv files are preferred (see below).
+ Can handle .csv or .xlsx files, but .csv files are preferred for now (see
+ note on timezones below).
 
  HOBO data should be exported in GMT+00 as a csv file so that the timestamp
  is in UTC.
 
- If exported as an xlsx, the timestamp accounts for daylight savings time.
- \code{compile_HOBO_data()} will automatically convert xlsx files to true UTC
- by subtracting 1 hour from each datetime that occurs during daylight
- savings. This feature will be removed as we solidify our workflow.
+ If exported as an xlsx, the timestamp accounts for daylight savings time
+ (this seems to be a bug in the HOBO software). \code{compile_HOBO_data()}
+ will automatically convert xlsx files to true UTC by subtracting 1 hour from
+ each datetime that occurs during daylight savings. This feature will be
+ removed as we solidify our workflow. Future versions of the package will
+ provide an option to convert from ADT to AST.
 
  The functions used to convert to true UTC are
  \code{convert_HOBO_datetime_to_true_UTC()} and \code{dates_to_fix()}, which

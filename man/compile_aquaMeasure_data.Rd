@@ -15,18 +15,16 @@ compile_aquaMeasure_data(
 )
 }
 \arguments{
-\item{path.aM}{File path to the aquaMeasure folder. There should only be one
-file in the aquaMeasure folder. A warning will be printed to the console if
-there is more than one file. The function can accept .csv or .xlsx files.}
+\item{path.aM}{File path to the aquaMeasure folder.}
 
 \item{area.name}{Area where aquaMeasure was deployed.}
 
-\item{serial.table.aM}{A table with the serial number of each aquaMeasure on the
-string, in the form "aquaMeasure-xxxxxx" (first column; note the capital
+\item{serial.table.aM}{A table with the serial number of each aquaMeasure on
+the string, in the form "aquaMeasure-xxxxxx" (first column; note the capital
 "M") and its corresponding depth in the form "2m" (second column).}
 
-\item{deployment.range}{The start and end dates of deployment from the
-deployment log. Must be in format "2018-Nov-15 to 2020-Jan-24".}
+\item{deployment.range}{The start and end dates of deployment. Must be in
+format "2018-Nov-15 to 2020-Jan-24".}
 
 \item{trim}{Logical value indicating whether to trim the data to the dates
 specified in \code{deployment.range}. (Note: four hours are added to the
@@ -43,7 +41,7 @@ Returns a dataframe or exports a spreadsheet with the data compiled
  from each of the aquaMeasure sensors. Columns alternate between datetime
  (UTC, in the format "Y-m-d H:M:S") and variable value (rounded to three
  decimal places). Metadata at the top of each column indicates the deployment
- range, the sensor serial number, and the variable and depth of the sensor.
+ dates, the sensor serial number, and the variable and depth of the sensor.
  Each datetime column shows the timezone as extracted from the aquaMeasure.
 
  To include the metadata, all values were converted to class
@@ -53,26 +51,26 @@ Returns a dataframe or exports a spreadsheet with the data compiled
  \code{convert_to_tidydata()}.
 }
 \description{
-This functions re-formats the data from an aquaMeasure deployment
- so it can be combined with the HOBO and Vemco temperature data.
+Formats the data from an aquaMeasure deployment so it can be
+ combined with the HOBO and Vemco temperature data.
 }
 \details{
-Might be able to get rid of parsing error by deleting Text column. IF
- you do this, make another folder inside aquaMeaure named Raw Data and save
- the unaltered data there
-
- Can handle .csv or .xlsx files.
-
- All columns in .xlsx files will be imported as characters to ensure dates
- are parsed correctly.
-
- The first 7 columns in .csv files will be imported as characters. There
- still may be parsing errors because there are not entries in every column.
-
- Rows with \code{undefined} and \code{... (time not set)} values in the
- \code{Timestamp(UTC)} column are filtered out.
+Rows with \code{undefined} and \code{... (time not set)} values in
+ the \code{Timestamp(UTC)} column are filtered out.
 
  Negative Dissolved Oxygen values are replaced with \code{NA}.
+
+ Can handle .csv and .xlsx files.
+
+ All columns in are imported as characters to ensure the timestamp is parsed
+ correctly. Timestamp must be saved in excel as a number or a character in
+ the order "ymd IMS p", "Ymd HM", or "Ymd HMS".
+
+ There still may be parsing errors because there are not entries in every
+ column. This should not affect the data compilation. To check, save the
+ spreadsheet with a new name new, delete the column causing the error (likley
+ the "Text" column), re-run the function, and verify that there is no parsing
+ error.
 }
 \seealso{
 Other compile: 

@@ -2,21 +2,20 @@
 % Please edit documentation in R/name_compiled_data.R
 \name{name_compiled_data}
 \alias{name_compiled_data}
-\title{Generates name for output file with HOBO, aquaMeasure, and Vemco data from a single
- deployment}
+\title{Generates name for output file}
 \usage{
 name_compiled_data(area.name, deployment.range, vars)
 }
 \arguments{
 \item{area.name}{Area where aquaMeasure was deployed.}
 
-\item{deployment.range}{The start and end dates of deployment from the
-deployment log. Must be in format "2018-Nov-15 to 2020-Jan-24".}
+\item{deployment.range}{The start and end dates of deployment. Must be in
+format "2018-Nov-15 to 2020-Jan-24".}
 
-\item{vars}{Text}
+\item{vars}{The variables included in the data file, e.g. \code{vars =
+c("Temperature", "Dissolved Oxygen")}.}
 }
 \description{
-Generates a name for output file based on the arguments to
- \code{compile_aquaMeasure_data()} in the format "area name_deployment date_variables",
- e.g. "Shad Bay_2018_11-15_TEMP_DO".
+Generates a name for output file in the format "area
+ name_deployment date_variables", e.g. "Shad Bay_2018-11-15_TEMP_DO".
 }

@@ -1,10 +1,10 @@
 Package: strings
 Type: Package
-Title: Functions to compile and plot string sensor data
-Version: 0.1.0
-Author: Danielle Dempsey, Leah Lewis-McCrea, Nicole Torrie
+Title: Compile, format and plot sensor string data
+Version: 1.0.0
+Author: Danielle Dempsey, Nicole Torrie, Leah Lewis-McCrea
 Maintainer: Danielle Dempsey <ddempsey@perennia.ca>
-Description: More about what it does (maybe more than one line)
+Description: More about what it does (add text here)
     Use four spaces when indenting paragraphs within the Description.
 License: GPL-3
 Encoding: UTF-8
