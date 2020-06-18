@@ -104,9 +104,9 @@ compile_HOBO_data <- function(path.HOBO,
                               export.csv = FALSE){
 
   # make sure columns of serial.table are named correctly
-  names(serial.table.HOBO) <- c("SERIAL", "VAR_DEPTH")
+  names(serial.table.HOBO) <- c("SERIAL", "DEPTH")
 
-  # extract the deployment start and end dates from deployment.dates
+  # extract the deployment start and end dates from deployment.range
   dates <- extract_deployment_dates(deployment.range)
   start.date <- dates$start
   end.date <- dates$end
@@ -186,10 +186,10 @@ compile_HOBO_data <- function(path.HOBO,
 
     # use serial number to identify the variable and depth (from serial.table)
     # could simplify this because variable will always be Temperature
-    variable_depth <- serial.table.HOBO %>%
+    depth <- serial.table.HOBO %>%
       dplyr::filter(SERIAL == serial.i)  %>%
-      select(VAR_DEPTH)
-    variable_depth <- variable_depth$VAR_DEPTH
+      select(DEPTH)
+    depth <- depth$DEPTH
 
     # extract date column header (includes GMT offset)
     if(file.type == "xlsx") date_ref <- hobo.i[1,2]$...2
@@ -200,6 +200,9 @@ compile_HOBO_data <- function(path.HOBO,
       rename("temp_ref" = 1) %>%
       separate(col = "temp_ref", into = c("temp_ref", NA), sep = 8)
     temp_ref <- temp_ref$temp_ref
+
+    # format deployment date range for metadata
+    deployment_ref <- paste(format(start.date, "%Y-%b-%d"), "to", format(end.date, "%Y-%b-%d"))
 
 
 # Format data -------------------------------------------------------------
@@ -228,9 +231,9 @@ compile_HOBO_data <- function(path.HOBO,
              DATE = format(DATE,  "%Y-%m-%d %H:%M:%S"),
              PLACEHOLDER = as.character(round(as.numeric(TEMPERATURE), digits = 3)))  %>%
       select(INDEX, DATE, PLACEHOLDER) %>%
-      add_metadata(row1 = deployment.range,
+      add_metadata(row1 = deployment_ref,
                    row2 = serial.i,
-                   row3 = variable_depth,
+                   row3 = (paste("Temperature", depth, sep = "-")),
                    row4 = c(date_ref, temp_ref))
 
     # merge data on the INDEX row

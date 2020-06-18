@@ -27,13 +27,10 @@ Returns a tidy dataframe with six columns: \code{DATE} (POSIXct),
 Converts compiled string data to a tidy format
 }
 \seealso{
-Other compile: 
-\code{\link{compile_HOBO_data}()},
-\code{\link{compile_all_data}()},
-\code{\link{compile_aquaMeasure_data}()},
-\code{\link{compile_vemco_data}()}
+Other format: 
+\code{\link{format_for_opendata}()}
 }
 \author{
 Danielle Dempsey
 }
-\concept{compile}
+\concept{format}

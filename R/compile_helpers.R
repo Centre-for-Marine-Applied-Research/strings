@@ -23,14 +23,14 @@
 
 extract_deployment_dates <- function(deployment.dates){
 
-  # extract the deployment start and end dates from deployment.dates
-  start_end_date <- separate(data = data.frame(deployment.dates),
-                             col = deployment.dates,
-                             into = c("start.date", NA, "end.date"), sep  = " " )
+  # # extract the deployment start and end dates from deployment.dates
+  # start_end_date <- separate(data = data.frame(deployment.dates),
+  #                            col = deployment.dates,
+  #                            into = c("start.date", NA, "end.date"), sep  = " " )
 
   # paste date and time and convert to a datetime object
-  start_date <- as_datetime(paste(start_end_date$start.date, "00:00:00"))
-  end_date <- as_datetime(paste(start_end_date$end.date, "23:59:59"))
+  start_date <- as_datetime(paste(deployment.dates$start.date, "00:00:00"))
+  end_date <- as_datetime(paste(deployment.dates$end.date, "23:59:59"))
 
   # return start and end datetimes
   data.frame(start = start_date, end = end_date)

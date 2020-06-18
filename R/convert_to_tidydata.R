@@ -10,7 +10,7 @@
 #'@return Returns a tidy dataframe with six columns: \code{DATE} (POSIXct),
 #'  \code{VALUE}, (numeric), \code{DATE_RANGE} (character), \code{SENSOR},
 #'  \code{VARIABLE} (character), \code{DEPTH} (ordered factor).
-#'@family compile
+#'@family format
 #'@author Danielle Dempsey
 #'@importFrom lubridate parse_date_time
 #'@importFrom readr parse_number

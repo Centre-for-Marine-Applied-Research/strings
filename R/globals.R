@@ -38,7 +38,19 @@ utils::globalVariables(c(
 
   # dates_to_fix
   "inx_fix",
-  "n_fix"
+  "n_fix",
+
+  # read_deployment_log
+  "Logger_Model",
+  "Serial#",
+  "Sensor_Depth",
+  "sensor",
+  "SENSOR",
+
+  # format_for_opendata
+  "lat",
+  "long",
+  "COUNTY"
 
 
 ))

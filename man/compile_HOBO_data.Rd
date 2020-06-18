@@ -116,7 +116,7 @@ Other compile:
 \code{\link{compile_all_data}()},
 \code{\link{compile_aquaMeasure_data}()},
 \code{\link{compile_vemco_data}()},
-\code{\link{convert_to_tidydata}()}
+\code{\link{read_deployment_log}()}
 }
 \author{
 Danielle Dempsey

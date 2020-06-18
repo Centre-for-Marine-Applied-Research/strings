@@ -60,7 +60,7 @@ compile_aquaMeasure_data <- function(path.aM,
   # make sure columns of serial.table are named correctly
   names(serial.table.aM) <- c("SERIAL", "DEPTH")
 
-  # extract the deployment start and end dates from deployment.dates
+  # extract the deployment start and end dates from deployment.range
   dates <- extract_deployment_dates(deployment.range)
   start.date <- dates$start
   end.date <- dates$end
@@ -129,6 +129,8 @@ compile_aquaMeasure_data <- function(path.aM,
     # use pattern match for "stamp" to look for column named "timestamp"
     date_ref.i <- names(dat.i)[grep("stamp", names(dat.i))]
 
+    # format deployment date range for metadata
+    deployment_ref <- paste(format(start.date, "%Y-%b-%d"), "to", format(end.date, "%Y-%b-%d"))
 
     # Clean and format data ---------------------------------------------------
 
@@ -179,7 +181,7 @@ compile_aquaMeasure_data <- function(path.aM,
         transmute(INDEX,
                   DATE = as.character(DATE),
                   PLACEHOLDER = as.character(PLACEHOLDER)) %>%
-        add_metadata(row1 = deployment.range,
+        add_metadata(row1 = deployment_ref,
                      row2 = serial.i,
                      row3 = paste(var.j, depth.i, sep = "-"),
                      row4 = c(date_ref.i, var.j))

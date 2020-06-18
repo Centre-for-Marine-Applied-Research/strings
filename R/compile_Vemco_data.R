@@ -46,7 +46,7 @@ compile_vemco_data <- function(path.vemco,
                               export.csv = FALSE){
 
 
-  # extract the deployment start and end dates from deployment.dates
+  # extract the deployment start and end dates from deployment.range
   dates <- extract_deployment_dates(deployment.range)
   start.date <- dates$start
   end.date <- dates$end
@@ -78,13 +78,18 @@ compile_vemco_data <- function(path.vemco,
   # extract date column header (includes UTC offset)
   date_ref <- names(vemco_dat)[1]
 
+  # format deployment date range for metadata
+  deployment_ref <- paste(format(start.date, "%Y-%b-%d"), "to", format(end.date, "%Y-%b-%d"))
+
+
   # Format data -------------------------------------------------------------
 
   # select the first three columns
   vemco <- vemco_dat %>%
     filter(Description == "Temperature") %>%
     transmute(INDEX = c(1:n()),
-              DATE = parse_date_time(`Date and Time (UTC)`, orders = c("Ymd HMS", "Ymd HM")),
+              DATE = parse_date_time(`Date and Time (UTC)`,
+                                     orders = c("Ymd HMS", "Ymd HM", "dmY HM", "dmY HMS")),
               TEMPERATURE = Data)
 
   # trim to the dates in deployment.range
@@ -102,7 +107,7 @@ compile_vemco_data <- function(path.vemco,
            DATE = format(DATE,  "%Y-%m-%d %H:%M:%S"),
            PLACEHOLDER = as.character(round(as.numeric(TEMPERATURE), digits = 3)))  %>%
     select(INDEX, DATE, PLACEHOLDER) %>%
-    add_metadata(row1 = deployment.range,
+    add_metadata(row1 = deployment_ref,
                  row2 = serial,
                  row3 = paste("Temperature", depth.vemco, sep = "-"),
                  row4 = c(date_ref, "Temperature"))
