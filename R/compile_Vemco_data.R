@@ -10,6 +10,11 @@
 #'  Timestamp must be a character in the order "Ymd HMS", "Ymd HM", "dmY HM", or
 #'  "dmY HMS".
 #'
+#'  If there are "Temperature" entries in the Description file, these will be
+#'  extracted adn compiled. If there are no "Temperature" entries, but there are
+#'  "Average temperature" entries, these will be extracted and compiled.
+#'  Otherwise, the function will stop with an error message.
+#'
 #'@inheritParams compile_HOBO_data
 #'@param path.vemco File path to the Vemco folder. This folder should have one
 #'  csv file that was extracted using Vue software. Other file types in the
@@ -85,9 +90,17 @@ compile_vemco_data <- function(path.vemco,
 
   # Format data -------------------------------------------------------------
 
+  description.col <- unique(vemco_dat$Description)
+
+  if("Temperature" %in% description.col) {
+    var.to.extract = "Temperature"
+  } else if("Average temperature" %in% description.col){
+    var.to.extract = "Average temperature"
+  } else stop("Could not find Temperature or Average temperature in vemco_dat. Check file.")
+
   # select the first three columns
   vemco <- vemco_dat %>%
-    filter(Description == "Temperature") %>%
+    filter(Description == var.to.extract) %>%
     transmute(INDEX = c(1:n()),
               DATE = parse_date_time(`Date and Time (UTC)`,
                                      orders = c("Ymd HMS", "Ymd HM", "dmY HM", "dmY HMS")),
@@ -129,7 +142,7 @@ compile_vemco_data <- function(path.vemco,
 
   } else{
 
-    print("Vemco data compiled")
+    print(paste("Vemco data compiled:", var.to.extract))
 
     vemco
   }
