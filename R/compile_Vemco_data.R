@@ -61,9 +61,10 @@ compile_vemco_data <- function(path.vemco,
   # remove files that start with "~"
   if(any(substring(dat.files, 1, 1)== "~")) {
 
-    dat.files <- dat.files[-which(substring(dat.files, 1, 1)== "~")]
     print(paste("Note:", sum((substring(dat.files, 1, 1)== "~")),
                 "files on the path begin with ~ and were not imported.", sep = " "))
+    dat.files <- dat.files[-which(substring(dat.files, 1, 1)== "~")]
+
   }
 
   vemco_dat <- read_csv(paste(path.vemco,  dat.files[1], sep = "/"),
