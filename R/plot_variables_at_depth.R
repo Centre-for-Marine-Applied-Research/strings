@@ -49,7 +49,6 @@ plot_variables_at_depth <- function(dat.tidy,
                                     date.breaks.minor = "1 month",
                                     stacked = TRUE){
 
-  #plot.new()
 
   theme_set(theme_light())
 
@@ -96,8 +95,11 @@ plot_variables_at_depth <- function(dat.tidy,
 
   # Loop over vars.to.plot --------------------------------------------------
 
-  figs <- list(NULL)
-  n.vars <- length(vars.to.plot)
+
+  figs <- list(NULL)              # empty list for storing the figures
+  n.vars <- length(vars.to.plot)  # number of variables to plot
+
+  if(n.vars == 1) stacked = FALSE # can't stack if there is only 1 variable (gives an error in the j for loop below)
 
 
   for(i in 1:n.vars){
@@ -107,7 +109,7 @@ plot_variables_at_depth <- function(dat.tidy,
     if(vars.to.plot[i] == "Temperature"){
 
       y.lab <- expression(paste("Temperature (",degree,"C)"))
-    } else  y.lab <-paste(vars.to.plot[i], ylab.units[i], sep = " ")
+    } else  y.lab <- paste(vars.to.plot[i], ylab.units[i], sep = " ")
 
     dat.i <- dat.tidy %>%  dplyr::filter(VARIABLE == var.i)
 
@@ -123,7 +125,7 @@ plot_variables_at_depth <- function(dat.tidy,
 
     figs[[i]] <- plot.i
 
-  }
+  } # end of for loop over n.vars
 
 
   # RETURN TO GLOBAL ENV ----------------------------------------------------
