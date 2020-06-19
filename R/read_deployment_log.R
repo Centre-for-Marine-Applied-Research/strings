@@ -1,7 +1,25 @@
 #'@title Extract information from deployment log
-#'@details describe required columns here
+#'@details The log must be saved in .xlsx or .xls format, and must include the
+#'  following columns:
 #'
-#'  .xls or .xlsx files
+#'  \code{Deployment_Waterbody} (waterbody where string was deployed),
+#'  \code{Location_Description} (the station name), \code{Deployment} (the
+#'  deployment date, in the order "Ymd"), \code{Retrieval} (the retrieval
+#'  date, in the order "Ymd"), \code{Logger_Latitude} (the latitude at which
+#'  the string was deployed), \code{Logger_Longitude} (the longitude at which
+#'  the string was deployed), \code{Logger_Model} (the logger type; see below
+#'  for options), \code{Serial#} (the logger serial number), and
+#'  \code{Sensor_Depth} (depth at which the sensor was deployed). All other
+#'  columns will be ignored.
+#'
+#'  Entries in the \code{Logger_Model} column can be "HOBO Pro V2" (or "HOBO pro
+#'  V2"), "aquaMeasure DOT", "aquaMeasure SAL", "aquaMeasure SST", or "VR2AR".
+#'
+#'  A warning will be printed to the console if there is more than one unique
+#'  entry in \code{Deployment_Waterbody}, \code{Location_Description},
+#'  \code{Deployment}, \code{Retrieval}, \code{Logger_Latitude}, or
+#'  \code{Logger_Longitude}.
+#'
 #'@param path.log File path to the Log folder. T
 #'@return Returns a list with 5 elements. \code{deployment.dates} is a dataframe
 #'  with two columns: \code{start.date} (the date of deployment) and
@@ -41,17 +59,22 @@ read_deployment_log <- function(path.log){
 
 # extract data ------------------------------------------------------------
 
+  # deployment dates
   start  <- unique(log$Deployment)
   end <- unique(log$Retrieval)
 
+  # warning if there is more than one Deployment or Retrieval date
   if(length(start) > 1 | length(end) > 1) print("WARNING: multiple Deployment or Retrieval dates in log")
 
-  if(is.na(ymd(log$Deployment[1]))) print("Make sure Deployment and Retrieval dates are in year-month-day format")
+  # Stop with ERROR if the dates are not in the proper format
+  if(is.na(suppressWarnings(ymd(log$Deployment[1]))) |
+     is.na(suppressWarnings(ymd(log$Retrieval[1])))) stop("Deployment and Retrieval dates must be in the order year, month, day")
 
+  # deployment info to export
   deployment.dates <- data.frame(start.date = ymd(log$Deployment[1]),
                                  end.date = ymd(log$Retrieval[1]))
 
-
+  # area info
   wb <- unique(log$Deployment_Waterbody)
   lat <- unique(log$Logger_Latitude)
   long <- unique(log$Logger_Longitude)

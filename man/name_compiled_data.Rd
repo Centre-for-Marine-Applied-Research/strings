@@ -4,13 +4,12 @@
 \alias{name_compiled_data}
 \title{Generates name for output file}
 \usage{
-name_compiled_data(area.name, deployment.range, vars)
+name_compiled_data(area.name, deployment.start, vars)
 }
 \arguments{
 \item{area.name}{Area where aquaMeasure was deployed.}
 
-\item{deployment.range}{The start and end dates of deployment. Must be in
-format "2018-Nov-15 to 2020-Jan-24".}
+\item{deployment.start}{start date of deployment}
 
 \item{vars}{The variables included in the data file, e.g. \code{vars =
 c("Temperature", "Dissolved Oxygen")}.}

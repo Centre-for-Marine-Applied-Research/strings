@@ -58,7 +58,7 @@ compile_aquaMeasure_data <- function(path.aM,
                                      export.csv = FALSE){
 
   # make sure columns of serial.table are named correctly
-  names(serial.table.aM) <- c("SERIAL", "DEPTH")
+  names(serial.table.aM) <- c("SENSOR", "DEPTH")
 
   # extract the deployment start and end dates from deployment.range
   dates <- extract_deployment_dates(deployment.range)
@@ -116,12 +116,12 @@ compile_aquaMeasure_data <- function(path.aM,
 
     # use serial number to identify the depth (from serial.table)
     depth.i <- serial.table.aM %>%
-      dplyr::filter(SERIAL == serial.i)  %>%
+      dplyr::filter(SENSOR == serial.i)  %>%
       select(DEPTH)
     depth.i <- depth.i$DEPTH
 
     # if the name of the file doesn't match any of the entries in serial.table: stop with message
-    if(!(serial.i %in% serial.table.aM$SERIAL)){
+    if(!(serial.i %in% serial.table.aM$SENSOR)){
       stop(paste("Serial number", serial.i, "does not match any serial numbers in serial.table.aM"))
     }
 

@@ -47,10 +47,11 @@
 #'@param area.name Area where the HOBO was deployed.
 #'@param serial.table.HOBO A table with the serial number of each HOBO sensor on
 #'  the string, in the form "HOBO-xxxxxxxx" (first column) and corresponding
-#'  variable it measured at the depth it was deployed in the form
-#'  "Temperature-2m" (second column).
-#'@param deployment.range The start and end dates of deployment. Must be in
-#'  format "2018-Nov-15 to 2020-Jan-24".
+#'  depth at which it was deployed in the form "2m" (second column).
+#'@param deployment.range A dataframe with two columns. The first column holds
+#'  the deployment date (a Date object in the order year, month, day),  and the
+#'  second column holds the retrieval date (a Date object in the order year,
+#'  month, day).
 #'@param trim Logical value indicating whether to trim the data to the dates
 #'  specified in \code{deployment.range}. (Note: four hours are added to the
 #'  retrieval date to account for AST, e.g., in case the sensor was retrieved
@@ -104,7 +105,7 @@ compile_HOBO_data <- function(path.HOBO,
                               export.csv = FALSE){
 
   # make sure columns of serial.table are named correctly
-  names(serial.table.HOBO) <- c("SERIAL", "DEPTH")
+  names(serial.table.HOBO) <- c("SENSOR", "DEPTH")
 
   # extract the deployment start and end dates from deployment.range
   dates <- extract_deployment_dates(deployment.range)
@@ -180,14 +181,14 @@ compile_HOBO_data <- function(path.HOBO,
 
 
     # if the name of the file doesn't match any of the entries in serial.table: stop with message
-    if(!(serial.i %in% serial.table.HOBO$SERIAL)){
+    if(!(serial.i %in% serial.table.HOBO$SENSOR)){
       stop(paste("The name of file", i, "does not match any serial numbers in serial.table.HOBO"))
     }
 
     # use serial number to identify the variable and depth (from serial.table)
     # could simplify this because variable will always be Temperature
     depth <- serial.table.HOBO %>%
-      dplyr::filter(SERIAL == serial.i)  %>%
+      dplyr::filter(SENSOR == serial.i)  %>%
       select(DEPTH)
     depth <- depth$DEPTH
 

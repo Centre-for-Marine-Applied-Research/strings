@@ -21,9 +21,26 @@ Returns a list with 5 elements. \code{deployment.dates} is a dataframe
 Extract information from deployment log
 }
 \details{
-describe required columns here
+The log must be saved in .xlsx or .xls format, and must include the
+ following columns:
 
- .xls or .xlsx files
+ \code{Deployment_Waterbody} (waterbody where string was deployed),
+ \code{Location_Description} (the station name), \code{Deployment} (the
+ deployment date, in the order "Ymd"), \code{Retrieval} (the retrieval
+ date, in the order "Ymd"), \code{Logger_Latitude} (the latitude at which
+ the string was deployed), \code{Logger_Longitude} (the longitude at which
+ the string was deployed), \code{Logger_Model} (the logger type; see below
+ for options), \code{Serial#} (the logger serial number), and
+ \code{Sensor_Depth} (depth at which the sensor was deployed). All other
+ columns will be ignored.
+
+ Entries in the \code{Logger_Model} column can be "HOBO Pro V2" (or "HOBO pro
+ V2"), "aquaMeasure DOT", "aquaMeasure SAL", "aquaMeasure SST", or "VR2AR".
+
+ A warning will be printed to the console if there is more than one unique
+ entry in \code{Deployment_Waterbody}, \code{Location_Description},
+ \code{Deployment}, \code{Retrieval}, \code{Logger_Latitude}, or
+ \code{Logger_Longitude}.
 }
 \seealso{
 Other compile: 

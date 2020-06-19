@@ -20,8 +20,10 @@ compile_all_data(
 
 \item{area.name}{Area where the sensor string was deployed.}
 
-\item{deployment.range}{The start and end dates of deployment. Must be in
-format "2018-Nov-15 to 2020-Jan-24".}
+\item{deployment.range}{A dataframe with two columns. The first column holds
+the deployment date (a Date object in the order year, month, day),  and the
+second column holds the retrieval date (a Date object in the order year,
+month, day).}
 
 \item{trim}{Logical value indicating whether to trim the data to the dates
 specified in \code{deployment.range}. (Note: four hours are added to the
@@ -31,9 +33,7 @@ TRUE}.}
 
 \item{serial.table.HOBO}{A table with the serial number of each HOBO sensor on
 the string, in the form "HOBO-xxxxxxxx" (first column) and corresponding
-variable it measured at the depth it was deployed in the form
-"Temperature-2m" (second column). Default is \code{serial.table.HOBO =
-NULL}.}
+depth at which it was deployed in the form "2m" (second column).}
 
 \item{file.type.HOBO}{Character string indicating whether the HOBO data is in
  .csv or .xlsx format. All HOBO data files that are being compiled must have
@@ -47,11 +47,10 @@ NULL}.}
 
 \item{serial.table.aM}{A table with the serial number of each aquaMeasure on
 the string, in the form "aquaMeasure-xxxxxx" (first column; note the capital
-"M") and its corresponding depth in the form "2m" (second column). Default
-is \code{serial.table.aquaMeasure = NULL}.}
+"M") and its corresponding depth in the form "2m" (second column).}
 
 \item{depth.vemco}{Character string indicating the depth at which the Vemco
-was deployed, in the form "10m". Default is \code{depth.vemco = NULL}.}
+was deployed, in the format "10m".}
 }
 \value{
 Returns a dataframe with the compiled and formatted data. Columns

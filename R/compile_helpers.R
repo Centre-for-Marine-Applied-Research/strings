@@ -7,15 +7,16 @@
 
 # extract_deployment_dates() ----------------------------------------------
 
-# function to extract the start date and end date of deployment from the deployment.range argument
-# dates are converted to datetimes
+# function to convert deployment and retrieval dates to datetimes
 # option to trim data to these dates in the compile_xx_data() functions
 
-# deployment.dates is in the format "2018-Nov-15 to 2020-Jan-24"
+# deployment.dates is a dataframe with two columns: start.date and end.date
+# there should be one observation in each column
+# each observation must be a Date object
 
-# returns a dataframe with 1 observation in two columns: start and end
-# start holds a datetime for the start of the deployment (with time of 00:00:00)
-# end holds a datetime for the end of the deployment (with time of 23:59:59)
+# returns a dataframe with 1 observation in two columns: start_date and end_date
+# start_date holds a datetime for the start of the deployment (with time of 00:00:00)
+# end_date holds a datetime for the end of the deployment (with time of 23:59:59)
 
 
 #'@importFrom tidyr separate
@@ -23,10 +24,8 @@
 
 extract_deployment_dates <- function(deployment.dates){
 
-  # # extract the deployment start and end dates from deployment.dates
-  # start_end_date <- separate(data = data.frame(deployment.dates),
-  #                            col = deployment.dates,
-  #                            into = c("start.date", NA, "end.date"), sep  = " " )
+  # name deployment.dates
+  names(deployment.dates) <- c("start.date", "end.date")
 
   # paste date and time and convert to a datetime object
   start_date <- as_datetime(paste(deployment.dates$start.date, "00:00:00"))

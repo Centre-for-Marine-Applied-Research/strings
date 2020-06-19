@@ -23,8 +23,10 @@ folder will be ignored.}
 \item{depth.vemco}{Character string indicating the depth at which the Vemco
 was deployed, in the format "10m".}
 
-\item{deployment.range}{The start and end dates of deployment. Must be in
-format "2018-Nov-15 to 2020-Jan-24".}
+\item{deployment.range}{A dataframe with two columns. The first column holds
+the deployment date (a Date object in the order year, month, day),  and the
+second column holds the retrieval date (a Date object in the order year,
+month, day).}
 
 \item{trim}{Logical value indicating whether to trim the data to the dates
 specified in \code{deployment.range}. (Note: four hours are added to the
