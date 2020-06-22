@@ -63,7 +63,13 @@ Only accepts csv files.
  correctly. **Not all dates were parsed with automatic imputation because the
  date format changes (some include seconds and others do not).
 
- Timestamp must be a character in the order "Ymd HMS" or "Ymd HM".
+ Timestamp must be a character in the order "Ymd HMS", "Ymd HM", "dmY HM", or
+ "dmY HMS".
+
+ If there are "Temperature" entries in the Description file, these will be
+ extracted adn compiled. If there are no "Temperature" entries, but there are
+ "Average temperature" entries, these will be extracted and compiled.
+ Otherwise, the function will stop with an error message.
 }
 \seealso{
 Other compile: 
