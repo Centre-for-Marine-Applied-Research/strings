@@ -7,7 +7,7 @@
 read_deployment_log(path.log)
 }
 \arguments{
-\item{path.log}{File path to the Log folder. T}
+\item{path.log}{File path to the Log folder.}
 }
 \value{
 Returns a list with 5 elements. \code{deployment.dates} is a dataframe
@@ -36,6 +36,11 @@ The log must be saved in .xlsx or .xls format, and must include the
  Entries in the \code{Logger_Model} column can be "HOBO Pro V2" (or "HOBO pro
  V2" or "HOBO_Pro_V2"), "aquaMeasure DOT", "aquaMeasure SAL", "aquaMeasure
  SST", or "VR2AR".
+
+ A Note is printed to the console when Hobo, aquaMeasure, or Vemco sensors
+ are not found in the log.
+
+ **TidBit sensors are not yet recognized**
 
  A warning will be printed to the console if there is more than one unique
  entry in \code{Deployment_Waterbody}, \code{Location_Description},

@@ -93,7 +93,6 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FA
     mutate(DEPTH = ordered(DEPTH,
                            levels = as.numeric(levels(DEPTH))[order(as.numeric(levels(DEPTH)))]))
 
-
   # number of NAs in the DATE and VALUE columns
   date.na <- sum(is.na(dat.tidy$DATE))
   value.na <- sum(is.na(dat.tidy$VALUE))

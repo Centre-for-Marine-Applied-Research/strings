@@ -3,10 +3,10 @@
 #'  the function \code{convert_to_tidydata()}. Must include four columns:
 #'  \code{DATE} (POSIXct), \code{VARIABLE} (character), \code{DEPTH} (ordered
 #'  factor), and \code{VALUE} (numeric).
-#'@param lat.deploy The latitude at which the station was deployed.
-#'@param long.deploy The longitude at which the station was deployed.
-#'@param waterbody The water body in which the station was deployed.
-#'@param county The county in which the station was deployed.
+#'@param location.info Dataframe of information about the deployment location. One
+#'  observation of 5 columns: \code{county}, \code{waterbody}, \code{station},
+#'  \code{latitude}, and \code{longitude}.
+
 
 #'@return Returns a dataframe of tidy data in the format for the OpenData portal for a single deployment,
 
@@ -17,11 +17,14 @@
 #'@import dplyr
 #'@export
 
-format_for_opendata <- function(dat.tidy, lat.deploy, long.deploy, waterbody, county) {
+format_for_opendata <- function(dat.tidy, location.info) {
 
   dat.tidy %>%
     separate(SENSOR, into = c("SENSOR", NA), sep = "-| - ") %>%
-    mutate(LATITUDE = lat, LONGITUDE = long, WATERBODY = waterbody, COUNTY = COUNTY)
-
+    mutate(COUNTY = location.info$county,
+           WATERBODY = location.info$waterbody,
+           STATION = location.info$station,
+           LATITUDE = location.info$latitude,
+           LONGITUDE = location.info$longitude)
 
 }

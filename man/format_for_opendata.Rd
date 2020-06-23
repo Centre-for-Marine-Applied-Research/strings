@@ -4,7 +4,7 @@
 \alias{format_for_opendata}
 \title{Format sensor string data for the OpenData portal}
 \usage{
-format_for_opendata(dat.tidy, lat.deploy, long.deploy, waterbody, county)
+format_for_opendata(dat.tidy, location.info)
 }
 \arguments{
 \item{dat.tidy}{Data from a single deployment in tidy format, as returned by
@@ -12,13 +12,9 @@ the function \code{convert_to_tidydata()}. Must include four columns:
 \code{DATE} (POSIXct), \code{VARIABLE} (character), \code{DEPTH} (ordered
 factor), and \code{VALUE} (numeric).}
 
-\item{lat.deploy}{The latitude at which the station was deployed.}
-
-\item{long.deploy}{The longitude at which the station was deployed.}
-
-\item{waterbody}{The water body in which the station was deployed.}
-
-\item{county}{The county in which the station was deployed.}
+\item{location.info}{Dataframe of information about the deployment location. One
+observation of 5 columns: \code{county}, \code{waterbody}, \code{station},
+\code{latitude}, and \code{longitude}.}
 }
 \value{
 Returns a dataframe of tidy data in the format for the OpenData portal for a single deployment,
