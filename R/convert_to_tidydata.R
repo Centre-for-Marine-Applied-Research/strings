@@ -88,15 +88,19 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FA
 
   }
 
+  # convert DEPTH to an ORDERED factor (so 2 < 5 < 10 etc., no matter what order they appear in dat.wide)
+  dat.tidy <- dat.tidy %>%
+    mutate(DEPTH = ordered(DEPTH,
+                           levels = as.numeric(levels(DEPTH))[order(as.numeric(levels(DEPTH)))]))
+
+
   # number of NAs in the DATE and VALUE columns
   date.na <- sum(is.na(dat.tidy$DATE))
   value.na <- sum(is.na(dat.tidy$VALUE))
 
   if(remove.NA == TRUE){
 
-    dat.tidy <- data.frame(na.omit(dat.tidy)) %>%   # remove NAs
-      mutate(DEPTH = ordered(DEPTH,                 # convert DEPTH to an ORDERED factor (so 2 < 5 < 10 etc., no matter what order they appear in dat.wide)
-                             levels = as.numeric(levels(DEPTH))[order(as.numeric(levels(DEPTH)))]))
+    dat.tidy <- data.frame(na.omit(dat.tidy))
 
     if(show.NA.message == TRUE) print(paste("NOTE:", sum(date.na), "NA values removed from DATE column.", sum(value.na), "NA values removed from VALUE column"))
 
