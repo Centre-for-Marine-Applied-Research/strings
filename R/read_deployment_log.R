@@ -4,23 +4,28 @@
 #'
 #'  \code{Deployment_Waterbody} (waterbody where string was deployed),
 #'  \code{Location_Description} (the station name), \code{Deployment} (the
-#'  deployment date, in the order "Ymd"), \code{Retrieval} (the retrieval
-#'  date, in the order "Ymd"), \code{Logger_Latitude} (the latitude at which
-#'  the string was deployed), \code{Logger_Longitude} (the longitude at which
-#'  the string was deployed), \code{Logger_Model} (the logger type; see below
-#'  for options), \code{Serial#} (the logger serial number), and
-#'  \code{Sensor_Depth} (depth at which the sensor was deployed). All other
-#'  columns will be ignored.
+#'  deployment date, in the order "Ymd"), \code{Retrieval} (the retrieval date,
+#'  in the order "Ymd"), \code{Logger_Latitude} (the latitude at which the
+#'  string was deployed), \code{Logger_Longitude} (the longitude at which the
+#'  string was deployed), \code{Logger_Model} (the logger type; see below for
+#'  options), \code{Serial#} (the logger serial number), and \code{Sensor_Depth}
+#'  (depth at which the sensor was deployed). All other columns will be ignored.
 #'
 #'  Entries in the \code{Logger_Model} column can be "HOBO Pro V2" (or "HOBO pro
-#'  V2"), "aquaMeasure DOT", "aquaMeasure SAL", "aquaMeasure SST", or "VR2AR".
+#'  V2" or "HOBO_Pro_V2"), "aquaMeasure DOT", "aquaMeasure SAL", "aquaMeasure
+#'  SST", or "VR2AR".
+#'
+#'  A Note is printed to the console when Hobo, aquaMeasure, or Vemco sensors
+#'  are not found in the log.
+#'
+#'  **TidBit sensors are not yet recognized**
 #'
 #'  A warning will be printed to the console if there is more than one unique
 #'  entry in \code{Deployment_Waterbody}, \code{Location_Description},
 #'  \code{Deployment}, \code{Retrieval}, \code{Logger_Latitude}, or
 #'  \code{Logger_Longitude}.
 #'
-#'@param path.log File path to the Log folder. T
+#'@param path.log File path to the Log folder.
 #'@return Returns a list with 5 elements. \code{deployment.dates} is a dataframe
 #'  with two columns: \code{start.date} (the date of deployment) and
 #'  \code{end.date} (date of retrieval). area.info is a dataframe with four
@@ -46,25 +51,25 @@ read_deployment_log <- function(path.log){
   dat.files <- list.files(path.log, all.files = FALSE, pattern = "*xlsx|*xls")
 
   # remove files that start with "~"
-  if(any(substring(dat.files, 1, 1)== "~")) {
+  if(any(substring(dat.files, 1, 1) == "~")) {
 
-    dat.files <- dat.files[-which(substring(dat.files, 1, 1)== "~")]
     print(paste("Note:", sum((substring(dat.files, 1, 1)== "~")),
                 "files on the path begin with ~ and were not imported.", sep = " "))
+    dat.files <- dat.files[-which(substring(dat.files, 1, 1)== "~")]
+
   }
 
   log <- read_excel(paste(path.log,  dat.files[1], sep = "/"))
 
 
-
-# extract data ------------------------------------------------------------
+  # extract data ------------------------------------------------------------
 
   # deployment dates
   start  <- unique(log$Deployment)
   end <- unique(log$Retrieval)
 
   # warning if there is more than one Deployment or Retrieval date
-  if(length(start) > 1 | length(end) > 1) print("WARNING: multiple Deployment or Retrieval dates in log")
+  if(length(start) > 1 | length(end) > 1) print("Warning: multiple Deployment or Retrieval dates in log")
 
   # Stop with ERROR if the dates are not in the proper format
   if(is.na(suppressWarnings(ymd(log$Deployment[1]))) |
@@ -80,10 +85,10 @@ read_deployment_log <- function(path.log){
   long <- unique(log$Logger_Longitude)
   station <- unique(log$Location_Description)
 
-  if(length(wb) > 1) print("WARNING: multiple waterbodies in log")
-  if(length(lat) > 1) print("WARNING: multiple latitudes recorded in log")
-  if(length(long) > 1) print("WARNING: multiple longitudes recorded in log")
-  if(length(station) > 1) print("WARNING: multiple location descriptions recorded in log")
+  if(length(wb) > 1) print("Warning: multiple waterbodies in log")
+  if(length(lat) > 1) print("Warning: multiple latitudes recorded in log")
+  if(length(long) > 1) print("Warning: multiple longitudes recorded in log")
+  if(length(station) > 1) print("Warning: multiple location descriptions recorded in log")
 
   area.info <- data.frame(waterbody = log$Deployment_Waterbody[1],
                           latitude = log$Logger_Latitude[1],
@@ -92,12 +97,17 @@ read_deployment_log <- function(path.log){
 
   # HOBO sensors
   hobos <- log %>%
-    filter(Logger_Model == "HOBO Pro V2" | Logger_Model == "HOBO pro V2" ) %>%
+    filter(Logger_Model == "HOBO Pro V2" | Logger_Model == "HOBO pro V2" | Logger_Model == "HOBO_Pro_V2") %>%
     select(Logger_Model, `Serial#`, Sensor_Depth) %>%
     separate(Logger_Model, into = c("sensor", NA, NA), sep = " ") %>%
     mutate(SENSOR = paste(sensor, `Serial#`, sep = "-"),
            DEPTH = paste(Sensor_Depth, "m", sep = "")) %>%
     select(SENSOR, DEPTH)
+
+  if(nrow(hobos) == 0){
+      hobos <- NULL
+      print("Note: No Hobo sensors found in log")
+  }
 
   # aquaMeasure sensors
   aquaMeasures <- log %>%
@@ -109,6 +119,11 @@ read_deployment_log <- function(path.log){
            DEPTH = paste(Sensor_Depth, "m", sep = "")) %>%
     select(SENSOR, DEPTH)
 
+  if(nrow(aquaMeasures) == 0){
+    aquaMeasures <- NULL
+    print("Note: No aquaMeasure sensors found in log")
+  }
+
   # vemco sensor
   vemcos <- log %>%
     filter(Logger_Model == "VR2AR") %>%
@@ -116,6 +131,11 @@ read_deployment_log <- function(path.log){
     mutate(SENSOR = paste(Logger_Model, `Serial#`, sep = "-"),
            DEPTH = paste(Sensor_Depth, "m", sep = "")) %>%
     select(SENSOR, DEPTH)
+
+  if(nrow(vemcos) == 0){
+    vemcos <- NULL
+    print("Note: No Vemco sensors found in log")
+  }
 
   # return list of deployment info
   list(deployment.dates = deployment.dates,
