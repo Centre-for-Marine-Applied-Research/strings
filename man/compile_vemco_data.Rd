@@ -66,8 +66,8 @@ Only accepts csv files.
  Timestamp must be a character in the order "Ymd HMS", "Ymd HM", "dmY HM", or
  "dmY HMS".
 
- If there are "Temperature" entries in the Description file, these will be
- extracted adn compiled. If there are no "Temperature" entries, but there are
+ If there are "Temperature" entries in the Description column, these will be
+ extracted and compiled. If there are no "Temperature" entries, but there are
  "Average temperature" entries, these will be extracted and compiled.
  Otherwise, the function will stop with an error message.
 }
