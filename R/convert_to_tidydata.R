@@ -73,7 +73,8 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FA
   # convert DEPTH to an ORDERED factor (so 2 < 5 < 10 etc., no matter what order they appear in dat.wide)
   dat.tidy <- dat.tidy %>%
     mutate(DEPTH = ordered(DEPTH,
-                           levels = as.numeric(levels(DEPTH))[order(as.numeric(levels(DEPTH)))]))
+                           levels = as.numeric(levels(DEPTH))[order(as.numeric(levels(DEPTH)))])) %>%
+    arrange(DEPTH)
 
   # number of NAs in the DATE and VALUE columns
   date.na <- sum(is.na(dat.tidy$DATE))
