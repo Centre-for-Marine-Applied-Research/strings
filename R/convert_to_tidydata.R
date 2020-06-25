@@ -57,26 +57,8 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FA
 
       # compile the tidy data
       dat.i.tidy <- dat.i %>% slice(-c(1:4)) %>%      # remove first four rows of data
-        select(DATE = 1, VALUE = 2)                   # name column 1 DATE and column 2 VALUE
-
-      # if the date can be converted to class numeric, then it is stored as a number in Excel
-      ## and we have to use janitor::convert_to_datetime to convert to POSIXct.
-      # Otherwise the date should be a character string that can be converted to POSIXct using
-      ## lubridate::parse_date_time (might have to add orders = c("Ymd HM", "Ymd HMS")))
-      date_format <- dat.i.tidy$DATE[1]
-      if(!is.na(suppressWarnings(as.numeric(date_format)))) {
-
-        dat.i.tidy <-  dat.i.tidy %>%
-          mutate(DATE = convert_to_datetime(as.numeric(DATE)))
-
-        } else {
-
-        dat.i.tidy <-  dat.i.tidy %>%
-          mutate(DATE = parse_date_time(DATE, orders = "Ymd HMS"))
-
-      }
-
-      dat.i.tidy <- dat.i.tidy %>%
+        select(DATE = 1, VALUE = 2)  %>%              # name column 1 DATE and column 2 VALUE
+        convert_timestamp_to_datetime() %>%               # convert the timestamp to a POSIXct object
         mutate(DATE_RANGE = daterange,        # add DATE_RANGE column
                SENSOR = sensor,               # Add SENSOR column
                VARIABLE = variable,           # Add VARIABLE column
