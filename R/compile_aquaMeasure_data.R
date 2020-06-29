@@ -11,7 +11,8 @@
 #'
 #'  All columns in are imported as characters to ensure the timestamp is parsed
 #'  correctly. Timestamp must be saved in excel as a number or a character in
-#'  the order "ymd IMS p", "Ymd HM", or "Ymd HMS".
+#'  the order ""ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY HM", or "dmY
+#'  HMS".
 #'
 #'  There still may be parsing errors because there are not entries in every
 #'  column. This should not affect the data compilation. To check, save the

@@ -3,7 +3,8 @@
 #'  depths on the same string.
 #'@details All columns are read in as characters to ensure the timestamp is
 #'  parsed correctly. Timestamp must be saved in excel as a number or a
-#'  character in the order "ymd IMS p", "Ymd HM", or "Ymd HMS".
+#'  character in the order ""ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY
+#'  HM", or "dmY HMS".
 #'
 #'  Can handle .csv or .xlsx files, but .csv files are preferred for now (see
 #'  note on timezones below).
