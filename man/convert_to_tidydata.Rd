@@ -28,7 +28,8 @@ Converts compiled string data to a tidy format
 }
 \seealso{
 Other format: 
-\code{\link{format_for_opendata}()}
+\code{\link{format_for_opendata}()},
+\code{\link{trim_data}()}
 }
 \author{
 Danielle Dempsey

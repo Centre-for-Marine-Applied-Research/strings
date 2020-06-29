@@ -24,7 +24,8 @@ Format sensor string data for the OpenData portal
 }
 \seealso{
 Other format: 
-\code{\link{convert_to_tidydata}()}
+\code{\link{convert_to_tidydata}()},
+\code{\link{trim_data}()}
 }
 \author{
 Danielle Dempsey
