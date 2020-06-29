@@ -47,6 +47,9 @@ utils::globalVariables(c(
   "sensor",
   "SENSOR",
 
+  # trim_data
+  "SENSOR_TYPE",
+
   # format_for_opendata
   "lat",
   "long",
