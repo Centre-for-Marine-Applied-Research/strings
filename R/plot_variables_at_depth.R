@@ -9,14 +9,16 @@
 #'  \code{vars.to.plot = c("Temperature", "Dissolved Oxygen", "Salinity")}.
 #'@param ylab.units Character vector of units as they will appear in the y-axis
 #'  title. Must be in the same order as the associated variable in
-#'  \code{vars.to.plot}. Note: the units for \code{vars.to.plot = "Temperature"} are
-#'  hard-coded to ensure the degree symbol renders.
+#'  \code{vars.to.plot}. Note: the units for \code{vars.to.plot = "Temperature"}
+#'  are hard-coded to ensure the degree symbol renders.
 #'@param color.palette Color palette of hex colors onto which \code{DEPTH} will
 #'  be mapped. Default is \code{color.palette = rev(viridis(6, option = "D"))}.
 #'@param date.breaks.major Intervals for major breaks. Default is
 #'  \code{date.breaks.major = "2 month"}.
 #'@param date.breaks.minor Intervals for minor breaks. Default is
 #'  \code{date.breaks.minor = "1 month"}.
+#'@param alpha.points Value indicating the transparency of the points. 0 is most
+#'  transparent; 1 is opaque.
 #'@param stacked Logical value indicating what figures to return.  If
 #'  \code{stacked = TRUE}, a single figure with the plots for each variable in
 #'  \code{vars.to.plot} stacked in a column is returned. Plots will be stacked
@@ -47,6 +49,7 @@ plot_variables_at_depth <- function(dat.tidy,
                                     color.palette = rev(viridis(6, option = "D")),
                                     date.breaks.major = "2 month",
                                     date.breaks.minor = "1 month",
+                                    alpha.points = 1,
                                     stacked = TRUE){
 
 
@@ -114,7 +117,7 @@ plot_variables_at_depth <- function(dat.tidy,
     dat.i <- dat.tidy %>%  dplyr::filter(VARIABLE == var.i)
 
     plot.i <- ggplot(dat.i, aes(x = DATE, y = VALUE, color = DEPTH)) +
-      geom_point(size = 0.25) +
+      geom_point(size = 0.25, alpha = alpha.points) +
       scale_y_continuous(name = y.lab) +
       string_color_scale +
       x_axis_date +
