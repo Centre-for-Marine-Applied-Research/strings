@@ -12,6 +12,7 @@ plot_variables_at_depth(
   color.palette = rev(viridis(6, option = "D")),
   date.breaks.major = "2 month",
   date.breaks.minor = "1 month",
+  alpha.points = 1,
   stacked = TRUE
 )
 }
@@ -29,8 +30,8 @@ match an entry in the \code{VARIABLE} column of \code{dat.tidy}. Default is
 
 \item{ylab.units}{Character vector of units as they will appear in the y-axis
 title. Must be in the same order as the associated variable in
-\code{vars.to.plot}. Note: the units for \code{vars.to.plot = "Temperature"} are
-hard-coded to ensure the degree symbol renders.}
+\code{vars.to.plot}. Note: the units for \code{vars.to.plot = "Temperature"}
+are hard-coded to ensure the degree symbol renders.}
 
 \item{color.palette}{Color palette of hex colors onto which \code{DEPTH} will
 be mapped. Default is \code{color.palette = rev(viridis(6, option = "D"))}.}
@@ -40,6 +41,9 @@ be mapped. Default is \code{color.palette = rev(viridis(6, option = "D"))}.}
 
 \item{date.breaks.minor}{Intervals for minor breaks. Default is
 \code{date.breaks.minor = "1 month"}.}
+
+\item{alpha.points}{Value indicating the transparency of the points. 0 is most
+transparent; 1 is opaque.}
 
 \item{stacked}{Logical value indicating what figures to return.  If
 \code{stacked = TRUE}, a single figure with the plots for each variable in
