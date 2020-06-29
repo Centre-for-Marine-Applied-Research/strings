@@ -1,14 +1,12 @@
 #'@title Formats temperature data from Vemco deployment
 #'@description This function formats data from a Vemco deployment so it can be
 #'  compiled with the HOBO and aquaMeasure data.
-#'@details Only accepts csv files.
+#'@details Can handle .csv and .xlsx files.
 #'
 #'  All columns are read in as class character to ensure the timestamp is parsed
-#'  correctly. **Not all dates were parsed with automatic imputation because the
-#'  date format changes (some include seconds and others do not).
-#'
-#'  Timestamp must be a character in the order "Ymd HMS", "Ymd HM", "dmY HM", or
-#'  "dmY HMS".
+#'  correctly. Timestamp must be saved in excel as a number or a character in
+#'  the order ""ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY HM", or "dmY
+#'  HMS".
 #'
 #'  If there are "Temperature" entries in the Description column, these will be
 #'  extracted and compiled. If there are no "Temperature" entries, but there are
@@ -39,6 +37,7 @@
 #'
 #'@importFrom lubridate parse_date_time
 #'@importFrom readr read_csv write_csv
+#'@importFrom readxl read_excel
 #'@import dplyr
 #'@export
 #'
@@ -61,10 +60,11 @@ compile_vemco_data <- function(path.vemco,
   # finish path
   path.vemco <- file.path(paste(path.vemco, "Vemco", sep = "/"))
 
-  dat.files <- list.files(path.vemco, all.files = FALSE, pattern = "*.csv")
+  # list csv and xlsx files in the data folder
+  dat.file <- list.files(path.vemco, all.files = FALSE, pattern = "*csv|*xlsx")
 
   # remove files that start with "~"
-  if(any(substring(dat.files, 1, 1)== "~")) {
+  if(any(substring(dat.file, 1, 1)== "~")) {
 
     print(paste("Note:", sum((substring(dat.files, 1, 1)== "~")),
                 "files on the path begin with ~ and were not imported.", sep = " "))
@@ -72,14 +72,32 @@ compile_vemco_data <- function(path.vemco,
 
   }
 
-  vemco_dat <- read_csv(paste(path.vemco,  dat.files[1], sep = "/"),
-                        col_names = TRUE,
-                        col_types = cols(.default = col_character()))
+  if(length(dat.file) > 1) print("Warning: More than one file found in path/Vemco. Only the first will be imported")
+
+  # check whether file is .csv or .xlsx
+  file.extension <- separate(data.frame(dat.file), col = dat.file,
+                               into = c(NA, "EXT"), sep = "\\.")
+  file.extension <- file.extension$EXT
+
+  # use appropriate function to import data
+  if(file.extension == "csv") {
+    vemco_dat <- read_csv(paste(path.vemco,  dat.file[1], sep = "/"),
+                          col_names = TRUE,
+                          col_types = cols(.default = col_character()))
+  }
+
+  if(file.extension == "xlsx") {
+
+    vemco_dat <- read_excel(paste(path.vemco,  dat.file[1], sep = "/"),
+                          col_names = TRUE,
+                          col_types = "text")
+
+  }
 
   # Extract metadata --------------------------------------------------------
 
   # sensor and serial number
-  serial <-vemco_dat$Receiver[1]
+  serial <- vemco_dat$Receiver[1]
 
   # extract date column header (includes UTC offset)
   date_ref <- names(vemco_dat)[1]
@@ -102,9 +120,9 @@ compile_vemco_data <- function(path.vemco,
   vemco <- vemco_dat %>%
     filter(Description == var.to.extract) %>%
     transmute(INDEX = c(1:n()),
-              DATE = parse_date_time(`Date and Time (UTC)`,
-                                     orders = c("Ymd HMS", "Ymd HM", "dmY HM", "dmY HMS")),
-              TEMPERATURE = Data)
+              DATE = `Date and Time (UTC)`,
+              TEMPERATURE = Data) %>%
+    convert_timestamp_to_datetime()
 
   # trim to the dates in deployment.range
   # added four hours to end.date to account for AST

@@ -57,14 +57,12 @@ This function formats data from a Vemco deployment so it can be
  compiled with the HOBO and aquaMeasure data.
 }
 \details{
-Only accepts csv files.
+Can handle .csv and .xlsx files.
 
  All columns are read in as class character to ensure the timestamp is parsed
- correctly. **Not all dates were parsed with automatic imputation because the
- date format changes (some include seconds and others do not).
-
- Timestamp must be a character in the order "Ymd HMS", "Ymd HM", "dmY HM", or
- "dmY HMS".
+ correctly. Timestamp must be saved in excel as a number or a character in
+ the order ""ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY HM", or "dmY
+ HMS".
 
  If there are "Temperature" entries in the Description column, these will be
  extracted and compiled. If there are no "Temperature" entries, but there are
