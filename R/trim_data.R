@@ -1,9 +1,9 @@
 #'@title Trim data to specified start and end datetimes
-#'@param dat.tidy Data in a tody format, as exported by the
+#'@param dat.tidy Data in a tidy format, as exported by the
 #'  \code{convert_to_tidydata()} function.
 #'@param var.to.trim Variable to trim, e.g. "Temperature", "Dissolved Oxygen",
 #'  or "Salinity".
-#'@param start.datetime A character string indicating the date and time the
+#'@param start.datetime A character string indicating the date and time that the
 #'  sensor started reliably recording data, in one of the following orders: "ymd
 #'  IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS".
 #'@param end.datetime A character string indicating the date and time the sensor
@@ -26,14 +26,14 @@ trim_data <- function(dat.tidy,
                       end.datetime = max(dat.tidy$DATE),
                       sensors.to.trim = c("HOBO", "aquaMeasure", "VR2AR")){
 
-  # remove observations of var.to.trim
-  dat <- dat.tidy %>% filter(VARIABLE != var.to.trim)
-
   # convert start/end datetimes to POSIXct
   parse.orders <- c("ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS")
 
   start.datetime <- parse_date_time(start.datetime, orders = parse.orders)
   end.datetime <- parse_date_time(end.datetime, orders = parse.orders)
+
+  # remove observations of var.to.trim
+  dat <- dat.tidy %>% filter(VARIABLE != var.to.trim)
 
   # filter dat.tidy for var.to.trim and make column of SENSOR_TYPE
   dat_var <- dat.tidy %>%
@@ -49,12 +49,12 @@ trim_data <- function(dat.tidy,
          ". Check spelling in sensors.to.trim", sep = ""))
   }
 
-  # data measured by sensors we are NOT interested in
+  # data for var.to.trim measured by sensors we are NOT interested in
   dat_var_other <- dat_var %>%
-    filter(VARIABLE != var.to.trim, !(SENSOR_TYPE %in% sensors.to.trim)) %>%
+    filter(!(SENSOR_TYPE %in% sensors.to.trim)) %>%
     select(-SENSOR_TYPE)
 
-  # filter for data
+  # filter for sensor type(s) and date range of interest
   dat_var_trim <- dat_var %>%
     filter(SENSOR_TYPE %in% sensors.to.trim,
            DATE >= start.datetime,
@@ -66,6 +66,5 @@ trim_data <- function(dat.tidy,
     arrange(VARIABLE, DEPTH)
 
   dat_out
-
 
 }
