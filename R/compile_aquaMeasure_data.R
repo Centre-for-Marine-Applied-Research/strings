@@ -11,7 +11,7 @@
 #'
 #'  All columns in are imported as characters to ensure the timestamp is parsed
 #'  correctly. Timestamp must be saved in excel as a number or a character in
-#'  the order ""ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY HM", or "dmY
+#'  the order "ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY HM", or "dmY
 #'  HMS".
 #'
 #'  There still may be parsing errors because there are not entries in every
@@ -114,17 +114,17 @@ compile_aquaMeasure_data <- function(path.aM,
     # Extract metadata --------------------------------------------------------
 
     # sensor and serial number
-    serial.i <- dat.i$Sensor[1]
+    sensor.i <- dat.i$Sensor[1]
 
     # use serial number to identify the depth (from serial.table)
     depth.i <- serial.table.aM %>%
-      dplyr::filter(SENSOR == serial.i)  %>%
+      dplyr::filter(SENSOR == sensor.i)  %>%
       select(DEPTH)
     depth.i <- depth.i$DEPTH
 
     # if the name of the file doesn't match any of the entries in serial.table: stop with message
-    if(!(serial.i %in% serial.table.aM$SENSOR)){
-      stop(paste("Serial number", serial.i, "does not match any serial numbers in serial.table.aM"))
+    if(!(sensor.i %in% serial.table.aM$SENSOR)){
+      stop(paste("Serial number", sensor.i, "does not match any serial numbers in serial.table.aM"))
     }
 
     # extract date column header (includes UTC offset)
@@ -184,7 +184,7 @@ compile_aquaMeasure_data <- function(path.aM,
                   DATE = as.character(DATE),
                   PLACEHOLDER = as.character(PLACEHOLDER)) %>%
         add_metadata(row1 = deployment_ref,
-                     row2 = serial.i,
+                     row2 = sensor.i,
                      row3 = paste(var.j, depth.i, sep = "-"),
                      row4 = c(date_ref.i, var.j))
 
