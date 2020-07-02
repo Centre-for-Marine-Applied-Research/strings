@@ -13,13 +13,13 @@ trim_data(
 )
 }
 \arguments{
-\item{dat.tidy}{Data in a tody format, as exported by the
+\item{dat.tidy}{Data in a tidy format, as exported by the
 \code{convert_to_tidydata()} function.}
 
 \item{var.to.trim}{Variable to trim, e.g. "Temperature", "Dissolved Oxygen",
 or "Salinity".}
 
-\item{start.datetime}{A character string indicating the date and time the
+\item{start.datetime}{A character string indicating the date and time that the
 sensor started reliably recording data, in one of the following orders: "ymd
 IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS".}
 
