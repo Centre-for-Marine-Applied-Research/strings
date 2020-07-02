@@ -156,11 +156,11 @@ compile_vemco_data <- function(path.vemco,
 
     write_csv(vemco, path = paste(path.vemco, "/", file.name, ".csv", sep = ""), col_names = FALSE)
 
-    message(paste("Check in ", path.vemco, " for file ", file.name, ".csv", sep = ""))
+    print(paste("Check in ", path.vemco, " for file ", file.name, ".csv", sep = ""))
 
   } else{
 
-    message(paste("Vemco data compiled:", var.to.extract))
+    print(paste("Vemco data compiled:", var.to.extract))
 
     vemco
   }

@@ -262,11 +262,11 @@ compile_HOBO_data <- function(path.HOBO,
 
     write_csv(HOBO_dat, path = paste(path.HOBO, "/", file.name, ".csv", sep = ""), col_names = FALSE)
 
-    message(paste("Check in ", path.HOBO, " for file ", file.name, ".csv", sep = ""))
+    print(paste("Check in ", path.HOBO, " for file ", file.name, ".csv", sep = ""))
 
   } else{
 
-    message("HOBO data compiled")
+    print("HOBO data compiled")
 
     HOBO_dat
   }
