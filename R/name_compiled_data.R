@@ -11,9 +11,6 @@
 
 name_compiled_data <- function(area.name, deployment.start, vars){
 
-  # format start date for file name
- # file.date <-
-
   # vars
   TEMP <- ifelse(any(vars %in% "Temperature"), temp <- "_TEMP", "")
   DO <- ifelse(any(vars %in% "Dissolved Oxygen"), "_DO", "")
