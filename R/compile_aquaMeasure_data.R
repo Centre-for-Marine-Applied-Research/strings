@@ -146,7 +146,7 @@ compile_aquaMeasure_data <- function(path.aM,
     vars.to.select <- vars.to.select[which(!is.na(vars.to.select))]
 
 
-    message(paste("found", vars.to.select, "in file", file.i), sep = " ")
+   print(paste("found", vars.to.select, "in file", file.i), sep = " ")
 
 
     # filter out DATES that sensor was not set up
@@ -203,20 +203,17 @@ compile_aquaMeasure_data <- function(path.aM,
     # format start date for file name
     file.date <-  format(start.date, '%Y-%m-%d')
 
-    # vars
-    TEMP <- ifelse(any(vars.aM %in% "Temperature"), temp <- "_TEMP", "")
-    DO <- ifelse(any(vars.aM %in% "Dissolved Oxygen"), "_DO", "")
-    SAL <- ifelse(any(vars.aM %in% "Salinity"), "_SAL", "")
-
     # name of output file
-    file.name <- paste(area.name, "_", file.date, TEMP, DO, SAL, sep = "")
+    file.name <- name_compiled_data(area.name = area.name,
+                                    deployment.start = file.date,
+                                    vars = unique(convert_to_tidydata(aM_dat[,-1])$VARIABLE))
 
     write_csv(aM_dat, path = paste(path.aM, "/", file.name, ".csv", sep = ""), col_names = FALSE)
 
-    message(paste("Check in ", path.aM, " for file ", file.name, ".csv", sep = ""))
+    print(paste("Check in ", path.aM, " for file ", file.name, ".csv", sep = ""))
   }else{
 
-    message("aquaMeasure data compiled")
+    print("aquaMeasure data compiled")
 
     aM_dat
   }
