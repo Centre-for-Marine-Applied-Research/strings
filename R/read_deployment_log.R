@@ -11,16 +11,18 @@
 #'  options), \code{Serial#} (the logger serial number), and \code{Sensor_Depth}
 #'  (depth at which the sensor was deployed). All other columns will be ignored.
 #'
-#'  Entries in the \code{Logger_Model} column can be "HOBO Pro V2" (or "HOBO pro
-#'  V2" or "HOBO_Pro_V2"), "aquaMeasure DOT", "aquaMeasure SAL", "aquaMeasure
-#'  SST", or "VR2AR".
+#'  Entries in the \code{Logger_Model} column can be "HOBO Pro V2", "TidbiT
+#'  MX2303"  "aquaMeasure DOT", "aquaMeasure SAL", "aquaMeasure SST", or
+#'  "VR2AR". (Some mis-spellings are accepted: ("HOBO pro V2", "HOBO_Pro_V2",
+#'  "aquameasure DOT", "aquameasure SAL", "aquameasure SST")
 #'
-#'  A Note is printed to the console when Hobo, aquaMeasure, or Vemco sensors
+#'  A Warning message is printed to the console when the function does not
+#'  recognize a sensor in the log.
+#'
+#'  A message is printed to the console when Hobo, aquaMeasure, or Vemco sensors
 #'  are not found in the log.
 #'
-#'  **TidBit sensors are not yet recognized**
-#'
-#'  A warning will be printed to the console if there is more than one unique
+#'  A message will be printed to the console if there is more than one unique
 #'  entry in \code{Deployment_Waterbody}, \code{Location_Description},
 #'  \code{Deployment}, \code{Retrieval}, \code{Logger_Latitude}, or
 #'  \code{Logger_Longitude}.
@@ -53,7 +55,7 @@ read_deployment_log <- function(path.log){
   # remove files that start with "~"
   if(any(substring(dat.files, 1, 1) == "~")) {
 
-    print(paste("Note:", sum((substring(dat.files, 1, 1)== "~")),
+    message(paste("Note:", sum((substring(dat.files, 1, 1)== "~")),
                 "files on the path begin with ~ and were not imported.", sep = " "))
     dat.files <- dat.files[-which(substring(dat.files, 1, 1)== "~")]
 
@@ -68,8 +70,8 @@ read_deployment_log <- function(path.log){
   start  <- unique(log$Deployment)
   end <- unique(log$Retrieval)
 
-  # warning if there is more than one Deployment or Retrieval date
-  if(length(start) > 1 | length(end) > 1) print("Warning: multiple Deployment or Retrieval dates in log")
+  # message if there is more than one Deployment or Retrieval date
+  if(length(start) > 1 | length(end) > 1) message("Multiple Deployment or Retrieval dates in log")
 
   # Stop with ERROR if the dates are not in the proper format
   if(is.na(suppressWarnings(ymd(log$Deployment[1]))) |
@@ -85,34 +87,38 @@ read_deployment_log <- function(path.log){
   long <- unique(log$Logger_Longitude)
   station <- unique(log$Location_Description)
 
-  if(length(wb) > 1) print("Warning: multiple waterbodies in log")
-  if(length(lat) > 1) print("Warning: multiple latitudes recorded in log")
-  if(length(long) > 1) print("Warning: multiple longitudes recorded in log")
-  if(length(station) > 1) print("Warning: multiple location descriptions recorded in log")
+  if(length(wb) > 1) message("Multiple waterbodies in log")
+  if(length(lat) > 1) message("Multiple latitudes recorded in log")
+  if(length(long) > 1) message("Multiple longitudes recorded in log")
+  if(length(station) > 1) message("Multiple location descriptions recorded in log")
 
   area.info <- data.frame(waterbody = log$Deployment_Waterbody[1],
                           latitude = log$Logger_Latitude[1],
                           longitude = log$Logger_Longitude[1],
                           station  = log$Location_Description[1])
 
-  # HOBO sensors
+  # HOBO & TidBit sensors
+  hobo.sensors <- c("HOBO Pro V2", "HOBO pro V2", "HOBO_Pro_V2", "TidbiT MX2303")
+
   hobos <- log %>%
-    filter(Logger_Model == "HOBO Pro V2" | Logger_Model == "HOBO pro V2" | Logger_Model == "HOBO_Pro_V2") %>%
+    filter(Logger_Model %in% hobo.sensors) %>%
     select(Logger_Model, `Serial#`, Sensor_Depth) %>%
-    separate(Logger_Model, into = c("sensor", NA, NA), sep = " ") %>%
+    separate(Logger_Model, into = c("sensor", NA, NA), sep = " ", fill = "right") %>%
     mutate(SENSOR = paste(sensor, `Serial#`, sep = "-"),
            DEPTH = paste(Sensor_Depth, "m", sep = "")) %>%
     select(SENSOR, DEPTH)
 
   if(nrow(hobos) == 0){
       hobos <- NULL
-      print("Note: No Hobo sensors found in log")
+      message("No Hobo sensors found in log")
   }
 
   # aquaMeasure sensors
+  aM.sensors <- c("aquaMeasure DOT", "aquaMeasure SAL", "aquaMeasure SST",
+                  "aquameasure DOT", "aquameasure SAL", "aquameasure SST")
+
   aquaMeasures <- log %>%
-    filter(Logger_Model == "aquaMeasure DOT" | Logger_Model == "aquaMeasure SAL" |
-             Logger_Model == "aquaMeasure SST") %>%
+    filter(Logger_Model %in% aM.sensors) %>%
     select(Logger_Model, `Serial#`, Sensor_Depth) %>%
     separate(Logger_Model, into = c("sensor", NA), sep = " ") %>%
     mutate(SENSOR = paste(sensor, `Serial#`, sep = "-"),
@@ -121,12 +127,14 @@ read_deployment_log <- function(path.log){
 
   if(nrow(aquaMeasures) == 0){
     aquaMeasures <- NULL
-    print("Note: No aquaMeasure sensors found in log")
+    message("No aquaMeasure sensors found in log")
   }
 
   # vemco sensor
+  vemco.sensors <- "VR2AR"
+
   vemcos <- log %>%
-    filter(Logger_Model == "VR2AR") %>%
+    filter(Logger_Model %in% vemco.sensors) %>%
     select(Logger_Model, `Serial#`, Sensor_Depth) %>%
     mutate(SENSOR = paste(Logger_Model, `Serial#`, sep = "-"),
            DEPTH = paste(Sensor_Depth, "m", sep = "")) %>%
@@ -134,7 +142,19 @@ read_deployment_log <- function(path.log){
 
   if(nrow(vemcos) == 0){
     vemcos <- NULL
-    print("Note: No Vemco sensors found in log")
+    message("No Vemco sensors found in log")
+  }
+
+  # print a warning if there are any sensors in the log that are NOT recognized by this function
+  log.sensors <- unique(log$Logger_Model)
+  script.sensors <- c(hobo.sensors, aM.sensors, vemco.sensors)
+
+  if(any(!(log.sensors %in% script.sensors))) {
+
+    extra.sensor <- log.sensors[which(!(log.sensors %in% script.sensors))]
+
+    warning(extra.sensor, " was found in the Logger_Model column of the log.
+            This sensor is not recognized by the read_deployment_log() function")
   }
 
   # return list of deployment info
