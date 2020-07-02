@@ -1,16 +1,18 @@
-#'@title Compiles temperature data from HOBO sensors
-#'@description Compiles and formats data from HOBO sensors deployed at different
-#'  depths on the same string.
-#'@details All columns are read in as characters to ensure the timestamp is
-#'  parsed correctly. Timestamp must be saved in excel as a number or a
-#'  character in the order ""ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY
-#'  HM", or "dmY HMS".
+#'@title Compiles temperature data from HOBO and TidbiT sensors
+#'@description Compiles and formats data from HOBO and TidbiT sensors deployed
+#'  at different depths on the same string.
+#'@details HOBO and TidBiT should be saved in a folder named Hobo.
+#'
+#'  All columns are read in as characters to ensure the timestamp is parsed
+#'  correctly. Timestamp must be saved in excel as a number or a character in
+#'  the order ""ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY HM", or "dmY
+#'  HMS".
 #'
 #'  Can handle .csv or .xlsx files, but .csv files are preferred for now (see
 #'  note on timezones below).
 #'
-#'  HOBO data should be exported in GMT+00 as a csv file so that the timestamp
-#'  is in UTC.
+#'  Data should be exported in GMT+00 as a csv file so that the timestamp is in
+#'  UTC.
 #'
 #'  If exported as an xlsx, the timestamp accounts for daylight savings time
 #'  (this seems to be a bug in the HOBO software). \code{compile_HOBO_data()}
@@ -41,14 +43,15 @@
 #'  break.
 #'
 #'@param path.HOBO File path to the Hobo folder. All of the excel files in the
-#'  Hobo folder should be data extracted from the HOBO software. The name of
-#'  each excel file must be the serial number of the sensor, and the excel files
-#'  must all have the same extension (either .csv or .xlsx). The datetime
-#'  columns must be in the order "ymd IMS p", "Ymd HM", or "Ymd HMS".
+#'  Hobo folder should be data to compile. The name of each excel file must be
+#'  the serial number of the sensor, and the excel files must all have the same
+#'  extension (either .csv or .xlsx). The datetime columns must be in the order
+#'  "ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY HM", or "dmY HMS".
 #'@param area.name Area where the HOBO was deployed.
-#'@param serial.table.HOBO A table with the serial number of each HOBO sensor on
-#'  the string, in the form "HOBO-xxxxxxxx" (first column) and corresponding
-#'  depth at which it was deployed in the form "2m" (second column).
+#'@param serial.table.HOBO A table with the serial number of each HOBO and
+#'  TidBiT sensor on the string, in the form "HOBO-xxxxxxxx" or
+#'  "TidbiT-xxxxxxxx" (first column) and corresponding depth at which it was
+#'  deployed in the form "2m" (second column).
 #'@param deployment.range A dataframe with two columns. The first column holds
 #'  the deployment date (a Date object in the order year, month, day),  and the
 #'  second column holds the retrieval date (a Date object in the order year,
@@ -107,6 +110,9 @@ compile_HOBO_data <- function(path.HOBO,
 
   # make sure columns of serial.table are named correctly
   names(serial.table.HOBO) <- c("SENSOR", "DEPTH")
+  # separate the SENSOR column into the SENSOR type and SERIAL number
+  serial.table.HOBO <- serial.table.HOBO %>%
+    separate(col = SENSOR, into = c("SENSOR", "SERIAL"))
 
   # extract the deployment start and end dates from deployment.range
   dates <- extract_deployment_dates(deployment.range)
@@ -178,20 +184,21 @@ compile_HOBO_data <- function(path.HOBO,
     # extract serial number from file name
     serial.i <- data.frame(file.name) %>%
       tidyr::separate(col = file.name, into = c("SERIAL", NA), sep = "\\.", remove = TRUE)
-    serial.i <- paste("HOBO-", serial.i$SERIAL, sep = "")
+    serial.i <- serial.i$SERIAL
 
-
-    # if the name of the file doesn't match any of the entries in serial.table: stop with message
-    if(!(serial.i %in% serial.table.HOBO$SENSOR)){
+    # if the name of the file doesn't match any of the entries in serial.table.HOBO: stop with message
+    if(!(serial.i %in% serial.table.HOBO$SERIAL)){
       stop(paste("The name of file", i, "does not match any serial numbers in serial.table.HOBO"))
     }
 
     # use serial number to identify the variable and depth (from serial.table)
-    # could simplify this because variable will always be Temperature
     depth <- serial.table.HOBO %>%
-      dplyr::filter(SENSOR == serial.i)  %>%
+      dplyr::filter(SERIAL == serial.i)  %>%
       select(DEPTH)
     depth <- depth$DEPTH
+
+    # sensor type and serial number
+    sensor.i <- paste(serial.table.HOBO$SENSOR[i], serial.table.HOBO$SERIAL[i], sep = "-")
 
     # extract date column header (includes GMT offset)
     if(file.type == "xlsx") date_ref <- hobo.i[1,2]$...2
@@ -234,7 +241,7 @@ compile_HOBO_data <- function(path.HOBO,
              PLACEHOLDER = as.character(round(as.numeric(TEMPERATURE), digits = 3)))  %>%
       select(INDEX, DATE, PLACEHOLDER) %>%
       add_metadata(row1 = deployment_ref,
-                   row2 = serial.i,
+                   row2 = sensor.i,
                    row3 = (paste("Temperature", depth, sep = "-")),
                    row4 = c(date_ref, temp_ref))
 
