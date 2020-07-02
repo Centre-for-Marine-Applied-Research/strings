@@ -33,16 +33,18 @@ The log must be saved in .xlsx or .xls format, and must include the
  options), \code{Serial#} (the logger serial number), and \code{Sensor_Depth}
  (depth at which the sensor was deployed). All other columns will be ignored.
 
- Entries in the \code{Logger_Model} column can be "HOBO Pro V2" (or "HOBO pro
- V2" or "HOBO_Pro_V2"), "aquaMeasure DOT", "aquaMeasure SAL", "aquaMeasure
- SST", or "VR2AR".
+ Entries in the \code{Logger_Model} column can be "HOBO Pro V2", "TidbiT
+ MX2303"  "aquaMeasure DOT", "aquaMeasure SAL", "aquaMeasure SST", or
+ "VR2AR". (Some mis-spellings are accepted: ("HOBO pro V2", "HOBO_Pro_V2",
+ "aquameasure DOT", "aquameasure SAL", "aquameasure SST")
 
- A Note is printed to the console when Hobo, aquaMeasure, or Vemco sensors
+ A Warning message is printed to the console when the function does not
+ recognize a sensor in the log.
+
+ A message is printed to the console when Hobo, aquaMeasure, or Vemco sensors
  are not found in the log.
 
- **TidBit sensors are not yet recognized**
-
- A warning will be printed to the console if there is more than one unique
+ A message will be printed to the console if there is more than one unique
  entry in \code{Deployment_Waterbody}, \code{Location_Description},
  \code{Deployment}, \code{Retrieval}, \code{Logger_Latitude}, or
  \code{Logger_Longitude}.

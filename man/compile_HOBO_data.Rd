@@ -2,7 +2,7 @@
 % Please edit documentation in R/compile_HOBO_data.R
 \name{compile_HOBO_data}
 \alias{compile_HOBO_data}
-\title{Compiles temperature data from HOBO sensors}
+\title{Compiles temperature data from HOBO and TidbiT sensors}
 \usage{
 compile_HOBO_data(
   path.HOBO,
@@ -16,16 +16,17 @@ compile_HOBO_data(
 }
 \arguments{
 \item{path.HOBO}{File path to the Hobo folder. All of the excel files in the
-Hobo folder should be data extracted from the HOBO software. The name of
-each excel file must be the serial number of the sensor, and the excel files
-must all have the same extension (either .csv or .xlsx). The datetime
-columns must be in the order "ymd IMS p", "Ymd HM", or "Ymd HMS".}
+Hobo folder should be data to compile. The name of each excel file must be
+the serial number of the sensor, and the excel files must all have the same
+extension (either .csv or .xlsx). The datetime columns must be in the order
+"ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY HM", or "dmY HMS".}
 
 \item{area.name}{Area where the HOBO was deployed.}
 
-\item{serial.table.HOBO}{A table with the serial number of each HOBO sensor on
-the string, in the form "HOBO-xxxxxxxx" (first column) and corresponding
-depth at which it was deployed in the form "2m" (second column).}
+\item{serial.table.HOBO}{A table with the serial number of each HOBO and
+TidBiT sensor on the string, in the form "HOBO-xxxxxxxx" or
+"TidbiT-xxxxxxxx" (first column) and corresponding depth at which it was
+deployed in the form "2m" (second column).}
 
 \item{deployment.range}{A dataframe with two columns. The first column holds
 the deployment date (a Date object in the order year, month, day),  and the
@@ -70,20 +71,22 @@ Returns a dataframe or exports a spreadsheet with the data compiled
  \code{convert_to_tidydata()}.
 }
 \description{
-Compiles and formats data from HOBO sensors deployed at different
- depths on the same string.
+Compiles and formats data from HOBO and TidbiT sensors deployed
+ at different depths on the same string.
 }
 \details{
-All columns are read in as characters to ensure the timestamp is
- parsed correctly. Timestamp must be saved in excel as a number or a
- character in the order ""ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY
- HM", or "dmY HMS".
+HOBO and TidBiT should be saved in a folder named Hobo.
+
+ All columns are read in as characters to ensure the timestamp is parsed
+ correctly. Timestamp must be saved in excel as a number or a character in
+ the order ""ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY HM", or "dmY
+ HMS".
 
  Can handle .csv or .xlsx files, but .csv files are preferred for now (see
  note on timezones below).
 
- HOBO data should be exported in GMT+00 as a csv file so that the timestamp
- is in UTC.
+ Data should be exported in GMT+00 as a csv file so that the timestamp is in
+ UTC.
 
  If exported as an xlsx, the timestamp accounts for daylight savings time
  (this seems to be a bug in the HOBO software). \code{compile_HOBO_data()}

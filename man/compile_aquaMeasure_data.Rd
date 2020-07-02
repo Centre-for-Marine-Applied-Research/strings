@@ -66,7 +66,7 @@ Rows with \code{undefined} and \code{... (time not set)} values in
 
  All columns in are imported as characters to ensure the timestamp is parsed
  correctly. Timestamp must be saved in excel as a number or a character in
- the order ""ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY HM", or "dmY
+ the order "ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY HM", or "dmY
  HMS".
 
  There still may be parsing errors because there are not entries in every

@@ -31,9 +31,10 @@ retrieval date to account for AST, e.g., in case the sensor was retrieved
 after 20:00 AST, which is 00:00 UTC the next day.) Default is \code{trim =
 TRUE}.}
 
-\item{serial.table.HOBO}{A table with the serial number of each HOBO sensor on
-the string, in the form "HOBO-xxxxxxxx" (first column) and corresponding
-depth at which it was deployed in the form "2m" (second column).}
+\item{serial.table.HOBO}{A table with the serial number of each HOBO and
+TidBiT sensor on the string, in the form "HOBO-xxxxxxxx" or
+"TidbiT-xxxxxxxx" (first column) and corresponding depth at which it was
+deployed in the form "2m" (second column).}
 
 \item{file.type.HOBO}{Character string indicating whether the HOBO data is in
  .csv or .xlsx format. All HOBO data files that are being compiled must have
