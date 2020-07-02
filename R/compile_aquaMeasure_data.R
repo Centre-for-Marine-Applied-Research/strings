@@ -80,7 +80,7 @@ compile_aquaMeasure_data <- function(path.aM,
   # remove files that start with "~"
   if(any(substring(dat.files, 1, 1)== "~")) {
 
-    print(paste("Note:", sum((substring(dat.files, 1, 1)== "~")),
+    message(paste("Note:", sum((substring(dat.files, 1, 1)== "~")),
                 "files on the path begin with ~ and were not imported.", sep = " "))
     dat.files <- dat.files[-which(substring(dat.files, 1, 1)== "~")]
 
@@ -146,7 +146,7 @@ compile_aquaMeasure_data <- function(path.aM,
     vars.to.select <- vars.to.select[which(!is.na(vars.to.select))]
 
 
-    print(paste("found", vars.to.select, "in file", file.i), sep = " ")
+    message(paste("found", vars.to.select, "in file", file.i), sep = " ")
 
 
     # filter out DATES that sensor was not set up
@@ -199,23 +199,24 @@ compile_aquaMeasure_data <- function(path.aM,
 # Return compiled data ----------------------------------------------------
 
   if(export.csv == TRUE){
-    # # format start date for file name
-    # file.date <-  format(start.date, '%Y-%m-%d')
-    #
-    # # vars
-    # TEMP <- ifelse(any(vars.aM %in% "Temperature"), temp <- "_TEMP", "")
-    # DO <- ifelse(any(vars.aM %in% "Dissolved Oxygen"), "_DO", "")
-    # SAL <- ifelse(any(vars.aM %in% "Salinity"), "_SAL", "")
-    #
-    # # name of output file
-    # file.name <- paste(area.name, "_", file.date, TEMP, DO, SAL, sep = "")
-    #
-    # write_csv(aM_dat, path = paste(path.aM, "/", file.name, ".csv", sep = ""), col_names = FALSE)
-    #
-    # print(paste("Check in ", path.aM, " for file ", file.name, ".csv", sep = ""))
+
+    # format start date for file name
+    file.date <-  format(start.date, '%Y-%m-%d')
+
+    # vars
+    TEMP <- ifelse(any(vars.aM %in% "Temperature"), temp <- "_TEMP", "")
+    DO <- ifelse(any(vars.aM %in% "Dissolved Oxygen"), "_DO", "")
+    SAL <- ifelse(any(vars.aM %in% "Salinity"), "_SAL", "")
+
+    # name of output file
+    file.name <- paste(area.name, "_", file.date, TEMP, DO, SAL, sep = "")
+
+    write_csv(aM_dat, path = paste(path.aM, "/", file.name, ".csv", sep = ""), col_names = FALSE)
+
+    message(paste("Check in ", path.aM, " for file ", file.name, ".csv", sep = ""))
   }else{
 
-    print("aquaMeasure data compiled")
+    message("aquaMeasure data compiled")
 
     aM_dat
   }

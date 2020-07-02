@@ -66,13 +66,13 @@ compile_vemco_data <- function(path.vemco,
   # remove files that start with "~"
   if(any(substring(dat.file, 1, 1)== "~")) {
 
-    print(paste("Note:", sum((substring(dat.files, 1, 1)== "~")),
+    message(paste("Note:", sum((substring(dat.files, 1, 1)== "~")),
                 "files on the path begin with ~ and were not imported.", sep = " "))
     dat.files <- dat.files[-which(substring(dat.files, 1, 1)== "~")]
 
   }
 
-  if(length(dat.file) > 1) print("Warning: More than one file found in path/Vemco. Only the first will be imported")
+  if(length(dat.file) > 1) warning("More than one file found in path/Vemco. Only the first will be imported")
 
   # check whether file is .csv or .xlsx
   file.extension <- separate(data.frame(dat.file), col = dat.file,
@@ -156,11 +156,11 @@ compile_vemco_data <- function(path.vemco,
 
     write_csv(vemco, path = paste(path.vemco, "/", file.name, ".csv", sep = ""), col_names = FALSE)
 
-    print(paste("Check in ", path.vemco, " for file ", file.name, ".csv", sep = ""))
+    message(paste("Check in ", path.vemco, " for file ", file.name, ".csv", sep = ""))
 
   } else{
 
-    print(paste("Vemco data compiled:", var.to.extract))
+    message(paste("Vemco data compiled:", var.to.extract))
 
     vemco
   }

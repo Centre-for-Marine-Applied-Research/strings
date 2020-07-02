@@ -143,7 +143,7 @@ compile_HOBO_data <- function(path.HOBO,
   # remove files that start with "~"
   if(any(substring(dat.files, 1, 1)== "~")) {
 
-    print(paste("Note:", sum((substring(dat.files, 1, 1)== "~")),
+    message(paste("Note:", sum((substring(dat.files, 1, 1)== "~")),
                 "files on the path begin with ~ and were not imported.", sep = " "))
     dat.files <- dat.files[-which(substring(dat.files, 1, 1)== "~")]
   }
@@ -262,11 +262,11 @@ compile_HOBO_data <- function(path.HOBO,
 
     write_csv(HOBO_dat, path = paste(path.HOBO, "/", file.name, ".csv", sep = ""), col_names = FALSE)
 
-    print(paste("Check in ", path.HOBO, " for file ", file.name, ".csv", sep = ""))
+    message(paste("Check in ", path.HOBO, " for file ", file.name, ".csv", sep = ""))
 
   } else{
 
-    print("HOBO data compiled")
+    message("HOBO data compiled")
 
     HOBO_dat
   }

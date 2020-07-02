@@ -84,10 +84,10 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FA
 
     dat.tidy <- data.frame(na.omit(dat.tidy))
 
-    if(show.NA.message == TRUE) print(paste("NOTE:", sum(date.na), "NA values removed from DATE column.", sum(value.na), "NA values removed from VALUE column"))
+    if(show.NA.message == TRUE) message(paste(sum(date.na), "NA values removed from DATE column.", sum(value.na), "NA values removed from VALUE column"))
 
   } else {
-    if(show.NA.message == TRUE) print(paste("NOTE:", sum(date.na), "NA values in DATE column.", sum(value.na), "NA values in VALUE column"))
+    if(show.NA.message == TRUE) message(paste(sum(date.na), "NA values in DATE column.", sum(value.na), "NA values in VALUE column"))
   }
 
   dat.tidy # return dat.tidy
