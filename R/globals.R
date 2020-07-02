@@ -5,8 +5,7 @@
 
 utils::globalVariables(c(
   # compile_HOBO_data()
-  #"SERIAL",
-  #"VAR_DEPTH",
+  "SERIAL",
   "DATE",
   "INDEX",
   "TEMPERATURE",
