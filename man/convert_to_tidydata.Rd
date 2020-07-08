@@ -28,6 +28,7 @@ Converts compiled string data to a tidy format
 }
 \seealso{
 Other format: 
+\code{\link{convert_DO_percent_to_concentration}()},
 \code{\link{format_for_opendata}()},
 \code{\link{trim_data}()}
 }
