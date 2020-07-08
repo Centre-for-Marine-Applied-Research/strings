@@ -24,6 +24,8 @@ Format sensor string data for the OpenData portal
 }
 \seealso{
 Other format: 
+\code{\link{convert_DO_percent_to_concentration}()},
+\code{\link{convert_depth_to_ordered_factor}()},
 \code{\link{convert_to_tidydata}()},
 \code{\link{trim_data}()}
 }
