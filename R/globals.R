@@ -26,6 +26,7 @@ utils::globalVariables(c(
   # convert_to_tidydata
   "DEPTH",
   "VALUE",
+  "DATE_RANGE",
 
   # plot_temp_DO_sal
   "VARIABLE",
@@ -34,6 +35,9 @@ utils::globalVariables(c(
   "ADT_force",
   "DAYLIGHT_SAVINGS",
   "UTC",
+
+  # convert_DO_percent_to_concentration
+  "cp",
 
   # dates_to_fix
   "inx_fix",
