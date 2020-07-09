@@ -20,13 +20,10 @@ Fill this in. Returns a tidy dataframe with six columns: \code{DATE} (POSIXct),
 Converts dissolved oxygen from percent to concentration (mg/L)
 }
 \seealso{
-Other format: 
-\code{\link{convert_depth_to_ordered_factor}()},
-\code{\link{convert_to_tidydata}()},
-\code{\link{format_for_opendata}()},
-\code{\link{trim_data}()}
+Other calculate: 
+\code{\link{calculate_degree_days}()}
 }
 \author{
 Danielle Dempsey
 }
-\concept{format}
+\concept{calculate}
