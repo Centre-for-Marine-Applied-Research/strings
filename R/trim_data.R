@@ -5,7 +5,7 @@
 #'  or "Salinity".
 #'@param start.datetime A character string indicating the date and time that the
 #'  sensor started reliably recording data, in one of the following orders: "ymd
-#'  IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS".
+#'  IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", dmY IM p", "dmY IMS p".
 #'@param end.datetime A character string indicating the date and time the sensor
 #'  stopped reliably recording data, in one of the following orders: "ymd IMS
 #'  p", "Ymd IMS p", "Ymd HM", "Ymd HMS".
@@ -27,7 +27,7 @@ trim_data <- function(dat.tidy,
                       sensors.to.trim = c("HOBO", "aquaMeasure", "VR2AR")){
 
   # convert start/end datetimes to POSIXct
-  parse.orders <- c("ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS")
+  parse.orders <- c("ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY IM p", "dmY IMS p")
 
   start.datetime <- parse_date_time(start.datetime, orders = parse.orders)
   end.datetime <- parse_date_time(end.datetime, orders = parse.orders)

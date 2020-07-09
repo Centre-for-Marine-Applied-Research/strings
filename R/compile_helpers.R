@@ -62,7 +62,8 @@ convert_timestamp_to_datetime <- function(sensor.data){
     # if saved as a character string in Excel
     parse.orders <- c("ymd IMS p", "Ymd IMS p",
                       "Ymd HM", "Ymd HMS",
-                      "dmY HM", "dmY HMS")
+                      "dmY HM", "dmY HMS",
+                      "dmY IM p", "dmY IMS p")
 
     if(!is.na(suppressWarnings(parse_date_time(date_format, orders = parse.orders)))){
 
