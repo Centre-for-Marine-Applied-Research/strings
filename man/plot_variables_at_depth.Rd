@@ -12,7 +12,9 @@ plot_variables_at_depth(
   color.palette = rev(viridis(6, option = "D")),
   date.breaks.major = "2 month",
   date.breaks.minor = "1 month",
+  date.labels.format = "\%y-\%b",
   alpha.points = 1,
+  legend.position = "right",
   stacked = TRUE
 )
 }
@@ -42,6 +44,9 @@ be mapped. Default is \code{color.palette = rev(viridis(6, option = "D"))}.}
 \item{date.breaks.minor}{Intervals for minor breaks. Default is
 \code{date.breaks.minor = "1 month"}.}
 
+\item{date.labels.format}{Format for the date labels. Default is "%y=%b"
+(two-digit year-three-letter month).}
+
 \item{alpha.points}{Value indicating the transparency of the points. 0 is most
 transparent; 1 is opaque.}
 
@@ -52,6 +57,9 @@ in the order the variables appear in \code{vars.to.plot}. \code{plot.title}
 will be placed on the top plot. If \code{stacked = FALSE}, a list of the
 individual plot for each variable will be returned. Default is \code{stacked
 = TRUE}.}
+
+\item{legend.posistion}{Position for the legend. Passed to \code{ggpubr}.
+Default is \code{legend.position = "right"}.}
 }
 \value{
 Returns ggplot2 object(s). If \code{stacked = TRUE}, a single figure

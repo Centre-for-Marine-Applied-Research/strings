@@ -17,8 +17,12 @@
 #'  \code{date.breaks.major = "2 month"}.
 #'@param date.breaks.minor Intervals for minor breaks. Default is
 #'  \code{date.breaks.minor = "1 month"}.
+#'@param date.labels.format Format for the date labels. Default is "%y=%b"
+#'  (two-digit year-three-letter month).
 #'@param alpha.points Value indicating the transparency of the points. 0 is most
 #'  transparent; 1 is opaque.
+#'@param legend.posistion Position for the legend. Passed to \code{ggpubr}.
+#'  Default is \code{legend.position = "right"}.
 #'@param stacked Logical value indicating what figures to return.  If
 #'  \code{stacked = TRUE}, a single figure with the plots for each variable in
 #'  \code{vars.to.plot} stacked in a column is returned. Plots will be stacked
@@ -49,7 +53,9 @@ plot_variables_at_depth <- function(dat.tidy,
                                     color.palette = rev(viridis(6, option = "D")),
                                     date.breaks.major = "2 month",
                                     date.breaks.minor = "1 month",
+                                    date.labels.format = "%y-%b",
                                     alpha.points = 1,
+                                    legend.position = "right",
                                     stacked = TRUE){
 
 
@@ -71,7 +77,7 @@ plot_variables_at_depth <- function(dat.tidy,
   x_axis_date <- scale_x_datetime(name = "Date",
                                   date_breaks = date.breaks.major,             # major breaks
                                   date_minor_breaks = date.breaks.minor,       # minor breaks
-                                  date_labels = "%b-%y",                       # format for showing date
+                                  date_labels = date.labels.format,            # format for showing date
                                   limits = c(x_date_min, x_date_max))          # date range
 
   # theme
@@ -147,9 +153,9 @@ plot_variables_at_depth <- function(dat.tidy,
     }
 
     # arrange figs using ggpubr::ggarrange
-    if(n.vars == 2) figs.stacked <- ggarrange(figs[[1]], figs[[2]], ncol = 1, common.legend = TRUE, legend = "right")
-    if(n.vars == 3) figs.stacked <- ggarrange(figs[[1]], figs[[2]], figs[[3]], ncol = 1, common.legend = TRUE, legend = "right")
-    if(n.vars == 4) figs.stacked <- ggarrange(figs[[1]], figs[[2]], figs[[3]], figs[[4]], ncol = 1, common.legend = TRUE, legend = "right")
+    if(n.vars == 2) figs.stacked <- ggarrange(figs[[1]], figs[[2]], ncol = 1, common.legend = TRUE, legend = legend.position)
+    if(n.vars == 3) figs.stacked <- ggarrange(figs[[1]], figs[[2]], figs[[3]], ncol = 1, common.legend = TRUE, legend = legend.position)
+    if(n.vars == 4) figs.stacked <- ggarrange(figs[[1]], figs[[2]], figs[[3]], figs[[4]], ncol = 1, common.legend = TRUE, legend = legend.position)
 
     figs.stacked # export stacked figs
 
