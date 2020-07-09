@@ -30,7 +30,6 @@ To use the function \code{plot_variables_at_depth()}, \code{DEPTH}
 }
 \seealso{
 Other format: 
-\code{\link{convert_DO_percent_to_concentration}()},
 \code{\link{convert_to_tidydata}()},
 \code{\link{format_for_opendata}()},
 \code{\link{trim_data}()}
