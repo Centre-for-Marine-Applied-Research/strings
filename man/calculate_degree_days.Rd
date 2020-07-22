@@ -2,54 +2,64 @@
 % Please edit documentation in R/calculate_degree_days.R
 \name{calculate_degree_days}
 \alias{calculate_degree_days}
-\title{Converts temperature data to degree-days}
+\title{Calculates temperature in degree-days}
 \usage{
 calculate_degree_days(
-  dat.tidy,
-  start.date,
-  end.date,
-  depths.to.include = "ALL",
-  group.by.depth = TRUE
+  .dat.tidy,
+  ...,
+  .start.date = min(.dat.tidy$DATE),
+  .end.date = max(.dat.tidy$DATE),
+  .depths.to.include = "ALL"
 )
 }
 \arguments{
-\item{dat.tidy}{Data in tidy format, as returned by the function
+\item{.dat.tidy}{Data in tidy format, as returned by the function
 \code{convert_to_tidydata()}. Must include three columns: \code{DATE}
 (POSIXct), \code{VARIABLE} (character), and \code{VALUE} (numeric). May also
-include a column \code{DEPTH} (factor), which can be used to filter the data
-included in the degree-days calculation. Other columns wil be ignored.}
+include the column \code{DEPTH} (factor) (required if
+\code{.depths.to.include} is not set to the default), or other grouping
+columns passed to \code{...}. Other columns wil be ignored.}
 
-\item{start.date}{First day that should be included in the calculation. If
-\code{start.date} does not include a time, then the start time is assumed to
-be midnight. Accepted orders for \code{start.date} are: "ymd IMS p", "Ymd
-IMS p", "Ymd HM", "Ymd HMS", "dmY HM", "dmY HMS", "Ymd", "ymd".}
+\item{...}{Columns in \code{.dat.tidy} to use for grouping in
+\code{dplyr::group_by()}, e.g., \code{YEAR, MONTH}. Degree-days are
+calculated for each combination of groups.}
 
-\item{end.date}{Last day that should be included in the calculation. If
-\code{end.date} does not include a time, then the end time is assumed to be
+\item{.start.date}{First day that should be included in the calculation. If
+\code{.start.date} does not include a time, then the start time is assumed
+to be midnight. Accepted orders for \code{start.date} are: "ymd IMS p", "Ymd
+IMS p", "Ymd HM", "Ymd HMS", "dmY HM", "dmY HMS", "Ymd", "ymd". Default is
+\code{.start.date = min(.dat.tidy$DATE)}.}
+
+\item{.end.date}{Last day that should be included in the calculation. If
+\code{.end.date} does not include a time, then the end time is assumed to be
 "23:59:59". Accepted orders for \code{start.date} are: "ymd IMS p", "Ymd IMS
-p", "Ymd HM", "Ymd HMS", "dmY HM", "dmY HMS", "Ymd", "ymd".}
-
-\item{depths.to.include}{Numeric vector of depths to include in the
-calculation. Default is \code{depths.to.include = "ALL"}, which includes all
-depths in the \code{DEPTH} column of \code{dat.tidy}.}
-
-\item{group.by.depth}{Logical value. By default, \code{group.by.depth = TRUE},
-and so the degree days are calculated and returned for each depth specified
-in \code{depths.to.include}. If \code{group.by.depth = FALSE} the
-degree-days will averaged over all depths.}
+p", "Ymd HM", "Ymd HMS", "dmY HM", "dmY HMS", "Ymd", "ymd". Default is
+\code{.end.date = max(.dat.tidy$DATE)}.}
 }
 \value{
-If \code{group.by.depth = FALSE}, returns the calue of the calculated
- degree-days averaged over all depths specified in \code{depths.to.include}.
- If \code{group.by.depth = TRUE}, returns a tibble with two columns:
- \code{DEPTH}, and the corresponding \code{Degree_Days}.
+Returns a tibble with at least five columns: \code{PERIOD} (start and
+ end date and time used to calculate mean temperature and number of days),
+ \code{n_DAYS} (the number of days, \emph{n}, used in the calculation),
+ \code{n_OBSERVATIONS} (the number of observations used to calculate the
+ average temperature), \code{AVG_TEMPERATURE} (the average temperature in the
+ time period), \code{DEGREE_DAYS} (degree-days, the product of
+ \code{AVG_TEMPERATURE} and \code{n_DAYS}). Additional columns are returned
+ for each grouping variable in \code{...}.
 }
 \description{
-Converts temperature data to degree-days
+Calculates temperature in degree-days
+}
+\details{
+Degree-days = average temperature over \emph{n} days * \emph{n}
+
+ \emph{n} is calculated using the \code{difftime()} function:
+
+ \code{n_DAYS = round(as.numeric(difftime(max(DATE), min(DATE), units =
+ "days")), digits = 3)}
 }
 \seealso{
 Other calculate: 
-\code{\link{convert_DO_percent_to_concentration}()}
+\code{\link{calculate_DO_concentration}()}
 }
 \author{
 Danielle Dempsey
