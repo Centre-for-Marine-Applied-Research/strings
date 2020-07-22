@@ -21,7 +21,7 @@ or "Salinity".}
 
 \item{start.datetime}{A character string indicating the date and time that the
 sensor started reliably recording data, in one of the following orders: "ymd
-IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS".}
+IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", dmY IM p", "dmY IMS p".}
 
 \item{end.datetime}{A character string indicating the date and time the sensor
 stopped reliably recording data, in one of the following orders: "ymd IMS

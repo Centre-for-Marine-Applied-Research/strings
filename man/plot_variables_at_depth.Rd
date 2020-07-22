@@ -50,6 +50,9 @@ be mapped. Default is \code{color.palette = rev(viridis(6, option = "D"))}.}
 \item{alpha.points}{Value indicating the transparency of the points. 0 is most
 transparent; 1 is opaque.}
 
+\item{legend.position}{Position for the legend. Passed to \code{ggpubr}.
+Default is \code{legend.position = "right"}.}
+
 \item{stacked}{Logical value indicating what figures to return.  If
 \code{stacked = TRUE}, a single figure with the plots for each variable in
 \code{vars.to.plot} stacked in a column is returned. Plots will be stacked
@@ -57,9 +60,6 @@ in the order the variables appear in \code{vars.to.plot}. \code{plot.title}
 will be placed on the top plot. If \code{stacked = FALSE}, a list of the
 individual plot for each variable will be returned. Default is \code{stacked
 = TRUE}.}
-
-\item{legend.posistion}{Position for the legend. Passed to \code{ggpubr}.
-Default is \code{legend.position = "right"}.}
 }
 \value{
 Returns ggplot2 object(s). If \code{stacked = TRUE}, a single figure

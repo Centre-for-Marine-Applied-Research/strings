@@ -21,7 +21,7 @@
 #'  (two-digit year-three-letter month).
 #'@param alpha.points Value indicating the transparency of the points. 0 is most
 #'  transparent; 1 is opaque.
-#'@param legend.posistion Position for the legend. Passed to \code{ggpubr}.
+#'@param legend.position Position for the legend. Passed to \code{ggpubr}.
 #'  Default is \code{legend.position = "right"}.
 #'@param stacked Logical value indicating what figures to return.  If
 #'  \code{stacked = TRUE}, a single figure with the plots for each variable in
