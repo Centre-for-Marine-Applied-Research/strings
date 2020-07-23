@@ -86,16 +86,19 @@ read_deployment_log <- function(path.log){
   lat <- unique(log$Logger_Latitude)
   long <- unique(log$Logger_Longitude)
   station <- unique(log$Location_Description)
+  lease <- unique(log$`Lease#`)
 
   if(length(wb) > 1) message("Multiple waterbodies in log")
   if(length(lat) > 1) message("Multiple latitudes recorded in log")
   if(length(long) > 1) message("Multiple longitudes recorded in log")
   if(length(station) > 1) message("Multiple location descriptions recorded in log")
+  if(length(lease) > 1) message("Multiple leases recorded in log")
 
   area.info <- data.frame(waterbody = log$Deployment_Waterbody[1],
                           latitude = log$Logger_Latitude[1],
                           longitude = log$Logger_Longitude[1],
-                          station  = log$Location_Description[1])
+                          station  = log$Location_Description[1],
+                          lease = log$`Lease#`[1])
 
   # HOBO & TidBit sensors
   hobo.sensors <- c("HOBO Pro V2", "HOBO pro V2", "HOBO_Pro_V2", "TidbiT MX2303")
