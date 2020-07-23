@@ -14,7 +14,7 @@
 #'@return Returns tidy.data trimmed to start.datetime to end.datetime
 #'@family format
 #'@author Danielle Dempsey
-#'@importFrom lubridate parse_date_time
+#'@importFrom lubridate parse_date_time as_datetime
 #'@importFrom tidyr separate
 #'@import dplyr
 #'@export
@@ -57,8 +57,8 @@ trim_data <- function(dat.tidy,
   # filter for sensor type(s) and date range of interest
   dat_var_trim <- dat_var %>%
     filter(SENSOR_TYPE %in% sensors.to.trim,
-           DATE >= start.datetime,
-           DATE <= end.datetime) %>%
+           DATE >= as_datetime(start.datetime),
+           DATE <= as_datetime(end.datetime)) %>%
     select(-SENSOR_TYPE)
 
   # bind and return data
