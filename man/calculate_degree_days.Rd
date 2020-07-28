@@ -8,8 +8,7 @@ calculate_degree_days(
   .dat.tidy,
   ...,
   .start.date = min(.dat.tidy$DATE),
-  .end.date = max(.dat.tidy$DATE),
-  .depths.to.include = "ALL"
+  .end.date = max(.dat.tidy$DATE)
 )
 }
 \arguments{
