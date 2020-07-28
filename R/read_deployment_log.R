@@ -74,12 +74,12 @@ read_deployment_log <- function(path.log){
   if(length(start) > 1 | length(end) > 1) message("Multiple Deployment or Retrieval dates in log")
 
   # Stop with ERROR if the dates are not in the proper format
-  if(is.na(suppressWarnings(ymd(log$Deployment[1]))) |
-     is.na(suppressWarnings(ymd(log$Retrieval[1])))) stop("Deployment and Retrieval dates must be in the order year, month, day")
+  if(is.na(suppressWarnings(lubridate::ymd(log$Deployment[1]))) |
+     is.na(suppressWarnings(lubridate::ymd(log$Retrieval[1])))) stop("Deployment and Retrieval dates must be in the order year, month, day")
 
   # deployment info to export
-  deployment.dates <- data.frame(start.date = ymd(log$Deployment[1]),
-                                 end.date = ymd(log$Retrieval[1]))
+  deployment.dates <- data.frame(start.date = lubridate::ymd(log$Deployment[1]),
+                                 end.date = lubridate::ymd(log$Retrieval[1]))
 
   # area info
   wb <- unique(log$Deployment_Waterbody)
@@ -108,7 +108,10 @@ read_deployment_log <- function(path.log){
     select(Logger_Model, `Serial#`, Sensor_Depth) %>%
     separate(Logger_Model, into = c("sensor", NA, NA), sep = " ", fill = "right") %>%
     mutate(SENSOR = paste(sensor, `Serial#`, sep = "-"),
-           DEPTH = paste(Sensor_Depth, "m", sep = "")) %>%
+           numeric_depth = if_else(is.numeric(Sensor_Depth), TRUE, FALSE)) %>%
+    # if depth is numeric, add "m" for meters
+    mutate(DEPTH = if_else(numeric_depth == TRUE,
+                                 paste(Sensor_Depth, "m", sep = ""), as.character(Sensor_Depth))) %>%
     select(SENSOR, DEPTH)
 
   if(nrow(hobos) == 0){
@@ -125,7 +128,10 @@ read_deployment_log <- function(path.log){
     select(Logger_Model, `Serial#`, Sensor_Depth) %>%
     separate(Logger_Model, into = c("sensor", NA), sep = " ") %>%
     mutate(SENSOR = paste(sensor, `Serial#`, sep = "-"),
-           DEPTH = paste(Sensor_Depth, "m", sep = "")) %>%
+           numeric_depth = if_else(is.numeric(Sensor_Depth), TRUE, FALSE)) %>%
+    # if depth is numeric, add "m" for meters
+    mutate(DEPTH = if_else(numeric_depth == TRUE,
+                           paste(Sensor_Depth, "m", sep = ""), as.character(Sensor_Depth))) %>%
     select(SENSOR, DEPTH)
 
   if(nrow(aquaMeasures) == 0){
@@ -140,7 +146,10 @@ read_deployment_log <- function(path.log){
     filter(Logger_Model %in% vemco.sensors) %>%
     select(Logger_Model, `Serial#`, Sensor_Depth) %>%
     mutate(SENSOR = paste(Logger_Model, `Serial#`, sep = "-"),
-           DEPTH = paste(Sensor_Depth, "m", sep = "")) %>%
+           numeric_depth = if_else(is.numeric(Sensor_Depth), TRUE, FALSE)) %>%
+    # if depth is numeric, add "m" for meters
+    mutate(DEPTH = if_else(numeric_depth == TRUE,
+                           paste(Sensor_Depth, "m", sep = ""), as.character(Sensor_Depth))) %>%
     select(SENSOR, DEPTH)
 
   if(nrow(vemcos) == 0){

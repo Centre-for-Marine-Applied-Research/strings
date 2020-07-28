@@ -52,6 +52,7 @@ utils::globalVariables(c(
   "Sensor_Depth",
   "sensor",
   "SENSOR",
+  "numeric_depth",
 
   # trim_data
   "SENSOR_TYPE",

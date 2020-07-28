@@ -53,7 +53,13 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FA
         separate(var_depth, into = c("variable", "depth"), sep = "-| - ") # can handle "variable-depth" OR "variable - depth"
 
       variable <- as.character(var_depth[1])
-      depth <-  parse_number(as.character(var_depth[2]))
+
+      # convert depth to number if possible. Otherwise, keep as character
+      if(!is.na(suppressWarnings(parse_number(as.character(var_depth[2]))))) {
+
+        depth <-  parse_number(as.character(var_depth[2]))  # convert depth to a number if possible
+
+      } else depth <- as.character(var_depth[2])            # otherwise keep as character
 
       # compile the tidy data
       dat.i.tidy <- dat.i %>% slice(-c(1:4)) %>%      # remove first four rows of data
@@ -70,13 +76,14 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FA
 
   }
 
-  # convert DEPTH to an ORDERED factor (so 2 < 5 < 10 etc., no matter what order they appear in dat.wide)
+  # select columns of interest
   dat.tidy <- dat.tidy %>%
-    convert_depth_to_ordered_factor() %>%
-    # mutate(DEPTH = ordered(DEPTH,
-    #                        levels = as.numeric(levels(DEPTH))[order(as.numeric(levels(DEPTH)))])) %>%
-    # arrange(DEPTH) %>%
     select(DATE_RANGE, SENSOR, DATE, VARIABLE, DEPTH, VALUE)
+
+  # if DEPTH is numeric, convert DEPTH to an ORDERED factor (so 2 < 5 < 10 etc., no matter what order they appear in dat.wide)
+  if(!is.na(suppressWarnings(parse_number(as.character(var_depth[2]))))) {
+    dat.tidy <- dat.tidy %>% convert_depth_to_ordered_factor()
+  }
 
   # number of NAs in the DATE and VALUE columns
   date.na <- sum(is.na(dat.tidy$DATE))
