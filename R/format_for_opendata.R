@@ -4,13 +4,13 @@
 #'  \code{DATE} (POSIXct), \code{VARIABLE} (character), \code{DEPTH} (ordered
 #'  factor), and \code{VALUE} (numeric).
 #'@param location.info Dataframe of information about the deployment location. One
-#'  observation of 5 columns: \code{county}, \code{waterbody}, \code{station},
+#'  observation of 5 columns: \code{county}, \code{waterbody}, \code{station}, \code{lease},
 #'  \code{latitude}, and \code{longitude}.
 
 
 #'@return Returns a dataframe of tidy data in the format for the OpenData portal for a single deployment,
 
-#'@family format
+#'@family format OpenData
 #'@author Danielle Dempsey
 #'
 #'@importFrom tidyr separate
@@ -24,7 +24,12 @@ format_for_opendata <- function(dat.tidy, location.info) {
     mutate(COUNTY = location.info$county,
            WATERBODY = location.info$waterbody,
            STATION = location.info$station,
+           LEASE = location.info$lease,
            LATITUDE = location.info$latitude,
-           LONGITUDE = location.info$longitude)
+           LONGITUDE = location.info$longitude,
+           TIMESTAMP = format(DATE, "%Y-%m%-%d %H:%M:%S")) %>%
+    select(WATERBODY, STATION, LEASE,
+           DATE_RANGE, LATITUDE, LONGITUDE,
+           TIMESTAMP, SENSOR, DEPTH, VARIABLE, VALUE)
 
 }

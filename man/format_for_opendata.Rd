@@ -13,7 +13,7 @@ the function \code{convert_to_tidydata()}. Must include four columns:
 factor), and \code{VALUE} (numeric).}
 
 \item{location.info}{Dataframe of information about the deployment location. One
-observation of 5 columns: \code{county}, \code{waterbody}, \code{station},
+observation of 5 columns: \code{county}, \code{waterbody}, \code{station}, \code{lease},
 \code{latitude}, and \code{longitude}.}
 }
 \value{
@@ -22,13 +22,7 @@ Returns a dataframe of tidy data in the format for the OpenData portal for a sin
 \description{
 Format sensor string data for the OpenData portal
 }
-\seealso{
-Other format: 
-\code{\link{convert_depth_to_ordered_factor}()},
-\code{\link{convert_to_tidydata}()},
-\code{\link{trim_data}()}
-}
 \author{
 Danielle Dempsey
 }
-\concept{format}
+\concept{format OpenData}
