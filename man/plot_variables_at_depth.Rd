@@ -13,7 +13,10 @@ plot_variables_at_depth(
   date.breaks.major = "2 month",
   date.breaks.minor = "1 month",
   date.labels.format = "\%y-\%b",
+  date.min = min(na.omit(dat.tidy$DATE)),
+  date.max = max(na.omit(dat.tidy$DATE)),
   alpha.points = 1,
+  legend.name = "Depth (m)",
   legend.position = "right",
   stacked = TRUE
 )
@@ -47,8 +50,17 @@ be mapped. Default is \code{color.palette = rev(viridis(6, option = "D"))}.}
 \item{date.labels.format}{Format for the date labels. Default is "%y=%b"
 (two-digit year-three-letter month).}
 
+\item{date.min}{First datetime to include in the plot. Must be a POSIXct
+object. Default is \code{date.min = min(na.omit(dat.tidy$DATE))}.}
+
+\item{date.max}{Last datetime to include in the plot. Must be a POSIXct
+object. Default is \code{date.max = max(na.omit(dat.tidy$DATE))}.}
+
 \item{alpha.points}{Value indicating the transparency of the points. 0 is most
 transparent; 1 is opaque.}
+
+\item{legend.name}{Name for the legend. Must be a character strings. Default
+is \code{legend.name = "Depth (m)"}.}
 
 \item{legend.position}{Position for the legend. Passed to \code{ggpubr}.
 Default is \code{legend.position = "right"}.}

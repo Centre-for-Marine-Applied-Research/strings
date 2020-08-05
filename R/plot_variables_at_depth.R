@@ -19,8 +19,14 @@
 #'  \code{date.breaks.minor = "1 month"}.
 #'@param date.labels.format Format for the date labels. Default is "%y=%b"
 #'  (two-digit year-three-letter month).
+#'@param date.min First datetime to include in the plot. Must be a POSIXct
+#'  object. Default is \code{date.min = min(na.omit(dat.tidy$DATE))}.
+#'@param date.max Last datetime to include in the plot. Must be a POSIXct
+#'  object. Default is \code{date.max = max(na.omit(dat.tidy$DATE))}.
 #'@param alpha.points Value indicating the transparency of the points. 0 is most
 #'  transparent; 1 is opaque.
+#'@param legend.name Name for the legend. Must be a character strings. Default
+#'  is \code{legend.name = "Depth (m)"}.
 #'@param legend.position Position for the legend. Passed to \code{ggpubr}.
 #'  Default is \code{legend.position = "right"}.
 #'@param stacked Logical value indicating what figures to return.  If
@@ -54,8 +60,15 @@ plot_variables_at_depth <- function(dat.tidy,
                                     date.breaks.major = "2 month",
                                     date.breaks.minor = "1 month",
                                     date.labels.format = "%y-%b",
+
+                                    date.min = min(na.omit(dat.tidy$DATE)),
+                                    date.max = max(na.omit(dat.tidy$DATE)),
+
                                     alpha.points = 1,
+
+                                    legend.name = "Depth (m)",
                                     legend.position = "right",
+
                                     stacked = TRUE){
 
 
@@ -70,15 +83,13 @@ plot_variables_at_depth <- function(dat.tidy,
 
   # Common plot elements ----------------------------------------------------
   # x range (must be POSIXct objects)
-  x_date_min <- min(na.omit(dat.tidy$DATE))
-  x_date_max <- max(na.omit(dat.tidy$DATE))
 
   # format for the x-axis
   x_axis_date <- scale_x_datetime(name = "Date",
                                   date_breaks = date.breaks.major,             # major breaks
                                   date_minor_breaks = date.breaks.minor,       # minor breaks
                                   date_labels = date.labels.format,            # format for showing date
-                                  limits = c(x_date_min, x_date_max))          # date range
+                                  limits = c(date.min, date.max))          # date range
 
   # theme
   string_theme <- theme(
@@ -91,7 +102,7 @@ plot_variables_at_depth <- function(dat.tidy,
 
 
   # color scale
-  string_color_scale <- scale_colour_manual(name = "Depth (m)",
+  string_color_scale <- scale_colour_manual(name = legend.name,
                                             values = color.palette,
                                             drop = FALSE)
 
