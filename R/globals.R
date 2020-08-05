@@ -58,9 +58,7 @@ utils::globalVariables(c(
   "SENSOR_TYPE",
 
   # format_for_opendata
-  "lat",
-  "long",
-  "COUNTY",
+  "LATITUDE", "LEASE", "LONGITUDE", "STATION", "TIMESTAMP", "WATERBODY",
 
   # calculate_degree_days
   "n_DAYS",
