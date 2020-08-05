@@ -30,8 +30,8 @@
 #'@param path.log File path to the Log folder.
 #'@return Returns a list with 5 elements. \code{deployment.dates} is a dataframe
 #'  with two columns: \code{start.date} (the date of deployment) and
-#'  \code{end.date} (date of retrieval). area.info is a dataframe with four
-#'  columns: waterbody, latitude, longitude, and station. HOBO, aM, and vemco
+#'  \code{end.date} (date of retrieval). area.info is a dataframe with five
+#'  columns: waterbody, latitude, longitude, station, and lease. HOBO, aM, and vemco
 #'  are each a dataframe with two columns: SENSOR (serial number) and the
 #'  corresponding DEPTH (depth of deployment in m).
 #'@family compile
