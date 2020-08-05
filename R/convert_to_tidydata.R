@@ -64,7 +64,7 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FA
       # compile the tidy data
       dat.i.tidy <- dat.i %>% slice(-c(1:4)) %>%      # remove first four rows of data
         select(DATE = 1, VALUE = 2)  %>%              # name column 1 DATE and column 2 VALUE
-        convert_timestamp_to_datetime() %>%               # convert the timestamp to a POSIXct object
+        convert_timestamp_to_datetime() %>%           # convert the timestamp to a POSIXct object
         mutate(DATE_RANGE = daterange,        # add DATE_RANGE column
                SENSOR = sensor,               # Add SENSOR column
                VARIABLE = variable,           # Add VARIABLE column
