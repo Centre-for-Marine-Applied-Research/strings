@@ -6,27 +6,12 @@ library(readr)   # to read and write csv files
 library(strings) # for string data functions
 library(viridis) # because 7 depths
 
-
-# path to the raw data file
-path <- file.path("C:/Users/Danielle Dempsey/Desktop/RProjects/strings_working/strings_example_data/Birchy Head 2019-05-02")
-
-
 # Raw data ----------------------------------------------------------------
 
-# file name
-file.name <- "Birchy Head_2019-05-02_TEMP_DO_SAL"
-
 # import raw data
-dat_raw <- read_csv(paste(path, "/", file.name, "_raw.csv", sep = ""),
-                    col_names = FALSE)
+dat_raw <- read_csv("data-raw/wide_data.csv", col_names = FALSE)
 
 dat_raw <- convert_to_tidydata(dat_raw)
-
-# plot raw data
-plot_variables_at_depth(dat_raw,
-                        vars.to.plot = c("Temperature", "Dissolved Oxygen", "Salinity"),
-                        color.palette = pal)
-
 
 #  Trim data --------------------------------------------------------------
 
@@ -74,8 +59,8 @@ dat_trim <- dat_trim %>%  filter(DEPTH != "15") %>%
   filter(row_number() %% 5 == 1)
 
 # plot trimmed data
-plot_variables_at_depth(dat_trim,
-                        vars.to.plot = c("Temperature", "Dissolved Oxygen", "Salinity"))
+#plot_variables_at_depth(dat_trim,
+ #                       vars.to.plot = c("Temperature", "Dissolved Oxygen", "Salinity"))
 
 tidydata <- dat_trim
 
