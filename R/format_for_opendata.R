@@ -20,7 +20,7 @@
 format_for_opendata <- function(dat.tidy, location.info) {
 
   dat.tidy %>%
-    separate(SENSOR, into = c("SENSOR", NA), sep = "-| - ") %>%
+    #separate(SENSOR, into = c("SENSOR", NA), sep = "-| - ") %>%
     mutate(COUNTY = location.info$county,
            WATERBODY = location.info$waterbody,
            STATION = location.info$station,
