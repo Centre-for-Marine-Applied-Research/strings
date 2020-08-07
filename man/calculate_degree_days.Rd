@@ -56,6 +56,15 @@ Degree-days = average temperature over \emph{n} days * \emph{n}
  \code{n_DAYS = round(as.numeric(difftime(max(TIMESTAMP), min(TIMESTAMP), units =
  "days")), digits = 3)}
 }
+\examples{
+data(tidydata)
+
+# degree-days including all depths for whole time series
+calculate_degree_days(tidydata)
+
+# degree-days by DEPTH for whole time series
+calculate_degree_days(tidydata, DEPTH)
+}
 \seealso{
 Other calculate: 
 \code{\link{calculate_DO_concentration}()}

@@ -39,6 +39,15 @@
 #'@import dplyr
 #'@export
 
+#' @examples
+#' data(tidydata)
+#'
+#' # degree-days including all depths for whole time series
+#' calculate_degree_days(tidydata)
+#'
+#' # degree-days by DEPTH for whole time series
+#' calculate_degree_days(tidydata, DEPTH)
+
 calculate_degree_days <- function(.dat.tidy,
                                   ...,
                                   .start.date = min(.dat.tidy$TIMESTAMP),

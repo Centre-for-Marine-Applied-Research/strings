@@ -22,8 +22,8 @@
 
 trim_data <- function(dat.tidy,
                       var.to.trim,
-                      start.datetime = min(dat.tidy$DATE),
-                      end.datetime = max(dat.tidy$DATE),
+                      start.datetime = min(dat.tidy$TIMESTAMP),
+                      end.datetime = max(dat.tidy$TIMESTAMP),
                       sensors.to.trim = c("HOBO", "aquaMeasure", "VR2AR")){
 
   # convert start/end datetimes to POSIXct
@@ -57,8 +57,8 @@ trim_data <- function(dat.tidy,
   # filter for sensor type(s) and date range of interest
   dat_var_trim <- dat_var %>%
     filter(SENSOR_TYPE %in% sensors.to.trim,
-           DATE >= as_datetime(start.datetime),
-           DATE <= as_datetime(end.datetime)) %>%
+           TIMESTAMP >= as_datetime(start.datetime),
+           TIMESTAMP <= as_datetime(end.datetime)) %>%
     select(-SENSOR_TYPE)
 
   # bind and return data
