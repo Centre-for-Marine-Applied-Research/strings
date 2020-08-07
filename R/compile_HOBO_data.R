@@ -28,8 +28,8 @@
 #'
 #'  \code{convert_HOBO_datetime_to_true_UTC()} identifies which times are during
 #'  daylight savings by creating two additional columns: \code{ADT_force =
-#'  force_tz(DATE, tzone = "America/Halifax")}, and \code{DAYLIGHT_SAVINGS =
-#'  dst(ADT_force)}. Where \code{DAYLIGHT_SAVINGS == TRUE}, the \code{DATE} is
+#'  force_tz(TIMESTAMP, tzone = "America/Halifax")}, and \code{DAYLIGHT_SAVINGS =
+#'  dst(ADT_force)}. Where \code{DAYLIGHT_SAVINGS == TRUE}, the \code{TIMESTAMP} is
 #'  shifted back by 1 hour.
 #'
 #'  This leaves apparent duplicates for the hour of 1 am on the day that
@@ -218,7 +218,7 @@ compile_HOBO_data <- function(path.HOBO,
 
     hobo.i <- hobo.i %>%
       slice(-1) %>%                                       # remove column headings
-      select(INDEX = 1, DATE = 2, TEMPERATURE = 3) %>%    # rename columns (will be dropped for export)
+      select(INDEX = 1, TIMESTAMP = 2, TEMPERATURE = 3) %>%    # rename columns (will be dropped for export)
       convert_timestamp_to_datetime()                     # convert the timestamp to a POSIXct object
 
     # un-account for daylight savings time
@@ -230,16 +230,16 @@ compile_HOBO_data <- function(path.HOBO,
     # (e.g., in case the sensor was retrieved after 20:00 AST, which is 00:00 UTC **The next day**)
     if(trim == TRUE) {
       hobo.i <- hobo.i %>%
-        filter(DATE >= start.date, DATE <= (end.date + hours(4))) %>%
+        filter(TIMESTAMP >= start.date, TIMESTAMP <= (end.date + hours(4))) %>%
         mutate(INDEX = c(1:n()))
     }
 
     # convert columns to class character so can add in the meta data
     hobo.i <- hobo.i %>%
       mutate(INDEX = as.character(round(as.numeric(INDEX), digits = 0)), # make sure INDEX will have the same class and format for each sheet
-             DATE = format(DATE,  "%Y-%m-%d %H:%M:%S"),
+             TIMESTAMP = format(TIMESTAMP,  "%Y-%m-%d %H:%M:%S"),
              PLACEHOLDER = as.character(round(as.numeric(TEMPERATURE), digits = 3)))  %>%
-      select(INDEX, DATE, PLACEHOLDER) %>%
+      select(INDEX, TIMESTAMP, PLACEHOLDER) %>%
       add_metadata(row1 = deployment_ref,
                    row2 = sensor.i,
                    row3 = (paste("Temperature", depth, sep = "-")),

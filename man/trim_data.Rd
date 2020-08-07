@@ -7,8 +7,8 @@
 trim_data(
   dat.tidy,
   var.to.trim,
-  start.datetime = min(dat.tidy$DATE),
-  end.datetime = max(dat.tidy$DATE),
+  start.datetime = min(dat.tidy$TIMESTAMP),
+  end.datetime = max(dat.tidy$TIMESTAMP),
   sensors.to.trim = c("HOBO", "aquaMeasure", "VR2AR")
 )
 }

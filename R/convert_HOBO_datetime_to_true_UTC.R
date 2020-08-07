@@ -30,9 +30,9 @@ dates_to_fix <- function(hobo.data, year.DST, day.DST) {
 convert_HOBO_datetime_to_true_UTC <- function(HOBO.DATA) {
 
   hobo <- HOBO.DATA %>%
-    mutate(ADT_force = force_tz(DATE, tzone = "America/Halifax"),
+    mutate(ADT_force = force_tz(TIMESTAMP, tzone = "America/Halifax"),
            DAYLIGHT_SAVINGS = dst(ADT_force),
-           UTC = if_else(DAYLIGHT_SAVINGS == TRUE, DATE - hours(1), DATE),
+           UTC = if_else(DAYLIGHT_SAVINGS == TRUE, TIMESTAMP - hours(1), TIMESTAMP),
            INDEX = c(1:n()))
 
   date.range <- interval(min(hobo$UTC), max(hobo$UTC))
@@ -78,7 +78,7 @@ convert_HOBO_datetime_to_true_UTC <- function(HOBO.DATA) {
   }
 
   hobo %>%
-    select(INDEX, DATE = UTC, TEMPERATURE)
+    select(INDEX, TIMESTAMP = UTC, TEMPERATURE)
 
 }
 

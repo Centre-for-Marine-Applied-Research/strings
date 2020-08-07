@@ -22,7 +22,7 @@ export_opendata <- function(path.data, path.export, deployment.name, file.name) 
   location <- log$area.info
 
   # read in deployment data
-  # separate(deployment.name, col = d3 , into = c("AREA", "DATE"), sep = "(?<=[a-zA-Z])\\s*(?=[0-9])")
+  # separate(deployment.name, col = d3 , into = c("AREA", "TIMESTAMP"), sep = "(?<=[a-zA-Z])\\s*(?=[0-9])")
   dat <- read_csv(paste(path, "/", file.name, ".csv", sep = ""))
 
   # add area info columns to deployment data

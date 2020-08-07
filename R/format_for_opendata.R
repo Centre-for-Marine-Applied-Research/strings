@@ -1,7 +1,7 @@
 #'@title Format sensor string data for the OpenData portal
 #'@param dat.tidy Data from a single deployment in tidy format, as returned by
 #'  the function \code{convert_to_tidydata()}. Must include four columns:
-#'  \code{DATE} (POSIXct), \code{VARIABLE} (character), \code{DEPTH} (ordered
+#'  \code{TIMESTAMP} (POSIXct), \code{VARIABLE} (character), \code{DEPTH} (ordered
 #'  factor), and \code{VALUE} (numeric).
 #'@param location.info Dataframe of information about the deployment location. One
 #'  observation of 5 columns: \code{county}, \code{waterbody}, \code{station}, \code{lease},
@@ -27,7 +27,7 @@ format_for_opendata <- function(dat.tidy, location.info) {
            LEASE = location.info$lease,
            LATITUDE = location.info$latitude,
            LONGITUDE = location.info$longitude,
-           TIMESTAMP = format(DATE, "%Y-%m%-%d %H:%M:%S")) %>%
+           TIMESTAMP = format(TIMESTAMP, "%Y-%m%-%d %H:%M:%S")) %>%
     select(WATERBODY, STATION, LEASE,
            DATE_RANGE, LATITUDE, LONGITUDE,
            TIMESTAMP, SENSOR, DEPTH, VARIABLE, VALUE)

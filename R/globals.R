@@ -8,7 +8,7 @@
 utils::globalVariables(c(
   # compile_HOBO_data()
   "SERIAL",
-  "DATE",
+  "TIMESTAMP",
   "INDEX",
   "TEMPERATURE",
 

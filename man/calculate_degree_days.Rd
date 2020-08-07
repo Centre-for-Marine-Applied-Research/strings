@@ -7,13 +7,13 @@
 calculate_degree_days(
   .dat.tidy,
   ...,
-  .start.date = min(.dat.tidy$DATE),
-  .end.date = max(.dat.tidy$DATE)
+  .start.date = min(.dat.tidy$TIMESTAMP),
+  .end.date = max(.dat.tidy$TIMESTAMP)
 )
 }
 \arguments{
 \item{.dat.tidy}{Data in tidy format, as returned by the function
-\code{convert_to_tidydata()}. Must include three columns: \code{DATE}
+\code{convert_to_tidydata()}. Must include three columns: \code{TIMESTAMP}
 (POSIXct), \code{VARIABLE} (character), and \code{VALUE} (numeric). May also
 include the column \code{DEPTH} (factor) (required if
 \code{.depths.to.include} is not set to the default), or other grouping
@@ -27,13 +27,13 @@ calculated for each combination of groups.}
 \code{.start.date} does not include a time, then the start time is assumed
 to be midnight. Accepted orders for \code{start.date} are: "ymd IMS p", "Ymd
 IMS p", "Ymd HM", "Ymd HMS", "dmY HM", "dmY HMS", "Ymd", "ymd". Default is
-\code{.start.date = min(.dat.tidy$DATE)}.}
+\code{.start.date = min(.dat.tidy$TIMESTAMP)}.}
 
 \item{.end.date}{Last day that should be included in the calculation. If
 \code{.end.date} does not include a time, then the end time is assumed to be
 "23:59:59". Accepted orders for \code{start.date} are: "ymd IMS p", "Ymd IMS
 p", "Ymd HM", "Ymd HMS", "dmY HM", "dmY HMS", "Ymd", "ymd". Default is
-\code{.end.date = max(.dat.tidy$DATE)}.}
+\code{.end.date = max(.dat.tidy$TIMESTAMP)}.}
 }
 \value{
 Returns a tibble with at least five columns: \code{PERIOD} (start and
@@ -53,7 +53,7 @@ Degree-days = average temperature over \emph{n} days * \emph{n}
 
  \emph{n} is calculated using the \code{difftime()} function:
 
- \code{n_DAYS = round(as.numeric(difftime(max(DATE), min(DATE), units =
+ \code{n_DAYS = round(as.numeric(difftime(max(TIMESTAMP), min(TIMESTAMP), units =
  "days")), digits = 3)}
 }
 \seealso{

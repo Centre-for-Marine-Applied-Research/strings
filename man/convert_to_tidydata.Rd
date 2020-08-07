@@ -11,7 +11,7 @@ convert_to_tidydata(dat.wide, remove.NA = TRUE, show.NA.message = FALSE)
 functions.}
 
 \item{remove.NA}{Logical value. If \code{remove.NA = TRUE}, observations where
-\code{DATE} or \code{VALUE} = \code{NA} are removed. Default is
+\code{TIMESTAMP} or \code{VALUE} = \code{NA} are removed. Default is
 \code{remove.NA = TRUE}.}
 
 \item{show.NA.message}{Logical value. If \code{show.NA.message = TRUE}, the
@@ -19,7 +19,7 @@ number of NA values removed is printed to the console. Default is
 \code{show.NA.message = FALSE}.}
 }
 \value{
-Returns a tidy dataframe with six columns: \code{DATE} (POSIXct),
+Returns a tidy dataframe with six columns: \code{TIMESTAMP} (POSIXct),
  \code{VALUE}, (numeric), \code{DATE_RANGE} (character), \code{SENSOR},
  \code{VARIABLE} (character), \code{DEPTH} (ordered factor).
 }

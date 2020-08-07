@@ -120,7 +120,7 @@ compile_vemco_data <- function(path.vemco,
   vemco <- vemco_dat %>%
     filter(Description == var.to.extract) %>%
     transmute(INDEX = c(1:n()),
-              DATE = `Date and Time (UTC)`,
+              TIMESTAMP = `Date and Time (UTC)`,
               TEMPERATURE = Data) %>%
     convert_timestamp_to_datetime()
 
@@ -129,16 +129,16 @@ compile_vemco_data <- function(path.vemco,
   # (e.g., in case the sensor was retrieved after 20:00 AST, which is 00:00 UTC **The next day**)
   if(trim == TRUE) {
     vemco <- vemco %>%
-      filter(DATE >= start.date, DATE <= (end.date + hours(4))) %>%
+      filter(TIMESTAMP >= start.date, TIMESTAMP <= (end.date + hours(4))) %>%
       mutate(INDEX = c(1:n()))
   }
 
   # convert columns to class character so can add in the meta data
   vemco <- vemco %>%
     mutate(INDEX = as.character(round(as.numeric(INDEX), digits = 0)), # make sure INDEX will have the same class and format for each sheet
-           DATE = format(DATE,  "%Y-%m-%d %H:%M:%S"),
+           TIMESTAMP = format(TIMESTAMP,  "%Y-%m-%d %H:%M:%S"),
            PLACEHOLDER = as.character(round(as.numeric(TEMPERATURE), digits = 3)))  %>%
-    select(INDEX, DATE, PLACEHOLDER) %>%
+    select(INDEX, TIMESTAMP, PLACEHOLDER) %>%
     add_metadata(row1 = deployment_ref,
                  row2 = serial,
                  row3 = paste("Temperature", depth.vemco, sep = "-"),

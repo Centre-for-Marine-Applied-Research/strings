@@ -1,6 +1,6 @@
 #'@title Exports ggplot2 object(s) of variables at depth over time
 #'@param dat.tidy Data in tidy format, as returned by the function
-#'  \code{convert_to_tidydata()}. Must include four columns: \code{DATE}
+#'  \code{convert_to_tidydata()}. Must include four columns: \code{TIMESTAMP}
 #'  (POSIXct), \code{VARIABLE} (character), \code{DEPTH} (ordered factor), and
 #'  \code{VALUE} (numeric).
 #'@param plot.title Title for plot. Default is blank: \code{plot.title = ""}.
@@ -20,9 +20,9 @@
 #'@param date.labels.format Format for the date labels. Default is "%y=%b"
 #'  (two-digit year-three-letter month).
 #'@param date.min First datetime to include in the plot. Must be a POSIXct
-#'  object. Default is \code{date.min = min(na.omit(dat.tidy$DATE))}.
+#'  object. Default is \code{date.min = min(na.omit(dat.tidy$TIMESTAMP))}.
 #'@param date.max Last datetime to include in the plot. Must be a POSIXct
-#'  object. Default is \code{date.max = max(na.omit(dat.tidy$DATE))}.
+#'  object. Default is \code{date.max = max(na.omit(dat.tidy$TIMESTAMP))}.
 #'@param alpha.points Value indicating the transparency of the points. 0 is most
 #'  transparent; 1 is opaque.
 #'@param legend.name Name for the legend. Must be a character strings. Default
@@ -61,8 +61,8 @@ plot_variables_at_depth <- function(dat.tidy,
                                     date.breaks.minor = "1 month",
                                     date.labels.format = "%y-%b",
 
-                                    date.min = min(na.omit(dat.tidy$DATE)),
-                                    date.max = max(na.omit(dat.tidy$DATE)),
+                                    date.min = min(na.omit(dat.tidy$TIMESTAMP)),
+                                    date.max = max(na.omit(dat.tidy$TIMESTAMP)),
 
                                     alpha.points = 1,
 
@@ -126,16 +126,25 @@ plot_variables_at_depth <- function(dat.tidy,
 
     var.i <- vars.to.plot[i]
 
-    if(vars.to.plot[i] == "Temperature"){
-
+    # set y-label
+    if(var.i == "Temperature"){
       y.lab <- expression(paste("Temperature (",degree,"C)"))
-    } else  y.lab <- paste(vars.to.plot[i], ylab.units[i], sep = " ")
+    } else  y.lab <- paste(var.i, ylab.units[i], sep = " ")
 
+    # set y limits
+    if(var.i == "Dissolved Oxygen"){
+      y.limits <- c(60, 130)
+
+    } else y.limits <- NULL
+
+
+    # filter data for the variable of interest
     dat.i <- dat.tidy %>%  dplyr::filter(VARIABLE == var.i)
 
-    plot.i <- ggplot(dat.i, aes(x = DATE, y = VALUE, color = DEPTH)) +
+    # plot var.i
+    plot.i <- ggplot(dat.i, aes(x = TIMESTAMP, y = VALUE, color = DEPTH)) +
       geom_point(size = 0.25, alpha = alpha.points) +
-      scale_y_continuous(name = y.lab) +
+      scale_y_continuous(name = y.lab, limits = y.limits) +
       string_color_scale +
       x_axis_date +
       string_theme +

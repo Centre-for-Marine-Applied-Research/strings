@@ -13,8 +13,8 @@ plot_variables_at_depth(
   date.breaks.major = "2 month",
   date.breaks.minor = "1 month",
   date.labels.format = "\%y-\%b",
-  date.min = min(na.omit(dat.tidy$DATE)),
-  date.max = max(na.omit(dat.tidy$DATE)),
+  date.min = min(na.omit(dat.tidy$TIMESTAMP)),
+  date.max = max(na.omit(dat.tidy$TIMESTAMP)),
   alpha.points = 1,
   legend.name = "Depth (m)",
   legend.position = "right",
@@ -23,7 +23,7 @@ plot_variables_at_depth(
 }
 \arguments{
 \item{dat.tidy}{Data in tidy format, as returned by the function
-\code{convert_to_tidydata()}. Must include four columns: \code{DATE}
+\code{convert_to_tidydata()}. Must include four columns: \code{TIMESTAMP}
 (POSIXct), \code{VARIABLE} (character), \code{DEPTH} (ordered factor), and
 \code{VALUE} (numeric).}
 
@@ -51,10 +51,10 @@ be mapped. Default is \code{color.palette = rev(viridis(6, option = "D"))}.}
 (two-digit year-three-letter month).}
 
 \item{date.min}{First datetime to include in the plot. Must be a POSIXct
-object. Default is \code{date.min = min(na.omit(dat.tidy$DATE))}.}
+object. Default is \code{date.min = min(na.omit(dat.tidy$TIMESTAMP))}.}
 
 \item{date.max}{Last datetime to include in the plot. Must be a POSIXct
-object. Default is \code{date.max = max(na.omit(dat.tidy$DATE))}.}
+object. Default is \code{date.max = max(na.omit(dat.tidy$TIMESTAMP))}.}
 
 \item{alpha.points}{Value indicating the transparency of the points. 0 is most
 transparent; 1 is opaque.}

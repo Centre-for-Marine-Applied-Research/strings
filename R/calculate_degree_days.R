@@ -3,11 +3,11 @@
 #'
 #'  \emph{n} is calculated using the \code{difftime()} function:
 #'
-#'  \code{n_DAYS = round(as.numeric(difftime(max(DATE), min(DATE), units =
+#'  \code{n_DAYS = round(as.numeric(difftime(max(TIMESTAMP), min(TIMESTAMP), units =
 #'  "days")), digits = 3)}
 #'
 #'@param .dat.tidy Data in tidy format, as returned by the function
-#'  \code{convert_to_tidydata()}. Must include three columns: \code{DATE}
+#'  \code{convert_to_tidydata()}. Must include three columns: \code{TIMESTAMP}
 #'  (POSIXct), \code{VARIABLE} (character), and \code{VALUE} (numeric). May also
 #'  include the column \code{DEPTH} (factor) (required if
 #'  \code{.depths.to.include} is not set to the default), or other grouping
@@ -16,12 +16,12 @@
 #'  \code{.start.date} does not include a time, then the start time is assumed
 #'  to be midnight. Accepted orders for \code{start.date} are: "ymd IMS p", "Ymd
 #'  IMS p", "Ymd HM", "Ymd HMS", "dmY HM", "dmY HMS", "Ymd", "ymd". Default is
-#'  \code{.start.date = min(.dat.tidy$DATE)}.
+#'  \code{.start.date = min(.dat.tidy$TIMESTAMP)}.
 #'@param .end.date Last day that should be included in the calculation. If
 #'  \code{.end.date} does not include a time, then the end time is assumed to be
 #'  "23:59:59". Accepted orders for \code{start.date} are: "ymd IMS p", "Ymd IMS
 #'  p", "Ymd HM", "Ymd HMS", "dmY HM", "dmY HMS", "Ymd", "ymd". Default is
-#'  \code{.end.date = max(.dat.tidy$DATE)}.
+#'  \code{.end.date = max(.dat.tidy$TIMESTAMP)}.
 #'@param ... Columns in \code{.dat.tidy} to use for grouping in
 #'  \code{dplyr::group_by()}, e.g., \code{YEAR, MONTH}. Degree-days are
 #'  calculated for each combination of groups.
@@ -41,8 +41,8 @@
 
 calculate_degree_days <- function(.dat.tidy,
                                   ...,
-                                  .start.date = min(.dat.tidy$DATE),
-                                  .end.date = max(.dat.tidy$DATE)
+                                  .start.date = min(.dat.tidy$TIMESTAMP),
+                                  .end.date = max(.dat.tidy$TIMESTAMP)
                                   ){
 
   # format dates (convert to datetime object and add time if only date was supplied)
@@ -52,15 +52,15 @@ calculate_degree_days <- function(.dat.tidy,
   # filter to the dates of interest
   dat.tidy <- .dat.tidy %>%
     filter(VARIABLE == "Temperature",
-           DATE >= start.date,
-           DATE <= end.date)
+           TIMESTAMP >= start.date,
+           TIMESTAMP <= end.date)
 
   dat.tidy %>%
     group_by(...) %>%                # group by the columns specified in ...
-    summarise(START_DAY = format(min(DATE), "%Y-%b-%d %H:%M"),
-              END_DAY = format(max(DATE), "%Y-%b-%d %H:%M"),
+    summarise(START_DAY = format(min(TIMESTAMP), "%Y-%b-%d %H:%M"),
+              END_DAY = format(max(TIMESTAMP), "%Y-%b-%d %H:%M"),
               n_OBSERVATIONS = n(),  # number of observations in each group
-              n_DAYS = round(as.numeric(difftime(max(DATE), min(DATE), units = "days")), digits = 3),     # number of days in group
+              n_DAYS = round(as.numeric(difftime(max(TIMESTAMP), min(TIMESTAMP), units = "days")), digits = 3),     # number of days in group
               AVG_TEMPERATURE =  round(mean(VALUE), digits = 3)) %>%                                      # average temperature in group
     mutate(DEGREE_DAYS = round(.data$n_DAYS * .data$AVG_TEMPERATURE, digits = 0),
            n_DAYS = round(n_DAYS, digits = 1)) %>%  #,

@@ -102,8 +102,8 @@ HOBO and TidBiT should be saved in a folder named Hobo.
 
  \code{convert_HOBO_datetime_to_true_UTC()} identifies which times are during
  daylight savings by creating two additional columns: \code{ADT_force =
- force_tz(DATE, tzone = "America/Halifax")}, and \code{DAYLIGHT_SAVINGS =
- dst(ADT_force)}. Where \code{DAYLIGHT_SAVINGS == TRUE}, the \code{DATE} is
+ force_tz(TIMESTAMP, tzone = "America/Halifax")}, and \code{DAYLIGHT_SAVINGS =
+ dst(ADT_force)}. Where \code{DAYLIGHT_SAVINGS == TRUE}, the \code{TIMESTAMP} is
  shifted back by 1 hour.
 
  This leaves apparent duplicates for the hour of 1 am on the day that

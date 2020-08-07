@@ -152,9 +152,9 @@ compile_aquaMeasure_data <- function(path.aM,
     # filter out DATES that sensor was not set up
     # "undefined" or "(time not set)"
     dat.i <- dat.i %>%
-      select(DATE = `Timestamp(UTC)`, `Record Type`, all_of(vars.to.select)) %>%
-      mutate(DATE_VALUES = str_detect(DATE, "(time not set)")) %>%
-      filter(DATE != "undefined", DATE_VALUES == FALSE) %>%
+      select(TIMESTAMP = `Timestamp(UTC)`, `Record Type`, all_of(vars.to.select)) %>%
+      mutate(DATE_VALUES = str_detect(TIMESTAMP, "(time not set)")) %>%
+      filter(TIMESTAMP != "undefined", DATE_VALUES == FALSE) %>%
       select(-DATE_VALUES) %>%
       convert_timestamp_to_datetime()  # convert the timestamp to a POSIXct object
 
@@ -163,7 +163,7 @@ compile_aquaMeasure_data <- function(path.aM,
     # (e.g., in case the sensor was retrieved after 20:00 AST, which is 00:00 UTC **The next day**)
     if(trim == TRUE) {
       dat.i <- dat.i %>%
-        filter(DATE >= start.date, DATE <= (end.date + hours(4)))
+        filter(TIMESTAMP >= start.date, TIMESTAMP <= (end.date + hours(4)))
     }
 
     for(j in 1:length(vars.to.select)){
@@ -171,7 +171,7 @@ compile_aquaMeasure_data <- function(path.aM,
       var.j <- vars.to.select[j]
 
       aM.j <- dat.i %>%
-        select(DATE, `Record Type`, all_of(var.j)) %>%
+        select(TIMESTAMP, `Record Type`, all_of(var.j)) %>%
         filter(`Record Type` == var.j) %>%
         rename(PLACEHOLDER = 3) %>%
         mutate(INDEX = as.character(c(1:n())),
@@ -181,7 +181,7 @@ compile_aquaMeasure_data <- function(path.aM,
 
       aM.j <- aM.j %>%
         transmute(INDEX,
-                  DATE = as.character(DATE),
+                  TIMESTAMP = as.character(TIMESTAMP),
                   PLACEHOLDER = as.character(PLACEHOLDER)) %>%
         add_metadata(row1 = deployment_ref,
                      row2 = sensor.i,

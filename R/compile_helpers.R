@@ -49,13 +49,13 @@ extract_deployment_dates <- function(deployment.dates){
 
 convert_timestamp_to_datetime <- function(sensor.data){
 
-  date_format <- sensor.data$DATE[1]  # first datetime value; use to check the format
+  date_format <- sensor.data$TIMESTAMP[1]  # first datetime value; use to check the format
 
   # if saved as a number in Excel
   if(!is.na(suppressWarnings(as.numeric(date_format)))) {
 
     sensor.data <- sensor.data %>%
-      mutate(DATE = janitor::convert_to_datetime(as.numeric(DATE)))
+      mutate(TIMESTAMP = janitor::convert_to_datetime(as.numeric(TIMESTAMP)))
 
   } else{
 
@@ -68,7 +68,7 @@ convert_timestamp_to_datetime <- function(sensor.data){
     if(!is.na(suppressWarnings(parse_date_time(date_format, orders = parse.orders)))){
 
       sensor.data <- sensor.data %>%
-        mutate(DATE = lubridate::parse_date_time(DATE, orders = parse.orders))
+        mutate(TIMESTAMP = lubridate::parse_date_time(TIMESTAMP, orders = parse.orders))
 
     } else {
 
@@ -89,18 +89,18 @@ convert_timestamp_to_datetime <- function(sensor.data){
 # function to add metadata rows to HOBO, aquaMeasure, and Vemco data
 # called by compiled_hobo_data(), compile_aquaMeasure_data(), and compile_vemco_data()
 
-# data.char has three columns of class character: INDEX, DATE, PLACEHOLDER
-# row1, row2, row3, and row4 are metadata to add to the DATE and PLACEHOLDER columns
-# row4[1] is added to the DATE column; row4[2] is added to the PLACEHOLDER column
+# data.char has three columns of class character: INDEX, TIMESTAMP, PLACEHOLDER
+# row1, row2, row3, and row4 are metadata to add to the TIMESTAMP and PLACEHOLDER columns
+# row4[1] is added to the TIMESTAMP column; row4[2] is added to the PLACEHOLDER column
 
 # data.char is returned with the additional rows
 
 add_metadata <- function(data.char, row1, row2, row3, row4){
 
   data.char %>%
-    add_row(INDEX = as.character(-1), DATE = row4[1], PLACEHOLDER = row4[2], .before = 1) %>%
-    add_row(INDEX = as.character(-2), DATE = row3, PLACEHOLDER = row3, .before = 1) %>%
-    add_row(INDEX = as.character(-3), DATE = row2, PLACEHOLDER = row2, .before = 1) %>%
-    add_row(INDEX = as.character(-4), DATE = row1, PLACEHOLDER = row1, .before = 1)
+    add_row(INDEX = as.character(-1), TIMESTAMP = row4[1], PLACEHOLDER = row4[2], .before = 1) %>%
+    add_row(INDEX = as.character(-2), TIMESTAMP = row3, PLACEHOLDER = row3, .before = 1) %>%
+    add_row(INDEX = as.character(-3), TIMESTAMP = row2, PLACEHOLDER = row2, .before = 1) %>%
+    add_row(INDEX = as.character(-4), TIMESTAMP = row1, PLACEHOLDER = row1, .before = 1)
 }
 

@@ -2,12 +2,12 @@
 #'@param dat.wide Data in the format exported by the \code{compile_xxx_data}
 #'  functions.
 #'@param remove.NA Logical value. If \code{remove.NA = TRUE}, observations where
-#'  \code{DATE} or \code{VALUE} = \code{NA} are removed. Default is
+#'  \code{TIMESTAMP} or \code{VALUE} = \code{NA} are removed. Default is
 #'  \code{remove.NA = TRUE}.
 #'@param show.NA.message Logical value. If \code{show.NA.message = TRUE}, the
 #'  number of NA values removed is printed to the console. Default is
 #'  \code{show.NA.message = FALSE}.
-#'@return Returns a tidy dataframe with six columns: \code{DATE} (POSIXct),
+#'@return Returns a tidy dataframe with six columns: \code{TIMESTAMP} (POSIXct),
 #'  \code{VALUE}, (numeric), \code{DATE_RANGE} (character), \code{SENSOR},
 #'  \code{VARIABLE} (character), \code{DEPTH} (ordered factor).
 #'@family format
@@ -63,7 +63,7 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FA
 
       # compile the tidy data
       dat.i.tidy <- dat.i %>% slice(-c(1:4)) %>%      # remove first four rows of data
-        select(DATE = 1, VALUE = 2)  %>%              # name column 1 DATE and column 2 VALUE
+        select(TIMESTAMP = 1, VALUE = 2)  %>%              # name column 1 TIMESTAMP and column 2 VALUE
         convert_timestamp_to_datetime() %>%           # convert the timestamp to a POSIXct object
         mutate(DATE_RANGE = daterange,        # add DATE_RANGE column
                SENSOR = sensor,               # Add SENSOR column
@@ -78,25 +78,25 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FA
 
   # select columns of interest
   dat.tidy <- dat.tidy %>%
-    select(DATE_RANGE, SENSOR, DATE, VARIABLE, DEPTH, VALUE)
+    select(DATE_RANGE, SENSOR, TIMESTAMP, VARIABLE, DEPTH, VALUE)
 
   # if DEPTH is numeric, convert DEPTH to an ORDERED factor (so 2 < 5 < 10 etc., no matter what order they appear in dat.wide)
   if(!is.na(suppressWarnings(parse_number(as.character(var_depth[2]))))) {
     dat.tidy <- dat.tidy %>% convert_depth_to_ordered_factor()
   }
 
-  # number of NAs in the DATE and VALUE columns
-  date.na <- sum(is.na(dat.tidy$DATE))
+  # number of NAs in the TIMESTAMP and VALUE columns
+  date.na <- sum(is.na(dat.tidy$TIMESTAMP))
   value.na <- sum(is.na(dat.tidy$VALUE))
 
   if(remove.NA == TRUE){
 
     dat.tidy <- data.frame(na.omit(dat.tidy))
 
-    if(show.NA.message == TRUE) message(paste(sum(date.na), "NA values removed from DATE column.", sum(value.na), "NA values removed from VALUE column"))
+    if(show.NA.message == TRUE) message(paste(sum(date.na), "NA values removed from TIMESTAMP column.", sum(value.na), "NA values removed from VALUE column"))
 
   } else {
-    if(show.NA.message == TRUE) message(paste(sum(date.na), "NA values in DATE column.", sum(value.na), "NA values in VALUE column"))
+    if(show.NA.message == TRUE) message(paste(sum(date.na), "NA values in TIMESTAMP column.", sum(value.na), "NA values in VALUE column"))
   }
 
   dat.tidy # return dat.tidy
