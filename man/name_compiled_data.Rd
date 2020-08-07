@@ -2,7 +2,7 @@
 % Please edit documentation in R/name_compiled_data.R
 \name{name_compiled_data}
 \alias{name_compiled_data}
-\title{Generates name for output file}
+\title{Generates name for output file of compiled data}
 \usage{
 name_compiled_data(area.name, deployment.start, vars)
 }
