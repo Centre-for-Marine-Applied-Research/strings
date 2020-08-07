@@ -11,6 +11,7 @@ compile_HOBO_data(
   deployment.range,
   trim = TRUE,
   file.type = "csv",
+  rm.DST = FALSE,
   export.csv = FALSE
 )
 }
@@ -51,6 +52,12 @@ TRUE}.}
  Future versions of the package will provide an option to convert from ADT to
  AST.}
 
+\item{rm.DST}{Option to remove daylight savings time. Here, daylight savings
+is as defined for Nova Scotia, Canada (begins in March and end in November).
+Only works for 2015 - 2021. It is strongly recommended that the data is in
+the correct timezone before using this function, and that the default
+\code{rm.DST = FALSE} is used.}
+
 \item{export.csv}{Logical value indicating whether to export the compiled data
 as a .csv file. If \code{export.csv = TRUE}, the compiled data will not be
 returned to the global environment. Default is \code{export.csv = FALSE}.}
@@ -78,33 +85,30 @@ Compiles and formats data from HOBO and TidbiT sensors deployed
 HOBO and TidBiT should be saved in a folder named Hobo.
 
  All columns are read in as characters to ensure the timestamp is parsed
- correctly. Timestamp must be saved in excel as a number or a character in
+ correctly. Timestamp must be saved in Excel as a number or a character in
  the order ""ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY HM", or "dmY
  HMS".
 
- Can handle .csv or .xlsx files, but .csv files are preferred for now (see
- note on timezones below).
+ Can handle .csv or .xlsx files.
 
- Data should be exported in GMT+00 as a csv file so that the timestamp is in
- UTC.
+ CMAR NOTES: Data should be exported from the Hobo software in GMT+00 as a
+ csv file so that the timestamp is in UTC.
 
  If exported as an xlsx, the timestamp accounts for daylight savings time
  (this seems to be a bug in the HOBO software). \code{compile_HOBO_data()}
- will automatically convert xlsx files to true UTC by subtracting 1 hour from
- each datetime that occurs during daylight savings. This feature will be
- removed as we solidify our workflow. Future versions of the package will
- provide an option to convert from ADT to AST.
+ can convert xlsx files to true UTC by setting \code{rm.DST = TRUE}. This
+ will subtract 1 hour from each datetime that occurs during daylight savings.
 
  The functions used to convert to true UTC are
  \code{convert_HOBO_datetime_to_true_UTC()} and \code{dates_to_fix()}, which
  are NOT exported to the \code{strings} package (i.e., they are only used
  internally).
 
- \code{convert_HOBO_datetime_to_true_UTC()} identifies which times are during
+ \code{convert_HOBO_datetime_to_true_UTC()} identifies which datetimes are during
  daylight savings by creating two additional columns: \code{ADT_force =
- force_tz(TIMESTAMP, tzone = "America/Halifax")}, and \code{DAYLIGHT_SAVINGS =
- dst(ADT_force)}. Where \code{DAYLIGHT_SAVINGS == TRUE}, the \code{TIMESTAMP} is
- shifted back by 1 hour.
+ force_tz(TIMESTAMP, tzone = "America/Halifax")}, and \code{DAYLIGHT_SAVINGS
+ = dst(ADT_force)}. Where \code{DAYLIGHT_SAVINGS == TRUE}, the
+ \code{TIMESTAMP} is shifted back by 1 hour.
 
  This leaves apparent duplicates for the hour of 1 am on the day that
  daylight savings ends. \code{dates_to_fix()} identifies these \code{n}
