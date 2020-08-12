@@ -24,7 +24,7 @@ format_for_opendata <- function(dat.tidy, location.info) {
     mutate(COUNTY = location.info$county,
            WATERBODY = location.info$waterbody,
            STATION = location.info$station,
-           LEASE = location.info$lease,
+           LEASE = as.character(location.info$lease),
            LATITUDE = location.info$latitude,
            LONGITUDE = location.info$longitude,
            TIMESTAMP = format(TIMESTAMP, "%Y-%m%-%d %H:%M:%S")) %>%
