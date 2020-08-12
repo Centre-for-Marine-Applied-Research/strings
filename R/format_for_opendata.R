@@ -28,6 +28,7 @@ format_for_opendata <- function(dat.tidy, location.info) {
            LATITUDE = location.info$latitude,
            LONGITUDE = location.info$longitude,
            TIMESTAMP = format(TIMESTAMP, "%Y-%m%-%d %H:%M:%S")) %>%
+    mutate(LEASE = if_else(LEASE == "n/a" | LEASE == "N/A" , "NA", LEASE)) %>%
     select(WATERBODY, STATION, LEASE,
            DATE_RANGE, LATITUDE, LONGITUDE,
            TIMESTAMP, SENSOR, DEPTH, VARIABLE, VALUE)
