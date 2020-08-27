@@ -15,13 +15,6 @@ Fill this in
 \description{
 Combines deloyment logs from a station to make deployment history
 }
-\seealso{
-Other format: 
-\code{\link{convert_depth_to_ordered_factor}()},
-\code{\link{convert_to_tidydata}()},
-\code{\link{trim_data}()}
-}
 \author{
 Danielle Dempsey
 }
-\concept{format}

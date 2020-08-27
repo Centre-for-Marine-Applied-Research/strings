@@ -1,7 +1,6 @@
 #'@title Combines deloyment logs from a station to make deployment history
 #'@param path Path to station folder.
 #'@return Fill this in
-#'@family format
 #'@author Danielle Dempsey
 
 #'@importFrom tidyr separate
