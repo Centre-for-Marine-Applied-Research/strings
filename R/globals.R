@@ -28,7 +28,7 @@ utils::globalVariables(c(
   # convert_to_tidydata
   "DEPTH",
   "VALUE",
-  "DATE_RANGE",
+  "DEPLOYMENT_PERIOD",
 
   # plot_temp_DO_sal
   "VARIABLE",

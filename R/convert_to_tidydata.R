@@ -8,7 +8,7 @@
 #'  number of NA values removed is printed to the console. Default is
 #'  \code{show.NA.message = FALSE}.
 #'@return Returns a tidy dataframe with six columns: \code{TIMESTAMP} (POSIXct),
-#'  \code{VALUE}, (numeric), \code{DATE_RANGE} (character), \code{SENSOR},
+#'  \code{VALUE}, (numeric), \code{DEPLOYMENT_PERIOD} (character), \code{SENSOR},
 #'  \code{VARIABLE} (character), \code{DEPTH} (ordered factor).
 #'@family format
 #'@author Danielle Dempsey
@@ -32,7 +32,7 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FA
 
   for(i in ind){
 
-    dat.i <- dat.wide[, c(i, i+1)]           # subset to columns of interest (should be 1 date column, 1 value column)
+    dat.i <- dat.wide[, c(i, i+1)]    # subset to columns of interest (should be 1 date column, 1 value column)
 
     # check if there is data in the date column.
     # If the whole column is NA, dat.i.tidy is set to NULL, and the loop moves on to the next i
@@ -63,9 +63,9 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FA
 
       # compile the tidy data
       dat.i.tidy <- dat.i %>% slice(-c(1:4)) %>%      # remove first four rows of data
-        select(TIMESTAMP = 1, VALUE = 2)  %>%              # name column 1 TIMESTAMP and column 2 VALUE
+        select(TIMESTAMP = 1, VALUE = 2)  %>%         # name column 1 TIMESTAMP and column 2 VALUE
         convert_timestamp_to_datetime() %>%           # convert the timestamp to a POSIXct object
-        mutate(DATE_RANGE = daterange,        # add DATE_RANGE column
+        mutate(DEPLOYMENT_PERIOD = daterange,         # add DEPLOYMENT_PERIOD column
                SENSOR = sensor,               # Add SENSOR column
                VARIABLE = variable,           # Add VARIABLE column
                DEPTH = factor(depth),         # Add DEPTH column (should be a factor or else the color scheme will be a gradient)
@@ -78,7 +78,7 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FA
 
   # select columns of interest
   dat.tidy <- dat.tidy %>%
-    select(DATE_RANGE, SENSOR, TIMESTAMP, VARIABLE, DEPTH, VALUE)
+    select(DEPLOYMENT_PERIOD, SENSOR, TIMESTAMP, VARIABLE, DEPTH, VALUE)
 
   # if DEPTH is numeric, convert DEPTH to an ORDERED factor (so 2 < 5 < 10 etc., no matter what order they appear in dat.wide)
   if(!is.na(suppressWarnings(parse_number(as.character(var_depth[2]))))) {

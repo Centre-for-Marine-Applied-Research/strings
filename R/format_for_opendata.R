@@ -7,7 +7,6 @@
 #'  observation of 5 columns: \code{county}, \code{waterbody}, \code{station}, \code{lease},
 #'  \code{latitude}, and \code{longitude}.
 
-
 #'@return Returns a dataframe of tidy data in the format for the OpenData portal for a single deployment,
 
 #'@family format OpenData
@@ -30,7 +29,7 @@ format_for_opendata <- function(dat.tidy, location.info) {
            TIMESTAMP = format(TIMESTAMP, "%Y-%m%-%d %H:%M:%S")) %>%
     mutate(LEASE = if_else(LEASE == "n/a" | LEASE == "N/A" , "NA", LEASE)) %>%
     select(WATERBODY, STATION, LEASE,
-           DATE_RANGE, LATITUDE, LONGITUDE,
+           DEPLOYMENT_PERIOD, LATITUDE, LONGITUDE,
            TIMESTAMP, SENSOR, DEPTH, VARIABLE, VALUE)
 
 }
