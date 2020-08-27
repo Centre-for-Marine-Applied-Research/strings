@@ -39,6 +39,7 @@
 #'
 #'@importFrom tidyr separate
 #'@importFrom readxl read_excel
+#'@importFrom readr read_csv
 #'@importFrom lubridate ymd
 #'@import dplyr
 #'@export
@@ -50,7 +51,7 @@ read_deployment_log <- function(path.log){
 
   path.log <- paste(path.log, "Log", sep = "/")
 
-  dat.files <- list.files(path.log, all.files = FALSE, pattern = "*xlsx|*xls")
+  dat.files <- list.files(path.log, all.files = FALSE, pattern = "*xlsx|*xls|*csv")
 
   # remove files that start with "~"
   if(any(substring(dat.files, 1, 1) == "~")) {
@@ -61,7 +62,15 @@ read_deployment_log <- function(path.log){
 
   }
 
-  log <- read_excel(paste(path.log,  dat.files[1], sep = "/"))
+  # extract file extension
+  extension <- dat.files %>%
+    data.frame() %>%
+    separate(col = 1, into = c(NA, "EXT"), sep = "\\.")
+  extension <- extension$EXT
+
+  if(extension == "xls" | extension == "xlsx") log <- read_excel(paste(path.log,  dat.files[1], sep = "/"))
+
+  if(extension == "csv") log <- read_csv(paste(path.log,  dat.files[1], sep = "/"))
 
 
   # extract data ------------------------------------------------------------
