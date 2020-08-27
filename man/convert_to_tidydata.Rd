@@ -20,7 +20,7 @@ number of NA values removed is printed to the console. Default is
 }
 \value{
 Returns a tidy dataframe with six columns: \code{TIMESTAMP} (POSIXct),
- \code{VALUE}, (numeric), \code{DATE_RANGE} (character), \code{SENSOR},
+ \code{VALUE}, (numeric), \code{DEPLOYMENT_PERIOD} (character), \code{SENSOR},
  \code{VARIABLE} (character), \code{DEPTH} (ordered factor).
 }
 \description{
