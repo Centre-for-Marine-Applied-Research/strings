@@ -1,5 +1,5 @@
 ---
-title: "CMAR Standard Operating Procedures: Compile and format sensor string data using the `strings` package"
+title: "CMAR Standard Operating Procedures: Folder structure for compiling data using the `strings` package"
 subtitle: SOP009
 author: Nicole Torrie, Danielle Dempsey
 date: "`r Sys.Date()`"
@@ -12,65 +12,62 @@ vignette: >
 
 ![](Logo.jpg){width=50%}
  
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
-
-```{r setup}
-library(strings)
-```
-
-DD: note to self
-Might need to run the exe for qpdf
-https://stackoverflow.com/questions/15035150/r-cmd-check-as-cran-warning
-
 ## 1. **PURPOSE** 
-`strings` is an R package developed to help users compile, format, calculate, and visualise oceanographic data collected by the Centre for Marine Applied REsearch's (CMAR) Coastal Monitoring Program (CMP). The package can process temperature, dissolved oxygen, and salinity data measured by HOBO Pro V2, TidBiT, aquaMeasure DOT, aquaMeasure SAL, and/or VR2AR sensors from a single sensor string deployment.
+
+`strings` is an R package developed to help users compile, format, calculate, and visualise oceanographic data, as collected by the Centre for Marine Applied Research's (CMAR) Coastal Monitoring Program (CMP). The package can process temperature, dissolved oxygen, and salinity data measured by HOBO Pro V2, TidBiT, aquaMeasure DOT, aquaMeasure SAL, and/or VR2AR sensors from a sensor string deployment.
 
 
-The purpose of this vignette is to provide detailed instruction on how to compile data from a single deployment following the `Compile_Template.R` file in the Data_Strings folder on the CMAR shared drive. The instructions are specific to CMAR's work flow, but other users may find the examples and explanations useful.
+The purpose of this vignette is to provide a detailed description of the folderand file structure required to compile data with the`strings` package. Section 3.1 describes the folder structure required for CMAR's workflow. Section 3.2 is more general, and describes the folder structure required for all `strings` users.
 
-See SOP010 (vignette name) for direction on how to trim data and SOP011 (vignette name) on how to calculate other parameters.
+
+*Links to other vignettes here. See SOP010 (vignette name) for direction on how to trim data and SOP011 (vignette name) on how to calculate other parameters.*
 
 
 ## 2. **SCOPE/PRINCIPAL** 
 
-  1. Set up folder structure
+  1. CMAR-specific folders
+      * Data_Strings
+      * Station
+      * Deployment
       * Log
+  1. General `strings` folders
       * aquaMeasure
       * Hobo
       * Vemco
-  1. Compile data
+ 
 
 ## 3. **PROCEDURE**
 
 
-### 3.1 **Set up folder structure**
+### 3.1 **CMAR-specific folders**
 
-All of the data from CMAR's CMP is stored in the Data_Strings folder on the shared drive. There is a folder for each station that has been sampled. If you are processing data from a new station, create a station folder with the appropriate name (the `Location_Description` in the log file, see below).  
+This section provides descriptions and instructions on how to organize the CMP data for CMAR's workflow.
+
+#### Data_Strings folder
+
+All of the data from CMAR's CMP is stored in the Data_Strings folder on the shared drive. There is a folder for each station that has been sampled. If you are processing data from a new station, create a station folder with the appropriate name (the `Location_Description` in the log; see **Log folder** section below).  
 
 
-    
 ![Figure 1. Station folders inside the Data_Strings folder](figure1.png)
 
+#### Station folders
 
-Inside each station folder is a folder for each deployment at this location, named "station deployment date" (e.g., "Birchy Head 2019-05-02"), and the Deployment History file, named "station_Deployment_History" (e.g., "Birchy Head_Deployment_History"; Figure 2). If you are processing data from a new deployment, create a deployment folder with the appropriate name. 
+Inside each Station folder is a folder for each deployment at this location and the Deployment History file. 
+
+Deployment folders are named "station deployment-date", where the date is in the order year-month-day (e.g., "Birchy Head 2019-05-02"). If you are processing data from a new deployment, create a deployment folder with the appropriate name and the sub-folders described below.
+
+The Deployment History file is named "station_Deployment_History" (e.g., "Birchy Head_Deployment_History"; Figure 2). The Deployment History tracks the string coordinates, sensor serial numbers and depths, and notes for all deployments at this station. Make sure the deployment you are processing is included in the Deployment History file. The information for this can be found in the log (see **Log folder** section below) and the NSFDA tracking sheet. For new stations, you can create a Deployment History file from the log manually or by using the `combine_deployment_logs()` function (see `?combine_deployment_logs`).
+
+Pay attention to separators (e.g., "_", "-", and " ") when naming deployment folders and history files.
 
 
-![Figure 2. There are four dpeloyment folders inside the Birchy Head station folder.](figure2.png)
+
+
+![Figure 2. There are four deployment folders and a Deployment History file inside the Birchy Head station folder.](figure2.png)
  
-
-Within each deployment folder, there is a "Log" folder and a folder for each type of sensor on the string, e.g., "Hobo", "aquaMeasure", and/or "Vemco". Spelling and case of these folder names must match that in Figure 3. Other folders in the deployment folder are ignored by the `strings` package. 
-
-Raw Hobo and TidBiT data files are saved in the Hobo folder, raw aquaMeasure (DOT and SAL) files are saved in the aquaMeasure folder, and raw VR2 data are saved in the Vemco folder.
-
-The following subsections descibes the content of these folders.
-
-Note for non-CMAR users: you do not need to structure your data into deployment folders as described above, but you MUST save the data from each sensor in the corresponding folder, and ideally these folders are on the same path.
+#### Deployment folders
+ 
+Within each deployment folder, there is a "Log" folder and a folder for each type of sensor on the string, e.g., "Hobo", "aquaMeasure", and/or "Vemco". Spelling and case of these folder names must match that in Figure 3. The following sub-section describes content of the Log folder, and Section 3.2 descibes the content of the remaining folders. Other folders in the deployment folder are ignored by the `strings` package. 
 
 ![Figure 3. Structure of deployment folder.](figure3.png)
 
@@ -98,171 +95,37 @@ CMAR users: if the deployment log does not exist, please make one using informat
 
 non-CMAR users: A deployment log is not strictly required to use the `strings` package. The infomration
 required can be manually entered into R and passed to the `compile_**_data()` and `format_for_opendata()` functions. 
+**Needed for read_deployment_log()
 
 ![Figure 4. Example deployment log.](figure4.png)
+
+
+### **3.2 General `strings` folders**
+
+The package expects sensor data to be saved in the appropriately-named folder: Hobo and TidBiT data files are saved in the Hobo folder, aquaMeasure (DOT and SAL) files are saved in the aquaMeasure folder, and VR2 data are saved in the Vemco folder.
+
+*error if not (will complain that is empty)
+
+Note for non-CMAR users: you do not need to structure your data into deployment folders as described above, but you MUST save the data from each sensor in the corresponding folder, and ideally these folders are on the same path.
+
+
+
+
+
 
 #### aquaMeasure folder
 
 Note the capital "M" in the folder name.
-Save all files downloaded from aquaCurrent for this deployment here (.csv or .xlsx). The file name does not matter for the package.
+Save all files downloaded from aquaCurrent for this deployment here (.csv or .xlsx). The file name does not matter.
  
 #### Hobo folder 
 
 Save the extracted Hobo and TidbiT files here (.csv or .xlsx; CMAR users see note below).  Extracted Hobo and TidBit files are treated the same by the package. The name of the file MUST be the serial number of the unit. This will be used to match the sensor to the depth at which it was deployed. The `compile_HOBO_data()` and `compile_all_data()` functions will stop with an error if the name of the file does not match an entry in the `serial.table.HOBO` argument (see help files for more info). The raw Hobo files may also be saved in this folder, but other Excel files (i.e., those not extracted from Hobo or TidiT files) will cause an error.
 
+CMAR users: Extract the Hobo data in UTC (set Offset from GMT to 0; Figure 5) and export as a .csv file. See `?compile_HOBO_data` for more information.
 
-## Compiling data
-Once you have ensured that your data and folder structure is compatible for use with the Strings package, you are ready to compile your data from each sensor into a single spreadsheet containing all data for the deployment period. 
+#### Vemco folder
 
-Open up the R file called Compile_Template.
-
-Save the file into the Deployment Period folder with the name structure: “Compile_Deployment_Location_YYYY-MM-DD” as pictured in Figure 6. 
-
-[Figure 6. Compile Data Folder Structure](/Users/Nicole Torrie/Desktop/STRINGS_SOP/STRINGS_Vignette_Git/Images/Compile_folder_structure.png)
-
-______________________________________________________________________________
-
-
-At the top of Compile_Template, fill in the current date, your name, the version of the Strings package you are using, and any additional notes you deem necessary for future data management. 
-
-```{r}
-#DATE: 
-#NAME: 
-#strings VERSION:
-#NOTES:
-```
-
-
-Template for compiling data extracted from a sensor string deployment:
-Returns compiled data as a csv file in the final folder on path
-
-
-SECTION 1: Define the path and variables
-
-SECTION 2: Extract deployment information from the log
-  Only modify this section if one type of sensor is not included on the string.
-  Set the argument for this sensor to NULL
-
-SECTION 3: Compile data
-  You should not have to modify anything in this section
-  A file will be exported to the path (_raw.csv)
-
-SECTION 4: Visualize data
-  Import data and visualize
-
-
-Load the necessary libraries
-```{r}
-# libraries
-library(dplyr)   # for piping and data manipulation functions
-library(readr)   # to write csv file
-library(strings) # to compile data
-```
-
-### Section 1: Define the path and variables
-The path defines the folder location of the deployment period folder. 
-
-Arguments:   
-file.path: Construct Path to File  
-trim_dates: Automatically trim data to deployment and retrieval dates included in the Log, in case sensors were turned on prior to deployment date or left running after retrieval. To accommodate for time zone difference, dates are trimmed to 8:00PM plus four hours the day before deployment, and on the retrieval date.   
-file_extension: Define the file type  
-```{r}
-#path <- file.path("C:/Users/Nicole Torrie/Desktop/STRINGS_SOP/Data/Example1_Data/Eddy Cove/Eddy Cove 2018-07-04")
-
-# trim the observations to the deployment and retrieval dates?
-#trim_dates <- TRUE
-
-# file extension for the HOBO data
-#file_extension <- "csv"
-
-```
-
-### SECTION 2: Extract deployment information from the log
-Only modify this section if one type of sensor is not included on the string.
-Set the argument for this sensor to NULL
-
-Arguments:  
-read_deployment_log:Extract information from deployment log
-
-```{r}
-
-# # Extract information from the deployment log
-# log_info <- read_deployment_log(path)
-# 
-# # Define station name based on the log
-# area = log_info$area.info$station
-# 
-# # Define deployment start and end dates based on the log
-# deployment <- log_info$deployment.dates
-# 
-# # Create a table of HOBO sensors and deployment depths based on the log
-# serial.table.HOBO <- log_info$HOBO
-# 
-# # Create a table of aquaMeasure sensors and deployment depths based on the log
-# serial.table.aM <- log_info$aM
-# 
-# # Define the deployment depth of the VR2 sensor based on the log
-# depth.vemco <- log_info$vemco$DEPTH
-
-```
-
-### SECTION 3: Compile data
-Arguments:  
-compile_all_data: Compiles HOBO, aquaMeasure, and Vemco data from a single deployment  
-name_compiled_data: Generates name for output file  
-write_csv: Write a data frame to a delimited file  
-
-```{r}
-# #Compile data from a single deployment
-# ALL_data <- compile_all_data(path = path,
-#                              deployment.range = deployment,
-#                              area.name = area,
-#                              trim = trim_dates,
-#                              # hobo
-#                              serial.table.HOBO = serial.table.HOBO,
-#                              file.type = file_extension,
-#                              # aquaMeasure
-#                              serial.table.aM = serial.table.aM,
-#                              # vemco
-#                              depth.vemco = depth.vemco)
-# 
-# # Name the file
-# file_name <- name_compiled_data(area.name = area,
-#                                 deployment.start = deployment$start.date,
-#                                 vars = unique(convert_to_tidydata(ALL_data)$VARIABLE))
-# 
-# # Write csv file with compiled data
-# write_csv(ALL_data, paste(path, "/", file_name, "_raw.csv", sep = ""), col_names = FALSE)
-```
-
-The CSV will save automatically to the path. In this case the deployment period folder.
-[Figure 7. Final Compiled Folder Structure](/Users/Nicole Torrie/Desktop/STRINGS_SOP/STRINGS_Vignette_Git/Images/Final_Compiled_Folder_Structure.png)
-
-### SECTION 4: Visualize the data
-Arguments:
-
-read_csv: Read a delimited file  
-convert_to_tidydata: Converts compiled string data to a tidy format  
-plot_variables_at_depth: Exports ggplot2 object(s) of variables at depth over time
-```{r}
-# # Import and plot the raw data
-# ALL_raw <- read_csv(paste(path, "/", file_name, "_raw.csv", sep = ""), col_names = FALSE)
-# ALL_raw_tidy <- convert_to_tidydata(ALL_raw)
-# 
-# # Update vars.to.plot and ylab.units as necessary. Remove any variables and their associated units if they aren't present in your data.
-# plot_variables_at_depth(ALL_raw_tidy,
-#                         plot.title = area,
-#                         vars.to.plot = c("Temperature", "Dissolved Oxygen"),
-#                         ylab.units = c("degC", "(%)"))
-
-```
-
-The final compiled csv containing raw data has not been trimmed to account for sensor errors and outliers.  
-
-
-
-
-
-
+Save the extracted VR2 data here (.csv or .xlsx). The file name does not matter. The raw VR2 files may also be saved in this folder, but other Excel files (i.e., those not extracted from VR2 files) will cause an error.
 
 
