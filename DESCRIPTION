@@ -1,7 +1,7 @@
 Package: strings
 Type: Package
 Title: Compile, format and plot sensor string data
-Version: 1.1.0
+Version: 1.2.0
 Author: Danielle Dempsey, Nicole Torrie, Leah Lewis-McCrea
 Maintainer: Danielle Dempsey <ddempsey@perennia.ca>
 Description: More about what it does (add text here)
@@ -24,3 +24,7 @@ Imports:
     tidyselect
 Depends: 
     R (>= 2.10)
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
