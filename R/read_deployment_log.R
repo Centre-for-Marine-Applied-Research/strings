@@ -1,15 +1,17 @@
 #'@title Extract information from deployment log
-#'@details The log must be saved in .xlsx or .xls format, and must include the
-#'  following columns:
+#'@details The log must be saved in .csv, .xlsx or .xls format, and must include
+#'  the following columns:
 #'
 #'  \code{Deployment_Waterbody} (waterbody where string was deployed),
-#'  \code{Location_Description} (the station name), \code{Deployment} (the
-#'  deployment date, in the order "Ymd"), \code{Retrieval} (the retrieval date,
-#'  in the order "Ymd"), \code{Logger_Latitude} (the latitude at which the
-#'  string was deployed), \code{Logger_Longitude} (the longitude at which the
-#'  string was deployed), \code{Logger_Model} (the logger type; see below for
-#'  options), \code{Serial#} (the logger serial number), and \code{Sensor_Depth}
-#'  (depth at which the sensor was deployed). All other columns will be ignored.
+#'  \code{Location_Description} (the station name), \code{Lease#} If located on
+#'  an aquaculture site, the lease number (NA otherwise),
+#'  \code{Deployment} (the deployment date, in the order "Ymd"),
+#'  \code{Retrieval} (the retrieval date, in the order "Ymd"),
+#'  \code{Logger_Latitude} (the latitude at which the string was deployed),
+#'  \code{Logger_Longitude} (the longitude at which the string was deployed),
+#'  \code{Logger_Model} (the type of sensor; see below for options),
+#'  \code{Serial#} (the sensor serial number), and \code{Sensor_Depth} (depth at
+#'  which the sensor was deployed). All other columns will be ignored.
 #'
 #'  Entries in the \code{Logger_Model} column can be "HOBO Pro V2", "TidbiT
 #'  MX2303"  "aquaMeasure DOT", "aquaMeasure SAL", "aquaMeasure SST", or
@@ -31,8 +33,8 @@
 #'@return Returns a list with 5 elements. \code{deployment.dates} is a dataframe
 #'  with two columns: \code{start.date} (the date of deployment) and
 #'  \code{end.date} (date of retrieval). area.info is a dataframe with five
-#'  columns: waterbody, latitude, longitude, station, and lease. HOBO, aM, and vemco
-#'  are each a dataframe with two columns: SENSOR (serial number) and the
+#'  columns: waterbody, latitude, longitude, station, and lease. HOBO, aM, and
+#'  vemco are each a dataframe with two columns: SENSOR (serial number) and the
 #'  corresponding DEPTH (depth of deployment in m).
 #'@family compile
 #'@author Danielle Dempsey
@@ -63,14 +65,16 @@ read_deployment_log <- function(path.log){
   }
 
   # extract file extension
-  extension <- dat.files %>%
-    data.frame() %>%
-    separate(col = 1, into = c(NA, "EXT"), sep = "\\.")
-  extension <- extension$EXT
+  # extension <- dat.files %>%
+  #   data.frame() %>%
+  #   separate(col = 1, into = c(NA, "EXT"), sep = "\\.")
+  # extension <- extension$EXT
 
-  if(extension == "xls" | extension == "xlsx") log <- read_excel(paste(path.log,  dat.files[1], sep = "/"))
+  file.type <- extract_file_extension(dat.files)
 
-  if(extension == "csv") log <- read_csv(paste(path.log,  dat.files[1], sep = "/"))
+  if(file.type == "xls" |  file.type == "xlsx") log <- read_excel(paste(path.log,  dat.files[1], sep = "/"))
+
+  if(file.type == "csv") log <- read_csv(paste(path.log,  dat.files[1], sep = "/"))
 
 
   # extract data ------------------------------------------------------------
