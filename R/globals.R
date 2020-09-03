@@ -65,7 +65,46 @@ utils::globalVariables(c(
   "AVG_TEMPERATURE",
   "START_DAY",
   "END_DAY",
-  "PERIOD"
+  "PERIOD",
+
+
+  # create_deployment_log & combine_deployment_logs
+  "Acoustic_Release?",
+  "Anchor_Wgt",
+  "Comments",
+  "Depl_Attendant",
+  "Depl_Date",
+  "Depl_Duration",
+  "Depl_Lat" ,
+  "Depl_Lon" ,
+  "Depl_Sounding" ,
+  "Depl_Time" ,
+  "Depl_Voltage",
+  "Deployment" ,
+  "Deployment_Waterbody" ,
+  "Duration",
+  "Inst_Depth",
+  "Inst_Model",
+  "Inst_Serial",
+
+  "Lease#",
+  "Location_Description" ,
+  "Logger_Latitude",
+  "Logger_Longitude",
+  "Notes" ,
+  "Recv_Attendant" ,
+  "Recv_Date" ,
+  "Recv_Lat" ,
+  "Recv_Lon",
+  "Recv_Method" ,
+  "Recv_Voltage" ,
+  "Retrieval" ,
+  "Sounding" ,
+  "Station_Name" ,
+  "Status",
+  "Waterbody"
+
+
 
 ))
 
