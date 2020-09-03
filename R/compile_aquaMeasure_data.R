@@ -27,15 +27,15 @@
 #'  the string, in the form "aquaMeasure-xxxxxx" (first column; note the capital
 #'  "M") and its corresponding depth in the form "2m" (second column).
 #'@return Returns a dataframe or exports a spreadsheet with the data compiled
-#'  from each of the aquaMeasure sensors. Columns alternate between datetime
+#'  from each of the aquaMeasure sensors. Columns alternate between timestamp
 #'  (UTC, in the format "Y-m-d H:M:S") and variable value (rounded to three
 #'  decimal places). Metadata at the top of each column indicates the deployment
-#'  dates, the sensor serial number, and the variable and depth of the sensor.
-#'  Each datetime column shows the timezone as extracted from the aquaMeasure.
+#'  period, the sensor serial number, the variable and depth of the sensor, and
+#'  the timezone of the timestamp.
 #'
 #'  To include the metadata, all values were converted to class
 #'  \code{character}. To manipulate the data, the values must be converted to
-#'  the appropriate class (e.g., \code{POSIXct} for the datetimes and
+#'  the appropriate class (e.g., \code{POSIXct} for the timestamps and
 #'  \code{numeric} for variable values). This can be done using the function
 #'  \code{convert_to_tidydata()}.
 #'@family compile
@@ -93,18 +93,16 @@ compile_aquaMeasure_data <- function(path.aM,
 
     # check whether file is .csv or .xlsx
     file.i <- dat.files[i]
-    file.extension.i <- separate(data.frame(file.i), col = file.i,
-                               into = c(NA, "EXT"), sep = "\\.")
-    file.extension.i <- file.extension.i$EXT
+    file.type.i <- extract_file_extension(file.i)
 
     # use appropriate function to import data
-    if(file.extension.i == "csv") {
+    if(file.type.i == "csv") {
       dat.i <- read_csv(paste(path.aM, file.i, sep = "/"),
                              col_names = TRUE,
                              col_types = cols(.default = col_character()))
     }
 
-    if(file.extension.i == "xlsx") {
+    if(file.type.i == "xlsx") {
       dat.i <- read_excel(paste(path.aM, file.i, sep = "/"),
                                col_names = TRUE,
                                col_types = "text")

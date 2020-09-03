@@ -17,16 +17,6 @@
 
 #'@param path File path to the Hobo, aquaMeasure, and/or Vemco folders.
 #'@param area.name Area where the sensor string was deployed.
-#'@param file.type.HOBO Character string indicating whether the HOBO data is in
-#'  .csv or .xlsx format. All HOBO data files that are being compiled must have
-#'  the same file extension.  Default is \code{file.type.HOBO = NULL}. Alternatives
-#'  are \code{file.type = "csv"} and \code{file.type = "xlsx"}.
-#'
-#'  Note that the HOBO software exports csv files in true UTC, but xlsx files
-#'  account for daylight savings time. This function will automatically convert
-#'  the datetimes in xlsx files to true UTC. Future versions of the package will
-#'  provide an option to convert from ADT to AST.
-
 #'@return Returns a dataframe with the compiled and formatted data. Columns
 #'  alternate between the timestamp (in the format "Y-m-d H:M:S") and the
 #'  variable value (rounded to three decimal places). Metadata at the top of
@@ -53,7 +43,6 @@ compile_all_data <- function(path,
                              trim,
                              # hobo
                              serial.table.HOBO = NULL,
-                             file.type.HOBO = NULL,
                              # aquaMeaure
                              serial.table.aM = NULL,
                              # vemco
@@ -68,8 +57,7 @@ compile_all_data <- function(path,
                               area.name = area.name,
                               serial.table.HOBO = serial.table.HOBO,
                               deployment.range = deployment.range,
-                              trim = trim,
-                              file.type = file.type.HOBO)
+                              trim = trim)
 
     ALL <- full_join(ALL, HOBO, by = "INDEX")
   }

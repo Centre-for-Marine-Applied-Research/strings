@@ -21,15 +21,15 @@
 #'@param depth.vemco Character string indicating the depth at which the Vemco
 #'  was deployed, in the format "10m".
 #'@return Returns a dataframe or exports a spreadsheet with the formatted Vemco
-#'  data in two columns: the timestamp (UTC, in the format "Y-m-d H:M:S") and
+#'  data in two columns: the timestamp (in the format "Y-m-d H:M:S") and
 #'  temperature value (degree celsius, rounded to three decimal places).
-#'  Metadata at the top of each column indicates the deployment dates, the
-#'  sensor serial number, and the depth of the sensor. Each datetime column
-#'  shows the timezone as extracted from the Vue software.
+#'  Metadata at the top of each column indicates the deployment period, the
+#'  sensor serial number, the depth of the sensor, and the timezone of the
+#'  timestamp.
 #'
 #'  To include the metadata, all values were converted to class
 #'  \code{character}. To manipulate the data, the values must be converted to
-#'  the appropriate class (e.g., \code{POSIXct} for the datetimes and
+#'  the appropriate class (e.g., \code{POSIXct} for the timestamps and
 #'  \code{numeric} for temperature values). This can be done using the function
 #'  \code{convert_to_tidydata()}.
 #'@family compile

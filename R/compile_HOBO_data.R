@@ -8,7 +8,8 @@
 #'  the order ""ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY HM", or "dmY
 #'  HMS".
 #'
-#'  Can handle .csv or .xlsx files.
+#'  Can handle .csv or .xlsx files. It is recommended that all files to be
+#'  compiled have the same extension.
 #'
 #'  CMAR NOTES: Data should be exported from the Hobo software in GMT+00 as a
 #'  csv file so that the timestamp is in UTC.
@@ -23,11 +24,11 @@
 #'  are NOT exported to the \code{strings} package (i.e., they are only used
 #'  internally).
 #'
-#'  \code{convert_HOBO_datetime_to_true_UTC()} identifies which datetimes are during
-#'  daylight savings by creating two additional columns: \code{ADT_force =
-#'  force_tz(TIMESTAMP, tzone = "America/Halifax")}, and \code{DAYLIGHT_SAVINGS
-#'  = dst(ADT_force)}. Where \code{DAYLIGHT_SAVINGS == TRUE}, the
-#'  \code{TIMESTAMP} is shifted back by 1 hour.
+#'  \code{convert_HOBO_datetime_to_true_UTC()} identifies which datetimes are
+#'  during daylight savings by creating two additional columns: \code{ADT_force
+#'  = force_tz(TIMESTAMP, tzone = "America/Halifax")}, and
+#'  \code{DAYLIGHT_SAVINGS = dst(ADT_force)}. Where \code{DAYLIGHT_SAVINGS ==
+#'  TRUE}, the \code{TIMESTAMP} is shifted back by 1 hour.
 #'
 #'  This leaves apparent duplicates for the hour of 1 am on the day that
 #'  daylight savings ends. \code{dates_to_fix()} identifies these \code{n}
@@ -58,17 +59,6 @@
 #'  retrieval date to account for AST, e.g., in case the sensor was retrieved
 #'  after 20:00 AST, which is 00:00 UTC the next day.) Default is \code{trim =
 #'  TRUE}.
-#'@param file.type Character string indicating whether the HOBO data is in .csv
-#'  or .xlsx format. All data files that are being compiled must have the same
-#'  file extension.  Default is \code{file.type = "csv"}. Alternative is
-#'  \code{file.type = "xlsx"}.
-#'
-#'  Note that the HOBO software exports csv files in true UTC, but xlsx files
-#'  account for daylight savings time. This function will automatically convert
-#'  the datetimes in xlsx files to true UTC.
-#'
-#'  Future versions of the package will provide an option to convert from ADT to
-#'  AST.
 #'@param rm.DST Option to remove daylight savings time. Here, daylight savings
 #'  is as defined for Nova Scotia, Canada (begins in March and end in November).
 #'  Only works for 2015 - 2021. It is strongly recommended that the data is in
@@ -78,16 +68,15 @@
 #'  as a .csv file. If \code{export.csv = TRUE}, the compiled data will not be
 #'  returned to the global environment. Default is \code{export.csv = FALSE}.
 #'@return Returns a dataframe or exports a spreadsheet with the data compiled
-#'  from each of the HOBO sensors. Columns alternate between datetime (UTC, in
-#'  the format "Y-m-d H:M:S") and temperature value (degree celsius, rounded to
-#'  three decimal places). Metadata at the top of each column indicates the
-#'  deployment dates, the sensor serial number, and the depth of the sensor.
-#'  Each datetime column shows the timezone as extracted from the HOBOware, and
-#'  each temperature column shows the units extracted from HOBO.
+#'  from each of the HOBO sensors. Columns alternate between timestamp (in the
+#'  format "Y-m-d H:M:S") and temperature value (rounded to three decimal
+#'  places). Metadata at the top of each column indicates the deployment period,
+#'  the sensor serial number, the depth of the sensor, the temperature units,
+#'  and the timezone of the timestamp.
 #'
 #'  To include the metadata, all values were converted to class
 #'  \code{character}. To manipulate the data, the values must be converted to
-#'  the appropriate class (e.g., \code{POSIXct} for the datetimes and
+#'  the appropriate class (e.g., \code{POSIXct} for the timestamps and
 #'  \code{numeric} for temperature values). This can be done using the function
 #'  \code{convert_to_tidydata()}.
 #'@family compile
@@ -107,7 +96,6 @@ compile_HOBO_data <- function(path.HOBO,
                               serial.table.HOBO,
                               deployment.range,
                               trim = TRUE,
-                              file.type = "csv",
                               rm.DST = FALSE,
                               export.csv = FALSE){
 
@@ -131,23 +119,28 @@ compile_HOBO_data <- function(path.HOBO,
   # finish path
   path.HOBO <- file.path(paste(path.HOBO, "Hobo", sep = "/"))
 
-  # list files .xlsx files in the data folder
-  if(file.type == "xlsx"){
-    dat.files <- list.files(path.HOBO, all.files = FALSE, pattern = "*.xlsx")
-  }
+  # list files in the Hobo folder
+  dat.files <- list.files(path.HOBO, all.files = FALSE, pattern = "*xlsx|*csv")
 
-  # list files .csv files in the data folder
-  if(file.type == "csv"){
-    dat.files <- list.files(path.HOBO, all.files = FALSE, pattern = "*.csv")
-  }
 
-  # remove files that start with "~"
-  if(any(substring(dat.files, 1, 1)== "~")) {
 
-    message(paste("Note:", sum((substring(dat.files, 1, 1)== "~")),
-                "files on the path begin with ~ and were not imported.", sep = " "))
-    dat.files <- dat.files[-which(substring(dat.files, 1, 1)== "~")]
-  }
+  # # list files .xlsx files in the data folder
+  # if(file.type == "xlsx"){
+  #   dat.files <- list.files(path.HOBO, all.files = FALSE, pattern = "*.xlsx")
+  # }
+  #
+  # # list files .csv files in the data folder
+  # if(file.type == "csv"){
+  #   dat.files <- list.files(path.HOBO, all.files = FALSE, pattern = "*.csv")
+  # }
+  #
+  # # remove files that start with "~"
+  # if(any(substring(dat.files, 1, 1)== "~")) {
+  #
+  #   message(paste("Note:", sum((substring(dat.files, 1, 1)== "~")),
+  #               "files on the path begin with ~ and were not imported.", sep = " "))
+  #   dat.files <- dat.files[-which(substring(dat.files, 1, 1)== "~")]
+  # }
 
   # loop over each HOBO file
   for(i in 1:length(dat.files)) {
@@ -155,6 +148,9 @@ compile_HOBO_data <- function(path.HOBO,
 # Import Data -------------------------------------------------------------
 
     file.name <- dat.files[i]
+
+    # extract the file extension
+    file.type <- extract_file_extension(file.name)
 
     # import HOBO file i. Remove the first row if the first cell is the Plot Title
     if(file.type == "xlsx") {
