@@ -104,3 +104,7 @@ add_metadata <- function(data.char, row1, row2, row3, row4){
     add_row(INDEX = as.character(-4), TIMESTAMP = row1, PLACEHOLDER = row1, .before = 1)
 }
 
+
+
+
+
