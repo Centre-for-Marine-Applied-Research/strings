@@ -5,7 +5,7 @@ author: Nicole Torrie, Danielle Dempsey
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{my-vignette}
+  %\VignetteIndexEntry{CMAR Standard Operating Procedures: Folder structure for compiling data using the `strings` package}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
