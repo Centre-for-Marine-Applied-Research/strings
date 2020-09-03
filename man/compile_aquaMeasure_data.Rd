@@ -40,15 +40,15 @@ returned to the global environment. Default is \code{export.csv = FALSE}.}
 }
 \value{
 Returns a dataframe or exports a spreadsheet with the data compiled
- from each of the aquaMeasure sensors. Columns alternate between datetime
+ from each of the aquaMeasure sensors. Columns alternate between timestamp
  (UTC, in the format "Y-m-d H:M:S") and variable value (rounded to three
  decimal places). Metadata at the top of each column indicates the deployment
- dates, the sensor serial number, and the variable and depth of the sensor.
- Each datetime column shows the timezone as extracted from the aquaMeasure.
+ period, the sensor serial number, the variable and depth of the sensor, and
+ the timezone of the timestamp.
 
  To include the metadata, all values were converted to class
  \code{character}. To manipulate the data, the values must be converted to
- the appropriate class (e.g., \code{POSIXct} for the datetimes and
+ the appropriate class (e.g., \code{POSIXct} for the timestamps and
  \code{numeric} for variable values). This can be done using the function
  \code{convert_to_tidydata()}.
 }

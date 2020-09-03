@@ -10,7 +10,6 @@ compile_HOBO_data(
   serial.table.HOBO,
   deployment.range,
   trim = TRUE,
-  file.type = "csv",
   rm.DST = FALSE,
   export.csv = FALSE
 )
@@ -40,18 +39,6 @@ retrieval date to account for AST, e.g., in case the sensor was retrieved
 after 20:00 AST, which is 00:00 UTC the next day.) Default is \code{trim =
 TRUE}.}
 
-\item{file.type}{Character string indicating whether the HOBO data is in .csv
- or .xlsx format. All data files that are being compiled must have the same
- file extension.  Default is \code{file.type = "csv"}. Alternative is
- \code{file.type = "xlsx"}.
-
- Note that the HOBO software exports csv files in true UTC, but xlsx files
- account for daylight savings time. This function will automatically convert
- the datetimes in xlsx files to true UTC.
-
- Future versions of the package will provide an option to convert from ADT to
- AST.}
-
 \item{rm.DST}{Option to remove daylight savings time. Here, daylight savings
 is as defined for Nova Scotia, Canada (begins in March and end in November).
 Only works for 2015 - 2021. It is strongly recommended that the data is in
@@ -64,16 +51,15 @@ returned to the global environment. Default is \code{export.csv = FALSE}.}
 }
 \value{
 Returns a dataframe or exports a spreadsheet with the data compiled
- from each of the HOBO sensors. Columns alternate between datetime (UTC, in
- the format "Y-m-d H:M:S") and temperature value (degree celsius, rounded to
- three decimal places). Metadata at the top of each column indicates the
- deployment dates, the sensor serial number, and the depth of the sensor.
- Each datetime column shows the timezone as extracted from the HOBOware, and
- each temperature column shows the units extracted from HOBO.
+ from each of the HOBO sensors. Columns alternate between timestamp (in the
+ format "Y-m-d H:M:S") and temperature value (rounded to three decimal
+ places). Metadata at the top of each column indicates the deployment period,
+ the sensor serial number, the depth of the sensor, the temperature units,
+ and the timezone of the timestamp.
 
  To include the metadata, all values were converted to class
  \code{character}. To manipulate the data, the values must be converted to
- the appropriate class (e.g., \code{POSIXct} for the datetimes and
+ the appropriate class (e.g., \code{POSIXct} for the timestamps and
  \code{numeric} for temperature values). This can be done using the function
  \code{convert_to_tidydata()}.
 }
@@ -89,7 +75,8 @@ HOBO and TidBiT should be saved in a folder named Hobo.
  the order ""ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY HM", or "dmY
  HMS".
 
- Can handle .csv or .xlsx files.
+ Can handle .csv or .xlsx files. It is recommended that all files to be
+ compiled have the same extension.
 
  CMAR NOTES: Data should be exported from the Hobo software in GMT+00 as a
  csv file so that the timestamp is in UTC.
@@ -104,11 +91,11 @@ HOBO and TidBiT should be saved in a folder named Hobo.
  are NOT exported to the \code{strings} package (i.e., they are only used
  internally).
 
- \code{convert_HOBO_datetime_to_true_UTC()} identifies which datetimes are during
- daylight savings by creating two additional columns: \code{ADT_force =
- force_tz(TIMESTAMP, tzone = "America/Halifax")}, and \code{DAYLIGHT_SAVINGS
- = dst(ADT_force)}. Where \code{DAYLIGHT_SAVINGS == TRUE}, the
- \code{TIMESTAMP} is shifted back by 1 hour.
+ \code{convert_HOBO_datetime_to_true_UTC()} identifies which datetimes are
+ during daylight savings by creating two additional columns: \code{ADT_force
+ = force_tz(TIMESTAMP, tzone = "America/Halifax")}, and
+ \code{DAYLIGHT_SAVINGS = dst(ADT_force)}. Where \code{DAYLIGHT_SAVINGS ==
+ TRUE}, the \code{TIMESTAMP} is shifted back by 1 hour.
 
  This leaves apparent duplicates for the hour of 1 am on the day that
  daylight savings ends. \code{dates_to_fix()} identifies these \code{n}

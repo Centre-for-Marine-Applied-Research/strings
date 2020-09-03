@@ -10,7 +10,6 @@ compile_all_data(
   deployment.range,
   trim,
   serial.table.HOBO = NULL,
-  file.type.HOBO = NULL,
   serial.table.aM = NULL,
   depth.vemco = NULL
 )
@@ -18,7 +17,7 @@ compile_all_data(
 \arguments{
 \item{path}{File path to the Hobo, aquaMeasure, and/or Vemco folders.}
 
-\item{area.name}{Area where the sensor string was deployed.}
+\item{area.name}{Area where the HOBO was deployed.}
 
 \item{deployment.range}{A dataframe with two columns. The first column holds
 the deployment date (a Date object in the order year, month, day),  and the
@@ -35,16 +34,6 @@ TRUE}.}
 TidBiT sensor on the string, in the form "HOBO-xxxxxxxx" or
 "TidbiT-xxxxxxxx" (first column) and corresponding depth at which it was
 deployed in the form "2m" (second column).}
-
-\item{file.type.HOBO}{Character string indicating whether the HOBO data is in
- .csv or .xlsx format. All HOBO data files that are being compiled must have
- the same file extension.  Default is \code{file.type.HOBO = NULL}. Alternatives
- are \code{file.type = "csv"} and \code{file.type = "xlsx"}.
-
- Note that the HOBO software exports csv files in true UTC, but xlsx files
- account for daylight savings time. This function will automatically convert
- the datetimes in xlsx files to true UTC. Future versions of the package will
- provide an option to convert from ADT to AST.}
 
 \item{serial.table.aM}{A table with the serial number of each aquaMeasure on
 the string, in the form "aquaMeasure-xxxxxx" (first column; note the capital
