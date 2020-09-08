@@ -67,6 +67,11 @@ utils::globalVariables(c(
   "END_DAY",
   "PERIOD",
 
+  # write_report_table
+  "Deployment Date",
+  "Depth (m)",
+  "Station",
+
 
   # create_deployment_log & combine_deployment_logs
   "Acoustic_Release?",

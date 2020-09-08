@@ -109,7 +109,7 @@ dat_trim <- wide_data %>%
 
 ```
 
-```{r, meaage=FALSE}
+```{r, message=FALSE}
 # start and end times of the trimmed data:
 dat_trim %>% 
   group_by(VARIABLE) %>% 

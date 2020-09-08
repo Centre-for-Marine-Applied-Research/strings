@@ -17,7 +17,7 @@ compile_all_data(
 \arguments{
 \item{path}{File path to the Hobo, aquaMeasure, and/or Vemco folders.}
 
-\item{area.name}{Area where the HOBO was deployed.}
+\item{area.name}{Area where the sensor string was deployed.}
 
 \item{deployment.range}{A dataframe with two columns. The first column holds
 the deployment date (a Date object in the order year, month, day),  and the
