@@ -40,7 +40,7 @@
 compile_all_data <- function(path,
                              area.name,
                              deployment.range,
-                             trim,
+                             trim = TRUE,
                              # hobo
                              serial.table.HOBO = NULL,
                              # aquaMeaure
