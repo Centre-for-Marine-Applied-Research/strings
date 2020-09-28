@@ -133,6 +133,15 @@ compile_aquaMeasure_data <- function(path.aM,
     deployment_ref <- paste(format(start.date, "%Y-%b-%d"), "to", format(end.date, "%Y-%b-%d"))
 
     # Clean and format data ---------------------------------------------------
+    if("Temperature" %in% colnames(dat.i) & "Temp(Water)" %in% colnames(dat.i)){
+      warning("There is a column named Temperature and a column named Temp(Water) in sensor ",
+              sensor.i)
+    }
+
+    # Re-name the "Temp(Water)" column to "Temperature"
+    if(!("Temperature" %in% colnames(dat.i)) & "Temp(Water)" %in% colnames(dat.i)){
+      dat.i <- dat.i %>% rename(Temperature = `Temp(Water)`)
+    }
 
     ## check colnames of dat.i for "Temperature", "Dissolved Oxygen", and "Salinity"
     temp <- ifelse("Temperature" %in% colnames(dat.i), "Temperature", NA)
@@ -171,28 +180,34 @@ compile_aquaMeasure_data <- function(path.aM,
       aM.j <- dat.i %>%
         select(TIMESTAMP, `Record Type`, all_of(var.j)) %>%
         filter(`Record Type` == var.j) %>%
-        rename(PLACEHOLDER = 3) %>%
-        mutate(INDEX = as.character(c(1:n())),
-               PLACEHOLDER = round(as.numeric(PLACEHOLDER), digits = 3))
+        rename(PLACEHOLDER = 3)
 
-      if(var.j == "Dissolved Oxygen") aM.j <- aM.j %>% filter(PLACEHOLDER > 0)
+      if(nrow(aM.j) > 0) {
 
-      aM.j <- aM.j %>%
-        transmute(INDEX,
-                  TIMESTAMP = as.character(TIMESTAMP),
-                  PLACEHOLDER = as.character(PLACEHOLDER)) %>%
-        add_metadata(row1 = deployment_ref,
-                     row2 = sensor.i,
-                     row3 = paste(var.j, depth.i, sep = "-"),
-                     row4 = c(date_ref.i, var.j))
+        aM.j <- aM.j %>%
+          mutate(INDEX = as.character(c(1:n())),
+                 PLACEHOLDER = round(as.numeric(PLACEHOLDER), digits = 3))
 
-      # merge data on the INDEX row
-      aM_dat <- full_join(aM_dat, aM.j, by = "INDEX")
+        if(var.j == "Dissolved Oxygen") aM.j <- aM.j %>% filter(PLACEHOLDER > 0)
 
-    } # end loop over variables
+        aM.j <- aM.j %>%
+          transmute(INDEX,
+                    TIMESTAMP = as.character(TIMESTAMP),
+                    PLACEHOLDER = as.character(PLACEHOLDER)) %>%
+          add_metadata(row1 = deployment_ref,
+                       row2 = sensor.i,
+                       row3 = paste(var.j, depth.i, sep = "-"),
+                       row4 = c(date_ref.i, var.j))
+
+        # merge data on the INDEX row
+        aM_dat <- full_join(aM_dat, aM.j, by = "INDEX")
+      }  else message(paste("No", var.j, "observations found for", sensor.i))
 
 
-  } # end loop over files
+  } # end loop over variables
+
+
+} # end loop over files
 
 # Return compiled data ----------------------------------------------------
 
