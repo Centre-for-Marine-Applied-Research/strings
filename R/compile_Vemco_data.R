@@ -116,6 +116,17 @@ compile_vemco_data <- function(path.vemco,
     var.to.extract = "Average temperature"
   } else stop("Could not find Temperature or Average temperature in vemco_dat. Check file.")
 
+
+
+  if("Date and Time (UTC)" %in% colnames(vemco_dat) & "Date/Time" %in% colnames(vemco_dat)){
+    warning("There are two datetime columns in the Vemco data")
+  }
+
+  # Re-name the "Date/Time" column to "Date and Time (UTC)"
+  if(!("Date and Time (UTC)" %in% colnames(vemco_dat)) & "Date/Time" %in% colnames(vemco_dat)){
+    vemco_dat <- vemco_dat %>% rename(`Date and Time (UTC)` = `Date/Time`)
+  }
+
   # select the first three columns
   vemco <- vemco_dat %>%
     filter(Description == var.to.extract) %>%
