@@ -8,7 +8,7 @@ plot_variables_at_depth(
   dat.tidy,
   plot.title = "",
   vars.to.plot = c("Temperature", "Dissolved Oxygen", "Salinity"),
-  ylab.units = c("deg C)", "(\%)", "(ppt)"),
+  ylab.units = NULL,
   color.palette = rev(viridis(6, option = "D")),
   date.breaks.major = "2 month",
   date.breaks.minor = "1 month",
@@ -34,9 +34,11 @@ match an entry in the \code{VARIABLE} column of \code{dat.tidy}. Default is
 \code{vars.to.plot = c("Temperature", "Dissolved Oxygen", "Salinity")}.}
 
 \item{ylab.units}{Character vector of units as they will appear in the y-axis
-title. Must be in the same order as the associated variable in
-\code{vars.to.plot}. Note: the units for \code{vars.to.plot = "Temperature"}
-are hard-coded to ensure the degree symbol renders.}
+title. Must be in the same order as the associated variables in
+\code{vars.to.plot}. Only required when \code{vars.to.plot} is NOT some
+combination of "Temperature", "Dissolved Oxygen", and "salinity". Units for
+"Temperature", "Dissolved Oxygen", and "Salinity" are hard-coded ((degree
+C), (\%), and (ppt)).}
 
 \item{color.palette}{Color palette of hex colors onto which \code{DEPTH} will
 be mapped. Default is \code{color.palette = rev(viridis(6, option = "D"))}.}
@@ -47,7 +49,7 @@ be mapped. Default is \code{color.palette = rev(viridis(6, option = "D"))}.}
 \item{date.breaks.minor}{Intervals for minor breaks. Default is
 \code{date.breaks.minor = "1 month"}.}
 
-\item{date.labels.format}{Format for the date labels. Default is "%y=%b"
+\item{date.labels.format}{Format for the date labels. Default is "\%y-\%b"
 (two-digit year-three-letter month).}
 
 \item{date.min}{First datetime to include in the plot. Must be a POSIXct

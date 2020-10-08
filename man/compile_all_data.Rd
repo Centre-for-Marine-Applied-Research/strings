@@ -8,7 +8,7 @@ compile_all_data(
   path,
   area.name,
   deployment.range,
-  trim,
+  trim = TRUE,
   serial.table.HOBO = NULL,
   serial.table.aM = NULL,
   depth.vemco = NULL

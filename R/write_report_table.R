@@ -1,10 +1,12 @@
 #'@title Writes deployment table for county report
+#'@details This is a temporary function to help prepare OpenData reports.
+
 #'@param dat.tidy Tidy data as formatted by \code{format_for_opendata()}.
 #'@param keep.waterbody Logical value indicating whether to keep the
 #'  \code{Waterbody} column.
 #'@family OpenData
 #'@author Danielle Dempsey
-#'
+
 #'@importFrom tidyr separate
 #'@import dplyr
 #'@export
