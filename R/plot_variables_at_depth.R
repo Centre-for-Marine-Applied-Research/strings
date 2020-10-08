@@ -8,16 +8,19 @@
 #'  match an entry in the \code{VARIABLE} column of \code{dat.tidy}. Default is
 #'  \code{vars.to.plot = c("Temperature", "Dissolved Oxygen", "Salinity")}.
 #'@param ylab.units Character vector of units as they will appear in the y-axis
-#'  title. Must be in the same order as the associated variable in
-#'  \code{vars.to.plot}. Note: the units for \code{vars.to.plot = "Temperature"}
-#'  are hard-coded to ensure the degree symbol renders.
+#'  title. Must be in the same order as the associated variables in
+#'  \code{vars.to.plot}. Only required when \code{vars.to.plot} is NOT some
+#'  combination of "Temperature", "Dissolved Oxygen", and "salinity". Units for
+#'  "Temperature", "Dissolved Oxygen", and "Salinity" are hard-coded ((degree
+#'  C), (\%), and (ppt)).
+
 #'@param color.palette Color palette of hex colors onto which \code{DEPTH} will
 #'  be mapped. Default is \code{color.palette = rev(viridis(6, option = "D"))}.
 #'@param date.breaks.major Intervals for major breaks. Default is
 #'  \code{date.breaks.major = "2 month"}.
 #'@param date.breaks.minor Intervals for minor breaks. Default is
 #'  \code{date.breaks.minor = "1 month"}.
-#'@param date.labels.format Format for the date labels. Default is "%y=%b"
+#'@param date.labels.format Format for the date labels. Default is "\%y-\%b"
 #'  (two-digit year-three-letter month).
 #'@param date.min First datetime to include in the plot. Must be a POSIXct
 #'  object. Default is \code{date.min = min(na.omit(dat.tidy$TIMESTAMP))}.
@@ -53,9 +56,7 @@
 plot_variables_at_depth <- function(dat.tidy,
                                     plot.title = "",
                                     vars.to.plot = c("Temperature", "Dissolved Oxygen", "Salinity"),
-                                    ylab.units = c("deg C)",
-                                                   "(%)",
-                                                   "(ppt)"),
+                                    ylab.units = NULL,
                                     color.palette = rev(viridis(6, option = "D")),
                                     date.breaks.major = "2 month",
                                     date.breaks.minor = "1 month",
@@ -129,14 +130,23 @@ plot_variables_at_depth <- function(dat.tidy,
     # set y-label
     if(var.i == "Temperature"){
       y.lab <- expression(paste("Temperature (",degree,"C)"))
-    } else  y.lab <- paste(var.i, ylab.units[i], sep = " ")
+    }
 
-    # set y limits
+    # set y-label and y limits
     if(var.i == "Dissolved Oxygen"){
       y.limits <- c(60, 130)
-
+      y.lab <- "Dissolved Oxygen (%)"
     } else y.limits <- NULL
 
+    # set y-label
+    if(var.i == "Salinity"){
+      y.lab <-  "Salinity (ppt)"
+    }
+
+    # General y-label, supplied by user
+    if(!(var.i %in% c("Temperature", "Dissolved Oxygen", "Salintiy"))){
+      y.lab <- paste(var.i, ylab.units[i], sep = " ")
+    }
 
     # filter data for the variable of interest
     dat.i <- dat.tidy %>%  dplyr::filter(VARIABLE == var.i)
