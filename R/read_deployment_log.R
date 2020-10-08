@@ -114,7 +114,7 @@ read_deployment_log <- function(path.log){
                           lease = log$`Lease#`[1])
 
   # HOBO & TidBit sensors
-  hobo.sensors <- c("HOBO Pro V2", "HOBO pro V2", "HOBO_Pro_V2", "TidbiT MX2303")
+  hobo.sensors <- c("HOBO Pro V2", "HOBO pro V2", "HOBO_Pro_V2", "TidbiT MX2303", "TidbiT MX2203")
 
   hobos <- log %>%
     filter(Logger_Model %in% hobo.sensors) %>%
