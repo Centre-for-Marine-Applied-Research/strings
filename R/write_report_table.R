@@ -22,7 +22,8 @@ table.out <- dat.tidy %>%
          `Sensor Type` = VARIABLE,
          `Depth (m)` = DEPTH) %>%
   distinct() %>%
-  separate(col = DEPLOYMENT_PERIOD, into = c("Deployment Date", "Retrieval Date"), sep = " to ")
+  separate(col = DEPLOYMENT_PERIOD, into = c("Deployment Date", "Retrieval Date"), sep = " to ") %>%
+  mutate(`Depth (m)` = as.numeric(`Depth (m)`))
 
 
 if(keep.waterbody == TRUE) table.out <- table.out %>% arrange(Waterbody, Station, `Deployment Date`, `Depth (m)`)
