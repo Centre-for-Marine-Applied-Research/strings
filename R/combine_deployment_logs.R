@@ -1,6 +1,10 @@
-#'@title Combines deloyment logs from a station to make deployment history
+#'@title Combines deployment logs from a station to make deployment history file
+#'@details Imports the log from each deployment folder, binds them together, and
+#'  re-formats into the deployment history file. Logs can be in .xls, .xlsx, or
+#'  .csv format.
 #'@param path Path to station folder.
-#'@return Fill this in
+#'@return Exports the deployment history file to the station folder, in .csv
+#'  format.
 #'@author Danielle Dempsey
 
 #'@importFrom tidyr separate
