@@ -5,39 +5,38 @@
 \title{Calculates temperature in degree-days}
 \usage{
 calculate_degree_days(
-  .dat.tidy,
+  dat.tidy,
   ...,
-  .start.date = min(.dat.tidy$TIMESTAMP),
-  .end.date = max(.dat.tidy$TIMESTAMP)
+  start.date = min(dat.tidy$TIMESTAMP),
+  end.date = max(dat.tidy$TIMESTAMP)
 )
 }
 \arguments{
-\item{.dat.tidy}{Data in tidy format, as returned by the function
+\item{dat.tidy}{Data in tidy format, as returned by the function
 \code{convert_to_tidydata()}. Must include three columns: \code{TIMESTAMP}
 (POSIXct), \code{VARIABLE} (character), and \code{VALUE} (numeric). May also
-include the column \code{DEPTH} (factor) (required if
-\code{.depths.to.include} is not set to the default), or other grouping
-columns passed to \code{...}. Other columns wil be ignored.}
+include columns with grouping variables passed to \code{...}. Other columns
+will be ignored.}
 
 \item{...}{Columns in \code{.dat.tidy} to use for grouping in
 \code{dplyr::group_by()}, e.g., \code{YEAR, MONTH}. Degree-days are
 calculated for each combination of groups.}
 
-\item{.start.date}{First day that should be included in the calculation. If
-\code{.start.date} does not include a time, then the start time is assumed
-to be midnight. Accepted orders for \code{start.date} are: "ymd IMS p", "Ymd
-IMS p", "Ymd HM", "Ymd HMS", "dmY HM", "dmY HMS", "Ymd", "ymd". Default is
-\code{.start.date = min(.dat.tidy$TIMESTAMP)}.}
+\item{start.date}{First day that should be included in the calculation. If
+\code{start.date} does not include a time, then the start time is assumed
+to be midnight. Accepted orders for \code{start.date} are: "ymd IMS p",
+"Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY HM", "dmY HMS", "Ymd", "ymd". Default
+is the first day in \code{dat.tidy}.}
 
-\item{.end.date}{Last day that should be included in the calculation. If
-\code{.end.date} does not include a time, then the end time is assumed to be
-"23:59:59". Accepted orders for \code{start.date} are: "ymd IMS p", "Ymd IMS
-p", "Ymd HM", "Ymd HMS", "dmY HM", "dmY HMS", "Ymd", "ymd". Default is
-\code{.end.date = max(.dat.tidy$TIMESTAMP)}.}
+\item{end.date}{Last day that should be included in the calculation. If
+\code{end.date} does not include a time, then the end time is assumed to be
+"23:59:59". Accepted orders for \code{end.date} are: "ymd IMS p", "Ymd IMS
+p", "Ymd HM", "Ymd HMS", "dmY HM", "dmY HMS", "Ymd", "ymd". Default is the
+last day in \code{dat.tidy}.}
 }
 \value{
 Returns a tibble with at least five columns: \code{PERIOD} (start and
- end date and time used to calculate mean temperature and number of days),
+ end date used to calculate mean temperature and number of days),
  \code{n_DAYS} (the number of days, \emph{n}, used in the calculation),
  \code{n_OBSERVATIONS} (the number of observations used to calculate the
  average temperature), \code{AVG_TEMPERATURE} (the average temperature in the
@@ -53,8 +52,8 @@ Degree-days = average temperature over \emph{n} days * \emph{n}
 
  \emph{n} is calculated using the \code{difftime()} function:
 
- \code{n_DAYS = round(as.numeric(difftime(max(TIMESTAMP), min(TIMESTAMP), units =
- "days")), digits = 3)}
+ \code{n_DAYS = round(as.numeric(difftime(max(TIMESTAMP), min(TIMESTAMP),
+ units = "days")), digits = 3)}
 }
 \examples{
 data(tidydata)
@@ -64,6 +63,10 @@ calculate_degree_days(tidydata)
 
 # degree-days by DEPTH for whole time series
 calculate_degree_days(tidydata, DEPTH)
+
+# degree-days by DEPTH and month from July 1 to September 30
+calculate_degree_days(tidydata, DEPTH, months(TIMESTAMP),
+start.date = "2019-06-01", end.date = "2019-09-30")
 }
 \seealso{
 Other calculate: 
