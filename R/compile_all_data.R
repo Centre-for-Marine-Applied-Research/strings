@@ -8,9 +8,10 @@
 #'  Hobo, aquaMeasure, and Vemco folders must be in the same folder.
 #'
 #'  If one type of sensor was not included in the deployment, set the
-#'  argument(s) related to that sensor to \code{NULL} (the default). For
+#'  argument related to that sensor to \code{NULL} (the default). For
 #'  example, if there is no aquaMeaure data for the deployment, set
 #'  \code{serial.table.aM = NULL}
+#'
 #'@inheritParams compile_HOBO_data
 #'@inheritParams compile_aquaMeasure_data
 #'@inheritParams compile_vemco_data
@@ -20,13 +21,13 @@
 #'@return Returns a dataframe with the compiled and formatted data. Columns
 #'  alternate between the timestamp (in the format "Y-m-d H:M:S") and the
 #'  variable value (rounded to three decimal places). Metadata at the top of
-#'  each column indicates the deployment dates, the sensor serial number, and
-#'  the variable and depth of the sensor. Each datetime column shows the
-#'  timezone as extracted from the sensor.
+#'  each column indicates the deployment and retrieval dates, the sensor serial
+#'  number, and the variable and depth of the sensor. Each timestamp column
+#'  shows the timezone as extracted from the sensor.
 #'
 #'  To include the metadata, all values were converted to class
 #'  \code{character}. To manipulate the data, the values must be converted to
-#'  the appropriate class (e.g., \code{POSIXct} for the datetimes and
+#'  the appropriate class (e.g., \code{POSIXct} for the timestamp and
 #'  \code{numeric} for variable values). This can be done using the function
 #'  \code{convert_to_tidydata()}.
 #'@family compile

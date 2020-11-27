@@ -16,12 +16,12 @@ compile_HOBO_data(
 }
 \arguments{
 \item{path.HOBO}{File path to the Hobo folder. All of the excel files in the
-Hobo folder should be data to compile. The name of each excel file must be
-the serial number of the sensor, and the excel files must all have the same
-extension (either .csv or .xlsx). The datetime columns must be in the order
-"ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY HM", or "dmY HMS".}
+Hobo folder will be compiled. The name of each file must be the serial
+number of the sensor, and the excel files must be in either .csv or .xlsx
+format. The timestamp columns must be in the order "ymd IMS p", "Ymd IMS p",
+"Ymd HM", "Ymd HMS", "dmY HM", or "dmY HMS".}
 
-\item{area.name}{Area where the HOBO was deployed.}
+\item{area.name}{Area where the sensor was deployed.}
 
 \item{serial.table.HOBO}{A table with the serial number of each HOBO and
 TidBiT sensor on the string, in the form "HOBO-xxxxxxxx" or
@@ -51,11 +51,11 @@ returned to the global environment. Default is \code{export.csv = FALSE}.}
 }
 \value{
 Returns a dataframe or exports a spreadsheet with the data compiled
- from each of the HOBO sensors. Columns alternate between timestamp (in the
- format "Y-m-d H:M:S") and temperature value (rounded to three decimal
- places). Metadata at the top of each column indicates the deployment period,
- the sensor serial number, the depth of the sensor, the temperature units,
- and the timezone of the timestamp.
+ from each of the HOBO and TidbiT sensors. Columns alternate between
+ timestamp (in the format "Y-m-d H:M:S") and temperature value (rounded to
+ three decimal places). Metadata at the top of each column indicates the
+ deployment and retrieval dates, the sensor serial number, the depth of the
+ sensor, the temperature units, and the timezone of the timestamp.
 
  To include the metadata, all values were converted to class
  \code{character}. To manipulate the data, the values must be converted to
@@ -65,18 +65,16 @@ Returns a dataframe or exports a spreadsheet with the data compiled
 }
 \description{
 Compiles and formats data from HOBO and TidbiT sensors deployed
- at different depths on the same string.
+ on the same string.
 }
 \details{
-HOBO and TidBiT should be saved in a folder named Hobo.
+HOBO and TidBiT data must be saved in a folder named Hobo in .csv or
+ .xlsx format.
 
  All columns are read in as characters to ensure the timestamp is parsed
  correctly. Timestamp must be saved in Excel as a number or a character in
  the order ""ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY HM", or "dmY
  HMS".
-
- Can handle .csv or .xlsx files. It is recommended that all files to be
- compiled have the same extension.
 
  CMAR NOTES: Data should be exported from the Hobo software in GMT+00 as a
  csv file so that the timestamp is in UTC.
@@ -101,8 +99,8 @@ HOBO and TidBiT should be saved in a folder named Hobo.
  daylight savings ends. \code{dates_to_fix()} identifies these \code{n}
  observations (e.g. 1:00, 1:15, 1:30, 1:45, 1:00, 1:15, 1:30, 1:45), and
  shifts the first \code{n/2} back by one hour (e.g. 00:00, 00:15, 00:30,
- 00:45, 1:00, 1:15, 1:30, 1:45). Function can handing this from 2017 - 2021;
- additional lines required for other years.
+ 00:45, 1:00, 1:15, 1:30, 1:45).The function can handing this from 2015 -
+ 2021; additional lines required for other years.
 
  If for some reason, there is an ODD number of duplicates, the function might
  break.
