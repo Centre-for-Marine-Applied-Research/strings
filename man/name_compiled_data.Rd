@@ -2,12 +2,12 @@
 % Please edit documentation in R/name_compiled_data.R
 \name{name_compiled_data}
 \alias{name_compiled_data}
-\title{Generates name for output file of compiled data}
+\title{Generates name for output file of compiled string data}
 \usage{
 name_compiled_data(area.name, deployment.start, vars)
 }
 \arguments{
-\item{area.name}{Area where aquaMeasure was deployed.}
+\item{area.name}{Area where the sensor(s) was deployed.}
 
 \item{deployment.start}{start date of deployment}
 

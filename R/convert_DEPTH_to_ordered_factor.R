@@ -21,6 +21,14 @@
 convert_depth_to_ordered_factor <- function(dat.tidy){
 
 
+  # dat.tidy <- dat.tidy %>%
+  #   mutate(DEPTH_QUAL = if_else(is.na(suppressWarnings(as.numeric(DEPTH))),
+  #                               as.character(DEPTH), NA_character_))
+
+  # filter out where DEPTH_QUAL = NA and do the numeric thing
+  # filter out where DEPTH_QUAL != NA and see the possible values of written depth
+  #
+
   if(is.na(suppressWarnings(as.numeric(dat.tidy$DEPTH[1])))) {
 
     stop("Column DEPTH cannot be coerced to class numeric")

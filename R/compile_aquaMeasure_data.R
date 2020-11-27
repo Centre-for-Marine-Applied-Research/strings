@@ -1,13 +1,13 @@
 #'@title Compiles temperature, dissolved oxygen, and/or salinity data from
-#'  aquaMeasure deployment
-#'@description Formats the data from an aquaMeasure deployment so it can be
-#'  combined with the HOBO and Vemco temperature data.
-#'@details Rows with \code{undefined} and \code{... (time not set)} values in
-#'  the \code{Timestamp(UTC)} column are filtered out.
+#'  aquaMeasure sensors
+#'@description Compiles and formats data from aquaMeasure sensors.
+#'@details The raw aquaMeasure data must be saved in a folder named aquaMeasure
+#'  in .csv or .xlsx format.
+#'
+#'  Rows with \code{undefined} and \code{... (time not set)} values in the
+#'  \code{Timestamp(UTC)} column are filtered out.
 #'
 #'  Negative Dissolved Oxygen values are replaced with \code{NA}.
-#'
-#'  Can handle .csv and .xlsx files.
 #'
 #'  All columns in are imported as characters to ensure the timestamp is parsed
 #'  correctly. Timestamp must be saved in excel as a number or a character in
@@ -22,7 +22,6 @@
 #'
 #'@inheritParams compile_HOBO_data
 #'@param path.aM File path to the aquaMeasure folder.
-#'@param area.name Area where aquaMeasure was deployed.
 #'@param serial.table.aM A table with the serial number of each aquaMeasure on
 #'  the string, in the form "aquaMeasure-xxxxxx" (first column; note the capital
 #'  "M") and its corresponding depth in the form "2m" (second column).
@@ -30,8 +29,8 @@
 #'  from each of the aquaMeasure sensors. Columns alternate between timestamp
 #'  (UTC, in the format "Y-m-d H:M:S") and variable value (rounded to three
 #'  decimal places). Metadata at the top of each column indicates the deployment
-#'  period, the sensor serial number, the variable and depth of the sensor, and
-#'  the timezone of the timestamp.
+#'  and retrieval dates, the sensor serial number, the variable and depth of the
+#'  sensor, and the timezone of the timestamp.
 #'
 #'  To include the metadata, all values were converted to class
 #'  \code{character}. To manipulate the data, the values must be converted to

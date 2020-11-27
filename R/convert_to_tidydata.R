@@ -1,5 +1,5 @@
 #'@title Converts compiled string data to a tidy format
-#'@param dat.wide Data in the format exported by the \code{compile_xxx_data}
+#'@param dat.wide Data in the format exported by the \code{compile_*_data}
 #'  functions.
 #'@param remove.NA Logical value. If \code{remove.NA = TRUE}, observations where
 #'  \code{TIMESTAMP} or \code{VALUE} = \code{NA} are removed. Default is

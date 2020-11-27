@@ -2,17 +2,18 @@
 % Please edit documentation in R/name_compiled_data.R
 \name{name_for_open_data}
 \alias{name_for_open_data}
-\title{Generates name for output file for Open Data portal}
+\title{Generates name for output file for Open Data Portal}
 \usage{
 name_for_open_data(name.input)
 }
 \arguments{
-\item{name.input}{File name as exported from \code{name_compiled_data()}, e.g. "Shad Bay_2018-11-15_TEMP_DO"}
+\item{name.input}{File name as exported from \code{name_compiled_data()}, e.g.
+"Shad Bay_2018-11-15_TEMP_DO"}
 }
 \value{
 Character string to use to name Open Data file.
 }
 \description{
-Generates a name for output file in the format "area
- name deployment date", e.g. "Shad Bay 2018-11-15".
+Generates a name for output file in the format "area name
+ deployment date", e.g. "Shad Bay 2018-11-15".
 }

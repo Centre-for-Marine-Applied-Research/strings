@@ -1,13 +1,16 @@
-#'@title Format sensor string data for the OpenData portal
+#'@title Format sensor string data for the Open Data portal
 #'@param dat.tidy Data from a single deployment in tidy format, as returned by
-#'  the function \code{convert_to_tidydata()}. Must include four columns:
-#'  \code{TIMESTAMP} (POSIXct), \code{VARIABLE} (character), \code{DEPTH} (ordered
-#'  factor), and \code{VALUE} (numeric).
-#'@param location.info Dataframe of information about the deployment location. One
-#'  observation of 5 columns: \code{county}, \code{waterbody}, \code{station}, \code{lease},
-#'  \code{latitude}, and \code{longitude}.
+#'  \code{convert_to_tidydata()}. Must include four columns: \code{TIMESTAMP}
+#'  (POSIXct), \code{VARIABLE} (character), \code{DEPTH} (ordered factor), and
+#'  \code{VALUE} (numeric).
+#'@param location.info Dataframe of information about the deployment location.
+#'  One observation of 5 columns: \code{county}, \code{waterbody},
+#'  \code{station}, \code{lease}, \code{latitude}, and \code{longitude}.
 
-#'@return Returns a dataframe of tidy data in the format for the OpenData portal for a single deployment,
+#'@return Returns a dataframe of tidy data in the format for submission to the
+#'  Open Data Portal. 10 columns: \code{WATERBODY}, \code{STATION},
+#'  \code{LEASE}, \code{LATITUDE}, \code{LONGITUDE}, \code{DEPLOYMENT_PERIOD},
+#'  \code{TIMESTAMP}, \code{SENSOR}, \code{DEPTH}, \code{VARIABLE}, \code{VALUE}
 
 #'@family format OpenData
 #'@author Danielle Dempsey
@@ -19,7 +22,6 @@
 format_for_opendata <- function(dat.tidy, location.info) {
 
   dat.tidy %>%
-    #separate(SENSOR, into = c("SENSOR", NA), sep = "-| - ") %>%
     mutate(COUNTY = location.info$county,
            WATERBODY = location.info$waterbody,
            STATION = location.info$station,

@@ -3,7 +3,7 @@
 #'  \code{convert_to_tidydata()}. Must include four columns: \code{TIMESTAMP}
 #'  (POSIXct), \code{VARIABLE} (character), \code{DEPTH} (ordered factor), and
 #'  \code{VALUE} (numeric).
-#'@param plot.title Title for plot. Default is blank: \code{plot.title = ""}.
+#'@param plot.title Title for plot. Default is no title.
 #'@param vars.to.plot A character vector of variables to plot. Each string must
 #'  match an entry in the \code{VARIABLE} column of \code{dat.tidy}. Default is
 #'  \code{vars.to.plot = c("Temperature", "Dissolved Oxygen", "Salinity")}.
@@ -15,17 +15,18 @@
 #'  C), (\%), and (ppt)).
 
 #'@param color.palette Color palette of hex colors onto which \code{DEPTH} will
-#'  be mapped. Default is \code{color.palette = rev(viridis(6, option = "D"))}.
+#'  be mapped. Required if there are more than 6 levels in \code{DEPTH}. Default
+#'  is \code{color.palette = rev(viridis(6, option = "D"))}.
 #'@param date.breaks.major Intervals for major breaks. Default is
 #'  \code{date.breaks.major = "2 month"}.
 #'@param date.breaks.minor Intervals for minor breaks. Default is
 #'  \code{date.breaks.minor = "1 month"}.
 #'@param date.labels.format Format for the date labels. Default is "\%y-\%b"
 #'  (two-digit year-three-letter month).
-#'@param date.min First datetime to include in the plot. Must be a POSIXct
-#'  object. Default is \code{date.min = min(na.omit(dat.tidy$TIMESTAMP))}.
-#'@param date.max Last datetime to include in the plot. Must be a POSIXct
-#'  object. Default is \code{date.max = max(na.omit(dat.tidy$TIMESTAMP))}.
+#'@param date.min First timestamp to include in the plot. Must be a POSIXct
+#'  object. Default is the minimum value in the \code{TIMESTAMP} column.
+#'@param date.max Last timestamp to include in the plot. Must be a POSIXct
+#'  object. Default is the maximum value in the \code{TIMESTAMP} column.
 #'@param alpha.points Value indicating the transparency of the points. 0 is most
 #'  transparent; 1 is opaque.
 #'@param legend.name Name for the legend. Must be a character strings. Default

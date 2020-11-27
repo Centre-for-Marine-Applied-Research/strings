@@ -1,5 +1,10 @@
-#'@title Returns nice major and minor breaks and label format based on timespan of the data
-#'@details This is a temporary function to help prepare OpenData reports.
+#'@title Returns nice major and minor breaks and label format based on timespan
+#'  of the data
+#'@details If \code{timespan} is less than or equal to 60 days, the major and
+#'  minor breaks will be every 2 weeks; if time span is greater than 60 days but
+#'  less than or equal to 120 days, the major and minor breaks will be every
+#'  month; if time span is greater than 120 days, the major breaks will be 2
+#'  months and the minor breaks will be 1 month.
 #'@param timespan Number of days of data to be plotted.
 #'@return Returns a dataframe with 1 observation of 3 variables
 #'  \code{date.breaks.major}, \code{date.breaks.minor},
@@ -9,14 +14,6 @@
 #'@author Danielle Dempsey
 #'@export
 
-# get_xaxis_breaks() ----------------------------------------------
-
-# returns nice major and minor breaks and label format based on timespan of the data
-
-# timespan: number of days of data
-
-# returns a dataframe with 1 observation of 3 variables
-## (date.breaks.major,date.breaks.minor, date.labels.format)
 
 get_xaxis_breaks <- function(timespan){
 

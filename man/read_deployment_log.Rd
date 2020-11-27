@@ -26,19 +26,18 @@ The log must be saved in .csv, .xlsx or .xls format, and must include
 
  \code{Deployment_Waterbody} (waterbody where string was deployed),
  \code{Location_Description} (the station name), \code{Lease#} If located on
- an aquaculture site, the lease number (NA otherwise),
- \code{Deployment} (the deployment date, in the order "Ymd"),
- \code{Retrieval} (the retrieval date, in the order "Ymd"),
- \code{Logger_Latitude} (the latitude at which the string was deployed),
- \code{Logger_Longitude} (the longitude at which the string was deployed),
- \code{Logger_Model} (the type of sensor; see below for options),
- \code{Serial#} (the sensor serial number), and \code{Sensor_Depth} (depth at
- which the sensor was deployed). All other columns will be ignored.
+ an aquaculture site, the lease number (NA otherwise), \code{Deployment} (the
+ deployment date, in the order "Ymd"), \code{Retrieval} (the retrieval date,
+ in the order "Ymd"), \code{Logger_Latitude} (the latitude at which the
+ string was deployed), \code{Logger_Longitude} (the longitude at which the
+ string was deployed), \code{Logger_Model} (the type of sensor; see below for
+ options), \code{Serial#} (the sensor serial number), and \code{Sensor_Depth}
+ (depth at which the sensor was deployed). All other columns will be ignored.
 
  Entries in the \code{Logger_Model} column can be "HOBO Pro V2", "TidbiT
- MX2303"  "aquaMeasure DOT", "aquaMeasure SAL", "aquaMeasure SST", or
- "VR2AR". (Some mis-spellings are accepted: ("HOBO pro V2", "HOBO_Pro_V2",
- "aquameasure DOT", "aquameasure SAL", "aquameasure SST")
+ MX2303", "TidbiT MX2203"  "aquaMeasure DOT", "aquaMeasure SAL", "aquaMeasure
+ SST", or "VR2AR". (Some mis-spellings are accepted: ("HOBO pro V2",
+ "HOBO_Pro_V2", "aquameasure DOT", "aquameasure SAL", "aquameasure SST")
 
  A Warning message is printed to the console when the function does not
  recognize a sensor in the log.

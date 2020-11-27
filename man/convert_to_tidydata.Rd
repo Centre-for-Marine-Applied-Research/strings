@@ -7,7 +7,7 @@
 convert_to_tidydata(dat.wide, remove.NA = TRUE, show.NA.message = FALSE)
 }
 \arguments{
-\item{dat.wide}{Data in the format exported by the \code{compile_xxx_data}
+\item{dat.wide}{Data in the format exported by the \code{compile_*_data}
 functions.}
 
 \item{remove.NA}{Logical value. If \code{remove.NA = TRUE}, observations where

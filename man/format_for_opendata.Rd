@@ -2,25 +2,28 @@
 % Please edit documentation in R/format_for_opendata.R
 \name{format_for_opendata}
 \alias{format_for_opendata}
-\title{Format sensor string data for the OpenData portal}
+\title{Format sensor string data for the Open Data portal}
 \usage{
 format_for_opendata(dat.tidy, location.info)
 }
 \arguments{
 \item{dat.tidy}{Data from a single deployment in tidy format, as returned by
-the function \code{convert_to_tidydata()}. Must include four columns:
-\code{TIMESTAMP} (POSIXct), \code{VARIABLE} (character), \code{DEPTH} (ordered
-factor), and \code{VALUE} (numeric).}
+\code{convert_to_tidydata()}. Must include four columns: \code{TIMESTAMP}
+(POSIXct), \code{VARIABLE} (character), \code{DEPTH} (ordered factor), and
+\code{VALUE} (numeric).}
 
-\item{location.info}{Dataframe of information about the deployment location. One
-observation of 5 columns: \code{county}, \code{waterbody}, \code{station}, \code{lease},
-\code{latitude}, and \code{longitude}.}
+\item{location.info}{Dataframe of information about the deployment location.
+One observation of 5 columns: \code{county}, \code{waterbody},
+\code{station}, \code{lease}, \code{latitude}, and \code{longitude}.}
 }
 \value{
-Returns a dataframe of tidy data in the format for the OpenData portal for a single deployment,
+Returns a dataframe of tidy data in the format for submission to the
+ Open Data Portal. 10 columns: \code{WATERBODY}, \code{STATION},
+ \code{LEASE}, \code{LATITUDE}, \code{LONGITUDE}, \code{DEPLOYMENT_PERIOD},
+ \code{TIMESTAMP}, \code{SENSOR}, \code{DEPTH}, \code{VARIABLE}, \code{VALUE}
 }
 \description{
-Format sensor string data for the OpenData portal
+Format sensor string data for the Open Data portal
 }
 \author{
 Danielle Dempsey

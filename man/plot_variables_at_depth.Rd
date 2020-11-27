@@ -27,7 +27,7 @@ plot_variables_at_depth(
 (POSIXct), \code{VARIABLE} (character), \code{DEPTH} (ordered factor), and
 \code{VALUE} (numeric).}
 
-\item{plot.title}{Title for plot. Default is blank: \code{plot.title = ""}.}
+\item{plot.title}{Title for plot. Default is no title.}
 
 \item{vars.to.plot}{A character vector of variables to plot. Each string must
 match an entry in the \code{VARIABLE} column of \code{dat.tidy}. Default is
@@ -41,7 +41,8 @@ combination of "Temperature", "Dissolved Oxygen", and "salinity". Units for
 C), (\%), and (ppt)).}
 
 \item{color.palette}{Color palette of hex colors onto which \code{DEPTH} will
-be mapped. Default is \code{color.palette = rev(viridis(6, option = "D"))}.}
+be mapped. Required if there are more than 6 levels in \code{DEPTH}. Default
+is \code{color.palette = rev(viridis(6, option = "D"))}.}
 
 \item{date.breaks.major}{Intervals for major breaks. Default is
 \code{date.breaks.major = "2 month"}.}
@@ -52,11 +53,11 @@ be mapped. Default is \code{color.palette = rev(viridis(6, option = "D"))}.}
 \item{date.labels.format}{Format for the date labels. Default is "\%y-\%b"
 (two-digit year-three-letter month).}
 
-\item{date.min}{First datetime to include in the plot. Must be a POSIXct
-object. Default is \code{date.min = min(na.omit(dat.tidy$TIMESTAMP))}.}
+\item{date.min}{First timestamp to include in the plot. Must be a POSIXct
+object. Default is the minimum value in the \code{TIMESTAMP} column.}
 
-\item{date.max}{Last datetime to include in the plot. Must be a POSIXct
-object. Default is \code{date.max = max(na.omit(dat.tidy$TIMESTAMP))}.}
+\item{date.max}{Last timestamp to include in the plot. Must be a POSIXct
+object. Default is the maximum value in the \code{TIMESTAMP} column.}
 
 \item{alpha.points}{Value indicating the transparency of the points. 0 is most
 transparent; 1 is opaque.}

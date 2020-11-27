@@ -21,7 +21,7 @@ number of the sensor, and the excel files must be in either .csv or .xlsx
 format. The timestamp columns must be in the order "ymd IMS p", "Ymd IMS p",
 "Ymd HM", "Ymd HMS", "dmY HM", or "dmY HMS".}
 
-\item{area.name}{Area where the sensor was deployed.}
+\item{area.name}{Area where the sensor(s) was deployed.}
 
 \item{serial.table.HOBO}{A table with the serial number of each HOBO and
 TidBiT sensor on the string, in the form "HOBO-xxxxxxxx" or
@@ -64,12 +64,11 @@ Returns a dataframe or exports a spreadsheet with the data compiled
  \code{convert_to_tidydata()}.
 }
 \description{
-Compiles and formats data from HOBO and TidbiT sensors deployed
- on the same string.
+Compiles and formats data from HOBO and TidbiT sensors.
 }
 \details{
-HOBO and TidBiT data must be saved in a folder named Hobo in .csv or
- .xlsx format.
+The raw HOBO and TidBiT data must be saved in a folder named Hobo in
+ .csv or .xlsx format.
 
  All columns are read in as characters to ensure the timestamp is parsed
  correctly. Timestamp must be saved in Excel as a number or a character in

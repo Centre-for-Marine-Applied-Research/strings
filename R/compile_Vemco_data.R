@@ -1,7 +1,8 @@
 #'@title Formats temperature data from Vemco deployment
 #'@description This function formats data from a Vemco deployment so it can be
 #'  compiled with the HOBO and aquaMeasure data.
-#'@details Can handle .csv and .xlsx files.
+#'@details The raw Vemco data must be saved in a folder named Vemco in .csv or
+#'  .xlsx format.
 #'
 #'  All columns are read in as class character to ensure the timestamp is parsed
 #'  correctly. Timestamp must be saved in excel as a number or a character in
@@ -15,17 +16,16 @@
 #'
 #'@inheritParams compile_HOBO_data
 #'@param path.vemco File path to the Vemco folder. This folder should have one
-#'  csv file that was extracted using Vue software. Other file types in the
-#'  folder will be ignored.
-#'@param area.name Area where the Vemco was deployed.
+#'  .csv or .xlsx file that was extracted using Vue software. Other file types
+#'  in the folder will be ignored.
 #'@param depth.vemco Character string indicating the depth at which the Vemco
 #'  was deployed, in the format "10m".
 #'@return Returns a dataframe or exports a spreadsheet with the formatted Vemco
 #'  data in two columns: the timestamp (in the format "Y-m-d H:M:S") and
 #'  temperature value (degree celsius, rounded to three decimal places).
-#'  Metadata at the top of each column indicates the deployment period, the
-#'  sensor serial number, the depth of the sensor, and the timezone of the
-#'  timestamp.
+#'  Metadata at the top of each column indicates the deployment and retrieval
+#'  dates, the sensor serial number, the depth of the sensor, and the timezone
+#'  of the timestamp.
 #'
 #'  To include the metadata, all values were converted to class
 #'  \code{character}. To manipulate the data, the values must be converted to
