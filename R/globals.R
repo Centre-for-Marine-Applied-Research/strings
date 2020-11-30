@@ -74,6 +74,8 @@ utils::globalVariables(c(
   "Depth (m)",
   "Station",
 
+  # convert_depth_to_ordered_factor
+  "DEPTH_QUAL",
 
   # create_deployment_log & combine_deployment_logs
   "Acoustic_Release?",
