@@ -25,7 +25,13 @@ Returns a dataframe of tidy data in the format for submission to the
 \description{
 Format sensor string data for the Open Data portal
 }
+\seealso{
+Other format: 
+\code{\link{convert_depth_to_ordered_factor}()},
+\code{\link{convert_to_tidydata}()},
+\code{\link{trim_data}()}
+}
 \author{
 Danielle Dempsey
 }
-\concept{format OpenData}
+\concept{format}

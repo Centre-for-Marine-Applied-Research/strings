@@ -12,7 +12,7 @@
 #'  \code{LEASE}, \code{LATITUDE}, \code{LONGITUDE}, \code{DEPLOYMENT_PERIOD},
 #'  \code{TIMESTAMP}, \code{SENSOR}, \code{DEPTH}, \code{VARIABLE}, \code{VALUE}
 
-#'@family format OpenData
+#'@family format
 #'@author Danielle Dempsey
 #'
 #'@importFrom tidyr separate
