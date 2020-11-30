@@ -9,8 +9,7 @@ convert_depth_to_ordered_factor(dat.tidy)
 \arguments{
 \item{dat.tidy}{Data in tidy format, as returned by the function
 \code{convert_to_tidydata()}. Must include at least one column: \code{DEPTH}
-(factor, character, or numeric). The values of \code{DEPTH} must be
-coercible to class \code{numeric}.}
+(factor, character, or numeric).}
 }
 \value{
 Returns dat.tidy, with the DEPTH column converted to an ordered
@@ -27,10 +26,25 @@ To use the function \code{plot_variables_at_depth()}, \code{DEPTH}
  must be a factor because \code{DEPTH} is mapped to a discrete color scale.
  For the legend to display correctly (e.g. depths arranged from shallow to
  deep), \code{DEPTH} must be an ordered factor.
+
+ The \code{DEPTH} column may be values that can be coerced to class
+ \code{numeric}, qualitative descriptors, or a combination of both. A
+ different level will be assigned to each of the unique values of
+ \code{DEPTH}. This could cause some confusion when \code{DEPTH} includes
+ numeric and qualitative values, for example because the level for "Surface"
+ will not the same as the level for "2 m").
+
+ Qualitative \code{DEPTH} values will be standardized to "Surface",
+ "Sub-surface", "Middle", and "Bottom". Accepted qualitative \code{DEPTH}
+ values are "Bottom", "bottom", "Middle", "middle", "Sub surface",
+ "Sub-Surface", Sub-surface", "sub surface", "sub-surface", "Sub", "sub",
+ "Surface", and "surface". Other values will cause the function to stop with
+ an error message.
 }
 \seealso{
 Other format: 
 \code{\link{convert_to_tidydata}()},
+\code{\link{format_for_opendata}()},
 \code{\link{trim_data}()}
 }
 \author{
