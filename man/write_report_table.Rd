@@ -18,10 +18,6 @@ Writes deployment table for county report
 \details{
 This is a temporary function to help prepare OpenData reports.
 }
-\seealso{
-Other OpenData: 
-\code{\link{get_xaxis_breaks}()}
-}
 \author{
 Danielle Dempsey
 }

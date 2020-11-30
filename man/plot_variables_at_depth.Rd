@@ -87,6 +87,10 @@ Returns ggplot2 object(s). If \code{stacked = TRUE}, a single figure
 \description{
 Exports ggplot2 object(s) of variables at depth over time
 }
+\seealso{
+Other plot: 
+\code{\link{get_xaxis_breaks}()}
+}
 \author{
 Danielle Dempsey
 }
