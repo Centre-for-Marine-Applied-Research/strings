@@ -5,10 +5,12 @@
 \title{Returns nice major and minor breaks and label format based on timespan
  of the data}
 \usage{
-get_xaxis_breaks(timespan)
+get_xaxis_breaks(dat.tidy)
 }
 \arguments{
-\item{timespan}{Number of days of data to be plotted.}
+\item{dat.tidy}{Data to be plotted, in tidy format, as returned by the
+function \code{convert_to_tidydata()}. Must include the column
+\code{TIMESTAMP} (POSIXct).}
 }
 \value{
 Returns a dataframe with 1 observation of 3 variables
@@ -20,17 +22,18 @@ Returns nice major and minor breaks and label format based on timespan
  of the data
 }
 \details{
-If \code{timespan} is less than or equal to 60 days, the major and
- minor breaks will be every 2 weeks; if time span is greater than 60 days but
- less than or equal to 120 days, the major and minor breaks will be every
- month; if time span is greater than 120 days, the major breaks will be 2
- months and the minor breaks will be 1 month.
+If the timespan in the \code{TIMESTAMP} column of \code{dat.tidy} is
+ less than or equal to 60 days, the major and minor breaks will be every 2
+ weeks; if time span is greater than 60 days but less than or equal to 120
+ days, the major and minor breaks will be every month; if time span is
+ greater than 120 days, the major breaks will be 2 months and the minor
+ breaks will be 1 month.
 }
 \seealso{
-Other OpenData: 
-\code{\link{write_report_table}()}
+Other plot: 
+\code{\link{plot_variables_at_depth}()}
 }
 \author{
 Danielle Dempsey
 }
-\concept{OpenData}
+\concept{plot}
