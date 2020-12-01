@@ -15,5 +15,5 @@ Character string to use to name Open Data file.
 }
 \description{
 Generates a name for output file in the format "area name
- deployment date", e.g. "Shad Bay 2018-11-15".
+ deployment-date", e.g. "Shad Bay 2018-11-15".
 }

@@ -29,7 +29,7 @@
 #'  object. Default is the maximum value in the \code{TIMESTAMP} column.
 #'@param alpha.points Value indicating the transparency of the points. 0 is most
 #'  transparent; 1 is opaque.
-#'@param legend.name Name for the legend. Must be a character strings. Default
+#'@param legend.name Name for the legend. Must be a character strings Default
 #'  is \code{legend.name = "Depth (m)"}.
 #'@param legend.position Position for the legend. Passed to \code{ggpubr}.
 #'  Default is \code{legend.position = "right"}.

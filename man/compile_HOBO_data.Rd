@@ -78,10 +78,11 @@ The raw HOBO and TidBiT data must be saved in a folder named Hobo in
  CMAR NOTES: Data should be exported from the Hobo software in GMT+00 as a
  csv file so that the timestamp is in UTC.
 
- If exported as an xlsx, the timestamp accounts for daylight savings time
- (this seems to be a bug in the HOBO software). \code{compile_HOBO_data()}
- can convert xlsx files to true UTC by setting \code{rm.DST = TRUE}. This
- will subtract 1 hour from each datetime that occurs during daylight savings.
+ If exported as a .xlsx file, the timestamp accounts for daylight savings
+ time (this seems to be a bug in the HOBO software).
+ \code{compile_HOBO_data()} can convert .xlsx files to true UTC by setting
+ \code{rm.DST = TRUE}. This will subtract 1 hour from each datetime that
+ occurs during daylight savings.
 
  The functions used to convert to true UTC are
  \code{convert_HOBO_datetime_to_true_UTC()} and \code{dates_to_fix()}, which
@@ -98,8 +99,7 @@ The raw HOBO and TidBiT data must be saved in a folder named Hobo in
  daylight savings ends. \code{dates_to_fix()} identifies these \code{n}
  observations (e.g. 1:00, 1:15, 1:30, 1:45, 1:00, 1:15, 1:30, 1:45), and
  shifts the first \code{n/2} back by one hour (e.g. 00:00, 00:15, 00:30,
- 00:45, 1:00, 1:15, 1:30, 1:45).The function can handing this from 2015 -
- 2021; additional lines required for other years.
+ 00:45, 1:00, 1:15, 1:30, 1:45).The function is hard-coded 2015 - 2021.
 
  If for some reason, there is an ODD number of duplicates, the function might
  break.

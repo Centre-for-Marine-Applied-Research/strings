@@ -35,14 +35,14 @@
 #'  (character, must include "aquaMeasure-xxxxxx"), \code{VARIABLE} (character,
 #'  must include "Temperature" and "Dissolved Oxygen"), and \code{VALUE}
 #'  (numeric). Temperature values must be in degrees Celsius, and Dissolved
-#'  Oxygen values must be in \% saturation. Other columns wil be ignored.
+#'  Oxygen values must be in \% saturation. Other columns will be ignored.
 #'@param pressure Total pressure (water pressure + air pressure) in atm on the
-#'  DO sensor. See section for how to determine an appropriate value.
+#'  DO sensor. See Details section for how to determine an appropriate value.
 #'@return Returns \code{dat.tidy} with additional observations in the
 #'  \code{VARIABLE} column for "DO_concentration" and the corresponding value in
 #'  the \code{VALUE} column.
 #'@family calculate
-#'@author Danielle Dempsey
+#'@author Danielle Dempsey, Nicole Torrie
 #'@importFrom tidyr pivot_wider pivot_longer separate
 #'@import dplyr
 #'@export

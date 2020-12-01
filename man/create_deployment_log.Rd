@@ -6,31 +6,38 @@
 \usage{
 create_deployment_log(
   path.tracking.sheet,
+  temp.sheet,
   path.export,
   station,
   deployment.date
 )
 }
 \arguments{
-\item{path.tracking.sheet}{Path to where "2020-08-10 - NSDFA_Tracking.xlsx" is
-saved.}
+\item{path.tracking.sheet}{Full path to the NSDFA tracking sheet (including
+the file name and extension). This must be a .xlsx file.}
+
+\item{temp.sheet}{Name of the tab with the temperature data (in "").}
 
 \item{path.export}{Path to the Log folder.}
 
-\item{station}{Station name}
+\item{station}{Station name.}
 
 \item{deployment.date}{Date of deployment as a character string in the format
-"\%Y-\%m-\%d"}
+"Y-m-d"}
 }
 \value{
-Fill this out
+Returns deployment log in .csv format.
 }
 \description{
 Writes deployment log from the NSDFA tracking sheet
 }
 \details{
-I tried to match Recv_Method from the tracking sheet with Mount_Type
- in the Log, but it doesn't match existing logs.
+Imports the NSDFA tracking sheet, filters for the station and date of
+ interest, re-formats into the deployment log format, and exports to the Log
+ folder.
+
+ DD: I tried to match Recv_Method from the tracking sheet with Mount_Type in
+ the Log, but it doesn't match existing logs.
 }
 \author{
 Danielle Dempsey

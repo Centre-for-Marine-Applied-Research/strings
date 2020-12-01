@@ -62,7 +62,7 @@ object. Default is the maximum value in the \code{TIMESTAMP} column.}
 \item{alpha.points}{Value indicating the transparency of the points. 0 is most
 transparent; 1 is opaque.}
 
-\item{legend.name}{Name for the legend. Must be a character strings. Default
+\item{legend.name}{Name for the legend. Must be a character strings Default
 is \code{legend.name = "Depth (m)"}.}
 
 \item{legend.position}{Position for the legend. Passed to \code{ggpubr}.

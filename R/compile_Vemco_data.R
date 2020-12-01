@@ -15,6 +15,7 @@
 #'  Otherwise, the function will stop with an error message.
 #'
 #'@inheritParams compile_HOBO_data
+#'@param area.name Area where the sensor was deployed.
 #'@param path.vemco File path to the Vemco folder. This folder should have one
 #'  .csv or .xlsx file that was extracted using Vue software. Other file types
 #'  in the folder will be ignored.

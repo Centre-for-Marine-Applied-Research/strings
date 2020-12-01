@@ -12,10 +12,11 @@ read_deployment_log(path.log)
 \value{
 Returns a list with 5 elements. \code{deployment.dates} is a dataframe
  with two columns: \code{start.date} (the date of deployment) and
- \code{end.date} (date of retrieval). area.info is a dataframe with five
- columns: waterbody, latitude, longitude, station, and lease. HOBO, aM, and
- vemco are each a dataframe with two columns: SENSOR (serial number) and the
- corresponding DEPTH (depth of deployment in m).
+ \code{end.date} (date of retrieval). \code{area.info} is a dataframe with
+ five columns: \code{waterbody}, \code{latitude}, \code{longitude},
+ \code{station}, and \code{lease}. \code{HOBO}, \code{aM}, and \code{vemco}
+ are each a dataframe with two columns: \code{SENSOR} (serial number) and the
+ corresponding \code{DEPTH} (depth of deployment in m).
 }
 \description{
 Extract information from deployment log
@@ -24,15 +25,28 @@ Extract information from deployment log
 The log must be saved in .csv, .xlsx or .xls format, and must include
  the following columns:
 
- \code{Deployment_Waterbody} (waterbody where string was deployed),
- \code{Location_Description} (the station name), \code{Lease#} If located on
- an aquaculture site, the lease number (NA otherwise), \code{Deployment} (the
- deployment date, in the order "Ymd"), \code{Retrieval} (the retrieval date,
- in the order "Ymd"), \code{Logger_Latitude} (the latitude at which the
- string was deployed), \code{Logger_Longitude} (the longitude at which the
- string was deployed), \code{Logger_Model} (the type of sensor; see below for
- options), \code{Serial#} (the sensor serial number), and \code{Sensor_Depth}
- (depth at which the sensor was deployed). All other columns will be ignored.
+ \code{Deployment_Waterbody}: waterbody where string was deployed
+
+ \code{Location_Description}: the station name
+
+ \code{Lease#}: If located on an aquaculture site, the lease number (NA
+ otherwise)
+
+ \code{Deployment}: The deployment date, in the order "Ymd"
+
+ \code{Retrieval}: The retrieval date, in the order "Ymd"
+
+ \code{Logger_Latitude}: The latitude at which the string was deployed
+
+ \code{Logger_Longitude} The longitude at which the string was deployed
+
+ \code{Logger_Model} The type of sensor; see below for options
+
+ \code{Serial#} The sensor serial number
+
+ \code{Sensor_Depth}: Depth at which the sensor was deployed
+
+ All other columns will be ignored.
 
  Entries in the \code{Logger_Model} column can be "HOBO Pro V2", "TidbiT
  MX2303", "TidbiT MX2203"  "aquaMeasure DOT", "aquaMeasure SAL", "aquaMeasure

@@ -2,9 +2,11 @@
 #'  of the data
 #'@details If the timespan in the \code{TIMESTAMP} column of \code{dat.tidy} is
 #'  less than or equal to 60 days, the major and minor breaks will be every 2
-#'  weeks; if time span is greater than 60 days but less than or equal to 120
+#'  weeks; if time span is greater than 60 days and less than or equal to 120
 #'  days, the major and minor breaks will be every month; if time span is
-#'  greater than 120 days, the major breaks will be 2 months and the minor
+#'  greater than 120 days and less than or equal to 240 days, the major breaks
+#'  will be 2 months and the minor breaks will be 1 month; if the time span is
+#'  greater than 240 days, the major breaks will be 4 months and the minor
 #'  breaks will be 1 month.
 #'@param dat.tidy Data to be plotted, in tidy format, as returned by the
 #'  function \code{convert_to_tidydata()}. Must include the column

@@ -12,10 +12,10 @@ calculate_DO_concentration(dat.tidy, pressure)
 (character, must include "aquaMeasure-xxxxxx"), \code{VARIABLE} (character,
 must include "Temperature" and "Dissolved Oxygen"), and \code{VALUE}
 (numeric). Temperature values must be in degrees Celsius, and Dissolved
-Oxygen values must be in \% saturation. Other columns wil be ignored.}
+Oxygen values must be in \% saturation. Other columns will be ignored.}
 
 \item{pressure}{Total pressure (water pressure + air pressure) in atm on the
-DO sensor. See section for how to determine an appropriate value.}
+DO sensor. See Details section for how to determine an appropriate value.}
 }
 \value{
 Returns \code{dat.tidy} with additional observations in the
@@ -60,6 +60,6 @@ Other calculate:
 \code{\link{calculate_degree_days}()}
 }
 \author{
-Danielle Dempsey
+Danielle Dempsey, Nicole Torrie
 }
 \concept{calculate}

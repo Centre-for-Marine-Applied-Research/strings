@@ -12,9 +12,8 @@ convert_depth_to_ordered_factor(dat.tidy)
 (factor, character, or numeric).}
 }
 \value{
-Returns dat.tidy, with the DEPTH column converted to an ordered
- factor. The smallest value will be assigned to the first level, the second
- smallest value will be assigned to the second level, and so on.
+Returns \code{dat.tidy}, with the \code{DEPTH} column converted to an
+ ordered factor.
 }
 \description{
 This function simplifies converting the DEPTH column from class
@@ -25,14 +24,14 @@ This function simplifies converting the DEPTH column from class
 To use the function \code{plot_variables_at_depth()}, \code{DEPTH}
  must be a factor because \code{DEPTH} is mapped to a discrete color scale.
  For the legend to display correctly (e.g. depths arranged from shallow to
- deep), \code{DEPTH} must be an ordered factor.
+ deep), \code{DEPTH} must be an \emph{ordered} factor.
 
  The \code{DEPTH} column may be values that can be coerced to class
  \code{numeric}, qualitative descriptors, or a combination of both. A
  different level will be assigned to each of the unique values of
  \code{DEPTH}. This could cause some confusion when \code{DEPTH} includes
- numeric and qualitative values, for example because the level for "Surface"
- will not the same as the level for "2 m").
+ numeric and qualitative values, for example because the level (colour) for
+ "Surface" will not the same as the level for "2 m").
 
  Qualitative \code{DEPTH} values will be standardized to "Surface",
  "Sub-surface", "Middle", and "Bottom". Accepted qualitative \code{DEPTH}
@@ -40,6 +39,12 @@ To use the function \code{plot_variables_at_depth()}, \code{DEPTH}
  "Sub-Surface", Sub-surface", "sub surface", "sub-surface", "Sub", "sub",
  "Surface", and "surface". Other values will cause the function to stop with
  an error message.
+
+ For numeric depths: the smallest value is assigned to the first level, the
+ second smallest value is assigned to the second level, and so on.
+
+ For qualitative depths: the assigned order is "Surface" < "Sub-surface" <
+ "Middle" < "Bottom".
 }
 \seealso{
 Other format: 

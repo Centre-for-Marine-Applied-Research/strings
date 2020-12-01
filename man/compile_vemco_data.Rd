@@ -18,7 +18,7 @@ compile_vemco_data(
 .csv or .xlsx file that was extracted using Vue software. Other file types
 in the folder will be ignored.}
 
-\item{area.name}{Area where the sensor(s) was deployed.}
+\item{area.name}{Area where the sensor was deployed.}
 
 \item{depth.vemco}{Character string indicating the depth at which the Vemco
 was deployed, in the format "10m".}

@@ -1,16 +1,15 @@
 #'@title Compiles HOBO, aquaMeasure, and Vemco data from a single deployment
 #'@details Calls \code{compile_HOBO_data()}, \code{compile_aquaMeasure_data()}
-#'  and \code{compile_vemco_data()} and joins the results into a single
+#'  and \code{compile_vemco_data()} and joins the results into a single wide
 #'  dataframe.
 #'
 #'  HOBO data must be in a folder named Hobo, aquaMeasure data must be in a
 #'  folder named aquaMeasure, and Vemco data must be in a folder name Vemco. The
 #'  Hobo, aquaMeasure, and Vemco folders must be in the same folder.
 #'
-#'  If one type of sensor was not included in the deployment, set the
-#'  argument related to that sensor to \code{NULL} (the default). For
-#'  example, if there is no aquaMeaure data for the deployment, set
-#'  \code{serial.table.aM = NULL}
+#'  If one type of sensor was not included in the deployment, set the argument
+#'  related to that sensor to \code{NULL} (the default). For example, if there
+#'  is no aquaMeaure data for the deployment, set \code{serial.table.aM = NULL}
 #'
 #'@inheritParams compile_HOBO_data
 #'@inheritParams compile_aquaMeasure_data

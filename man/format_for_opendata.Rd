@@ -8,9 +8,10 @@ format_for_opendata(dat.tidy, location.info)
 }
 \arguments{
 \item{dat.tidy}{Data from a single deployment in tidy format, as returned by
-\code{convert_to_tidydata()}. Must include four columns: \code{TIMESTAMP}
-(POSIXct), \code{VARIABLE} (character), \code{DEPTH} (ordered factor), and
-\code{VALUE} (numeric).}
+\code{convert_to_tidydata()}. Must include six columns:
+\code{DEPLOYMENT_PERIOD} (character), \code{TIMESTAMP} (POSIXct),
+\code{SENSOR} (character), \code{DEPTH} (character or ordered factor),
+\code{VARIABLE} (character), \code{VALUE} (numeric).}
 
 \item{location.info}{Dataframe of information about the deployment location.
 One observation of 5 columns: \code{county}, \code{waterbody},

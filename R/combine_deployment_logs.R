@@ -1,4 +1,4 @@
-#'@title Combines deployment logs from a station to make deployment history file
+#'@title Combines logs from a station to make deployment history file
 #'@details Imports the log from each deployment folder, binds them together, and
 #'  re-formats into the deployment history file. Logs can be in .xls, .xlsx, or
 #'  .csv format.

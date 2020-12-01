@@ -9,7 +9,7 @@ name_compiled_data(area.name, deployment.start, vars)
 \arguments{
 \item{area.name}{Area where the sensor(s) was deployed.}
 
-\item{deployment.start}{start date of deployment}
+\item{deployment.start}{Start date of deployment}
 
 \item{vars}{The variables included in the data file, e.g. \code{vars =
 c("Temperature", "Dissolved Oxygen")}.}

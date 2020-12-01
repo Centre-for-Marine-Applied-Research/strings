@@ -2,7 +2,7 @@
 % Please edit documentation in R/combine_deployment_logs.R
 \name{combine_deployment_logs}
 \alias{combine_deployment_logs}
-\title{Combines deployment logs from a station to make deployment history file}
+\title{Combines logs from a station to make deployment history file}
 \usage{
 combine_deployment_logs(path)
 }
@@ -14,7 +14,7 @@ Exports the deployment history file to the station folder, in .csv
  format.
 }
 \description{
-Combines deployment logs from a station to make deployment history file
+Combines logs from a station to make deployment history file
 }
 \details{
 Imports the log from each deployment folder, binds them together, and
