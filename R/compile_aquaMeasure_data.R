@@ -7,7 +7,9 @@
 #'  Rows with \code{undefined} and \code{... (time not set)} values in the
 #'  \code{Timestamp(UTC)} column are filtered out.
 #'
-#'  Negative Dissolved Oxygen values are replaced with \code{NA}.
+#'  Negative Dissolved Oxygen values are filtered out of the compiled data.
+#'
+#'  "ERR" values are filtered out of the compiled data.
 #'
 #'  All columns in are imported as characters to ensure the timestamp is parsed
 #'  correctly. Timestamp must be saved in excel as a number or a character in
@@ -16,7 +18,7 @@
 #'
 #'  There still may be parsing errors because there are not entries in every
 #'  column. This should not affect the data compilation. To check, save the
-#'  spreadsheet with a new name new, delete the column causing the error (likley
+#'  spreadsheet with a new name new, delete the column causing the error (likely
 #'  the "Text" column), re-run the function, and verify that there is no parsing
 #'  error.
 #'
@@ -178,12 +180,15 @@ compile_aquaMeasure_data <- function(path.aM,
 
       aM.j <- dat.i %>%
         select(TIMESTAMP, `Record Type`, all_of(var.j)) %>%
-        filter(`Record Type` == var.j) %>%
-        rename(PLACEHOLDER = 3)
+        rename(PLACEHOLDER = 3) %>%
+        # filter out "ERR" values
+        filter(`Record Type` == var.j, PLACEHOLDER != "ERR")
+
 
       if(nrow(aM.j) > 0) {
 
         aM.j <- aM.j %>%
+          filter(PLACEHOLDER != "ERR") %>%
           mutate(INDEX = as.character(c(1:n())),
                  PLACEHOLDER = round(as.numeric(PLACEHOLDER), digits = 3))
 
