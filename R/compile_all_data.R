@@ -70,7 +70,7 @@ compile_all_data <- function(path,
                                    area.name = area.name,
                                    serial.table.aM = serial.table.aM,
                                    deployment.range = deployment.range,
-                                   trim = TRUE)
+                                   trim = trim)
 
     ALL <- full_join(ALL, aM, by = "INDEX")
   }
@@ -82,7 +82,7 @@ compile_all_data <- function(path,
                                 area.name = area.name,
                                 depth.vemco = depth.vemco,
                                 deployment.range = deployment.range,
-                                trim = TRUE)
+                                trim = trim)
 
     ALL <- full_join(ALL, vemco, by = "INDEX")
   }
