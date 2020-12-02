@@ -7,9 +7,12 @@
 #'  Rows with \code{undefined} and \code{... (time not set)} values in the
 #'  \code{Timestamp(UTC)} column are filtered out.
 #'
-#'  Negative Dissolved Oxygen values are filtered out of the compiled data.
+#'  Negative Dissolved Oxygen values are converted to \code{NA}.
 #'
-#'  "ERR" values are filtered out of the compiled data.
+#'  "ERR" values are converted to \code{NA}.
+#'
+#'  A warning message is printed if there are more than 1000 \code{NA} values
+#'  for a given variable.
 #'
 #'  All columns in are imported as characters to ensure the timestamp is parsed
 #'  correctly. Timestamp must be saved in excel as a number or a character in
@@ -181,18 +184,24 @@ compile_aquaMeasure_data <- function(path.aM,
       aM.j <- dat.i %>%
         select(TIMESTAMP, `Record Type`, all_of(var.j)) %>%
         rename(PLACEHOLDER = 3) %>%
-        # filter out "ERR" values
-        filter(`Record Type` == var.j, PLACEHOLDER != "ERR")
+        filter(`Record Type` == var.j)
 
 
       if(nrow(aM.j) > 0) {
 
         aM.j <- aM.j %>%
-          filter(PLACEHOLDER != "ERR") %>%
-          mutate(INDEX = as.character(c(1:n())),
+          mutate(INDEX = as.character(c(1:n()))) %>%
+          mutate(PLACEHOLDER = na_if(PLACEHOLDER, "ERR"),
                  PLACEHOLDER = round(as.numeric(PLACEHOLDER), digits = 3))
 
-        if(var.j == "Dissolved Oxygen") aM.j <- aM.j %>% filter(PLACEHOLDER > 0)
+        if(var.j == "Dissolved Oxygen") {
+          aM.j <- aM.j %>%
+            mutate(PLACEHOLDER = if_else(PLACEHOLDER < 0, NA_real_, PLACEHOLDER))
+        }
+
+        NA.j <- sum(is.na(aM.j$PLACEHOLDER))
+
+        if(NA.j > 1000) warning(paste(NA.j, "values in", file.i, "for variable", var.j, "are NA"))
 
         aM.j <- aM.j %>%
           transmute(INDEX,

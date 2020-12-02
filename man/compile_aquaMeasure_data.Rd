@@ -62,9 +62,12 @@ The raw aquaMeasure data must be saved in a folder named aquaMeasure
  Rows with \code{undefined} and \code{... (time not set)} values in the
  \code{Timestamp(UTC)} column are filtered out.
 
- Negative Dissolved Oxygen values are filtered out of the compiled data.
+ Negative Dissolved Oxygen values are converted to \code{NA}.
 
- "ERR" values are filtered out of the compiled data.
+ "ERR" values are converted to \code{NA}.
+
+ A warning message is printed if there are more than 1000 \code{NA} values
+ for a given variable.
 
  All columns in are imported as characters to ensure the timestamp is parsed
  correctly. Timestamp must be saved in excel as a number or a character in
