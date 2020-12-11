@@ -20,26 +20,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-
-```{css}
-# pre code, pre, code {
-#   white-space: pre !important;
-#   overflow-x: scroll !important;
-#   word-break: keep-all !important;
-#   word-wrap: initial !important;
-# }
-```
-
-```{css, echo=FALSE}
-#re, code {white-space:pre !important; overflow-x:auto}
-```
-
-
 ```{r set-options, echo=FALSE, cache=FALSE}
 options(width=300)
 ```
-
-
 
 ```{r setup}
 library(strings)
@@ -47,37 +30,33 @@ library(strings)
 
 
 ## 1. **PURPOSE** 
-`strings` is an R package developed to help users compile, format, calculate, and visualise oceanographic data collected by the Centre for Marine Applied REsearch's (CMAR) Coastal Monitoring Program (CMP). The package can process temperature, dissolved oxygen, and salinity data measured by HOBO Pro V2, TidBiT, aquaMeasure DOT, aquaMeasure SAL, and/or VR2AR sensors from a single sensor string deployment.
+`strings` is an R package developed to help users compile, format, calculate, and visualize oceanographic data collected by the Centre for Marine Applied REsearch's (CMAR) Coastal Monitoring Program. The package can process temperature, dissolved oxygen, and salinity data measured by HOBO Pro V2, TidBiT, aquaMeasure DOT, aquaMeasure SAL, and/or VR2AR sensors from a single sensor string deployment.
 
-The purpose of this vignette is to provide detailed instruction on how to compile data from a deployment into a single spreadsheet, assuming the data is structured as described in [SOP009](file:///C:/Users/Danielle%20Dempsey/Desktop/RProjects/strings/vignettes/SOP_009.html). Section 3.1 provides a general overview of the `compile_***_data()` family of functions. Section 3.2 is CMAR-specific, and shows how to compile CMP data using a template.
-
-See [SOP009](file:///C:/Users/Danielle%20Dempsey/Desktop/RProjects/strings/vignettes/SOP_009.html) for detailed description of the folder structure required to compile data using the `strings` package and SOP011 (vignette name) on how to calculate other parameters.
-
+The purpose of this vignette is to provide detailed instruction on how to compile data from a deployment into a single spreadsheet, assuming the data is structured as described in [SOP009](file:///C:/Users/Danielle%20Dempsey/Desktop/RProjects/strings/vignettes/SOP_009.html). Section 3.1 provides a general overview of the `compile_*_data()` family of functions. Section 3.2 is CMAR-specific, and shows how to compile CMP data using a template.
 
 ## 2. **SCOPE/PRINCIPAL** 
 
-  1. `compile_***_data()` family of functions
+  1. `compile_*_data()` family of functions
         * Individual `compile` functions
         * `compile` family wrapper function
-  1. CMAR Workflow: `Compile_Template.R`
+  1. CMAR work flow: `Compile_Template.R`
 
 ## 3. **PROCEDURE**
 
 
-### 3.1 **The `compile_***_data()` family of functions**
+### 3.1 **The `compile_*_data()` family of functions**
 
 #### 3.1.1 Individual `compile` functions
 
-`strings` provides a separate `compile_***_data()` function for each type of sensor:
+`strings` provides a separate `compile_*_data()` function for each type of sensor:
 
 * `compile_aquaMeasure_data()`: compiles data in the aquaMeasure folder
 * `compile_HOBO_data()`: compiles data in the Hobo folder (Hobo or TidBiT data)
 * `compile_vemco_data()`: compiles data in the Vemco folder
 
-These functions are useful if you only want to compile data from one type of sensor. They compile all of the data in the corresponding folder into a single dataframe, with the option to export as a .csv file. The data is compiled in a "wide" format, with metadata in the first four rows indicating the deployment period, the sensor serial number, the variable and depth of the sensor, and the timezone of the timestamps. The first column is an index column, starting at -4 to account for the metadata rows. The remaining columns alternate between timestamp (in the format "Y-m-d H:M:S") and variable value (rounded to three decimal places). Note that because the sensors can be initialized at different times, values in a single row do not necessarily correspond to the same timestamp. 
+These functions are useful if you only want to compile data from one type of sensor. They compile all of the data in the corresponding folder into a single dataframe, with the option to export as a .csv file. The data is compiled in a "wide" format, with metadata in the first four rows indicating the deployment period, the sensor serial number, the variable and depth of the sensor, and the timezone of the timestamps. The first column is an index column, starting at -4 to account for the metadata rows. The remaining columns alternate between timestamp (in the format "Y-m-d H:M:S") and variable value (rounded to three decimal places). Note that because the sensors can be initialized at different times and record on different intervals, values in a single row do not necessarily correspond to the same timestamp. 
 
 See the help files for the arguments required to run these functions.
-
 
 ```{r}
 # Data compiled from the three Hobo sensors deployed at Birchy Head on May 2, 2019:
@@ -85,15 +64,14 @@ head(hobo_data, n = 10)
 
 ```
 
-This format is convenient for human readers, who can quickly scan the metadata to determine how many of this sensor type was deployed, the depths of deployment, etc. However, to include include the metadata, all values were converted to class character. To manipulate the data, the values should be converted to the appropriate class (e.g., POSIXct for the timestamps and
-numeric for variable values), and the dataframe should be converted to a "long" format. This can be done using the `convert_to_tidydata()` function, which returns a dataframe with the following columns:
+This format is convenient for human readers, who can quickly scan the metadata to determine the number of sensors deployed, the depths of deployment, etc. However, this format is less convenient for analysis (e.g., to include include the metadata, all values were converted to class character). Prior to analysis, the dataframe should be converted to a "long" ("tidy") format, and the values should be converted to the appropriate class (e.g., POSIXct for the timestamps and numeric for variable values). This can be done using the `convert_to_tidydata()` function, which returns a dataframe with the following columns:
 
-* DEPLOYMENT_RANGE: The deployment and retrieval dates.
-* SENSOR: The sensor that recorded the measurement.
-* TIMESTAMP: The timestamp of the measurement.
-* VARIABLE: The parameter measured (Temperature, Dissolved Oxygen, or Salinity).
-* DEPTH: The depth of the sensor.
-* VALUE: The value of the measurement.
+* `DEPLOYMENT_RANGE`: The deployment and retrieval dates (character)
+* `SENSOR`: The sensor that recorded the measurement (character)
+* `TIMESTAMP`: The timestamp of the measurement (POSIXct)
+* `VARIABLE`: The parameter measured (Temperature, Dissolved Oxygen, or Salinity) (character)
+* `DEPTH`: The depth of the sensor (ordered factor)
+* `VALUE:` The value of the measurement (numeric)
 
 ```{r}
 
@@ -112,7 +90,7 @@ head(hobo_tidy)
 
 See the help file for more detail on this function, including the arguments required.
 
-As with the other `compile` functions, `compile_all_data` returns the data in a wide format, with metadata in the first four rows. The columns alternate between timestamp (in the format "Y-m-d H:M:S") and variable value (rounded to three decimal places). Note that because the sensors can be initialized at different times and because the sensors record on different time intervals, values in a single row do not necessarily correspond to the same timestamp.  
+As with the other `compile` functions, `compile_all_data` returns the data in a wide format, with metadata in the first four rows. The columns alternate between timestamp (in the format "Y-m-d H:M:S") and variable value (rounded to three decimal places). Note that because the sensors can be initialized at different times and record on different time intervals, values in a single row do not necessarily correspond to the same timestamp.  
 
 ```{r}
 # Data compiled from the all sensors deployed at Birchy Head on May 2, 2019:
@@ -123,7 +101,6 @@ head(wide_data, n = 10)
 As described above, the data will be easier to work with after it has been converted to a long format:
 
 ```{r}
-
 ALL_tidy <- convert_to_tidydata(wide_data) 
 
 head(ALL_tidy)
@@ -132,15 +109,16 @@ head(ALL_tidy)
 
 ### 3.2 CMAR Workflow: `Compile_Template.R`
 
-Before compiling:
-    1. Make sure your data and folder structure is as described in Section 3.1 of [SOP009](file:///C:/Users/Danielle%20Dempsey/Desktop/RProjects/strings/vignettes/SOP_009.html).
-    1. Fill out the STRING TRACKING spreadsheet to make sure all of the data is in the appropriate folders. You may need to add a new row for the deployment you are compiling.
+Compiling data for a single deployment is straightforward using the `Compile_Template.R` saved in the "Y:/Coastal Monitoring Program/Strings Files/Templates" folder. You should only need to change one line, but we will walk through each of the sections here.
 
-Compiling data for a single deployment is straightforward using the `Compile_Template.R` saved in the Data_Strings folder. You should only need to change one line, but we will walk through each of the sections here.
+Before compiling:
+    1. Make sure the folder structure is as described in Section 3.1 of [SOP009](file:///C:/Users/Danielle%20Dempsey/Desktop/RProjects/strings/vignettes/SOP_009.html).
+    1. Fill out the [STRING TRACKING](https://docs.google.com/spreadsheets/d/1a3QvJsvwr4dd64g3jxgewRtfutIpsKjT2yrMEAoxA3I/edit#gid=0) spreadsheet to make sure all of the data is in the appropriate folders. You may need to add a new row for the deployment you are compiling.
+
 
 Open `Compile_Template.R`.
 
-Save the file into the deployment folder with the name structure: “Compile_Deployment_Location_YYYY-MM-DD.” 
+Save the file into the deployment folder with the name structure: “Compile_Deployment_Location_yyyy-mm-dd.R” 
 
 ![Figure 1. Save `Compile_Template.R` into the deployment folder of the string you are processing and re-name.](SOP010_figure1.png)
 
@@ -152,7 +130,6 @@ At the top of `Compile_Template.R`, fill in the current date, your name, the ver
 # strings VERSION: 1.1.0
 # NOTES:
 ```
-
 
 The next comments describe the sections of the script:
 ```{r}
@@ -170,7 +147,6 @@ The next comments describe the sections of the script:
 #   Import data and visualize
 ```
 
-
 Load the necessary libraries
 ```{r}
 # libraries
@@ -179,12 +155,10 @@ library(readr)   # to write csv file
 library(strings) # to compile data
 ```
 
-
 **Section 1:**
 Update the path to the deployment folder you are processing. This should be the only line you need to change.
 
 ```{r, eval=FALSE}
-
 ### Section 1: Define the path
 
 # path to Log, Hobo, aquaMeasure, and Vemco folders
@@ -192,9 +166,8 @@ path <- file.path("Y:/Coastal Monitoring Program/Data_Strings/Birchy Head/Birchy
 
 ```
 
-
 **Section 2:**
-Run this section to extract information about the deployment from the deployment log. This information will be used as arguments in the `compile_all_data()` function.
+Run this section to extract information from the deployment log. This information will be used as arguments in the `compile_all_data()` function.
 
 ```{r, eval=FALSE}
 # SECTION 2: Extract deployment information from the log ------------------
@@ -226,7 +199,7 @@ Run this section to compile the data. A note will be printed to the console when
 
 Parsing errors may occur from end-of line rows in the Hobo files or the Text column in the aquaMeasure files. These errors can typically be ignored. You can delete the offending rows or columns (these should not include useful data) to make sure they were the source of the error.
 
-The function will automatically trim data to deployment and retrieval dates included in the log (supplied in the `deployment.,range` argument), in case sensors were turned on prior to deployment date or left running after retrieval.   
+The function will automatically trim data to deployment and retrieval dates included in the log (supplied in the `deployment.range` argument).   
 
 ```{r, eval=FALSE}
 #Compile data from a single deployment
@@ -249,13 +222,12 @@ file_name <- name_compiled_data(area.name = area,
 write_csv(ALL_data, paste(path, "/", file_name, "_raw.csv", sep = ""), col_names = FALSE)
 ```
 
-The naming convention for the csv is Station Name_Deployment-Date_Variable_raw, where "raw" indicates that the data has not been trimmed. The csv will be saved to the deployment folder (Figure 2).
+The naming convention for the csv is Station Name_Deployment-Date_Variable_raw, where "raw" indicates that the data has not been trimmed. The csv file will be saved to the deployment folder (Fig. 2).
 
 ![Figure 2. The csv of compiled data will be saved to the deployment folder](SOP010_figure2.png)
 
 **Section 4:**
-This section is meant as a check to ensure the data compiled properly (don't worry if the figure is not pretty). Compare the variables and depths in the figure to those recorded in the log. You may need to modify some of the arguments in the `plot_variables_at_depth()` function, for example `vars.to.plot` and `ylab.units` will need to be updated if the only variable in the data is temperature, or if salinity is also included. `color.palette` will need to be updated for deployments with sensors at more than six depths. See the help files for more detail.
-
+This section is meant as a check to ensure the data compiled properly (don't worry if the figure is not pretty). Compare the variables and depths in the figure to those recorded in the log. You may need to modify some of the arguments in the `plot_variables_at_depth()` function, for example `vars.to.plot` and `ylab.units` will need to be updated if the only variable in the data is temperature. `color.palette` will need to be updated for deployments with sensors at more than six depths. See the help files for more detail.
 
 ```{r, echo=FALSE}
 ALL_raw <- wide_data[, c(1:4, 7:20)] 
@@ -281,9 +253,11 @@ plot_variables_at_depth(ALL_raw_tidy,
 
 ```
 
-You will get a note from ggplot if any dissolved oxygen values are >130 % (the upper limit on the y-axis of the plot.) These values will be removed when the data is trimmed (see SOP011).
+You will get a note from ggplot if any dissolved oxygen values are >130 % or < 60 % (the limits on the y-axis of the plot). These values will be removed if necessary when the data is trimmed (see SOP011).
 
 Note the outliers at the beginning and end of the figure. These values were recorded before and after the string was deployed and should be trimmed off prior to data analysis. This is the subject of the next vignette.
+
+Mark on the [STRING TRACKING](https://docs.google.com/spreadsheets/d/1a3QvJsvwr4dd64g3jxgewRtfutIpsKjT2yrMEAoxA3I/edit#gid=0) sheet that the deployment has been compiled (you may need to ask Danielle or Nicole for access).
 
 
 

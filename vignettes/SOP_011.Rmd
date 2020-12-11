@@ -11,7 +11,6 @@ vignette: >
 ---
 
 ![](Logo.jpg){width=50%}
- 
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -24,8 +23,6 @@ knitr::opts_chunk$set(
 options(width=300)
 ```
 
-
-
 ```{r setup, message=FALSE}
 library(strings)
 library(dplyr)
@@ -33,31 +30,30 @@ library(dplyr)
 
 
 ## 1. **PURPOSE** 
-`strings` is an R package developed to help users compile, format, calculate, and visualise oceanographic data collected by the Centre for Marine Applied REsearch's (CMAR) Coastal Monitoring Program (CMP). The package can process temperature, dissolved oxygen, and salinity data measured by HOBO Pro V2, TidBiT, aquaMeasure DOT, aquaMeasure SAL, and/or VR2AR sensors from a single sensor string deployment.
+`strings` is an R package developed to help users compile, format, calculate, and visualize oceanographic data collected by the Centre for Marine Applied REsearch's (CMAR) Coastal Monitoring Program. The package can process temperature, dissolved oxygen, and salinity data measured by HOBO Pro V2, TidBiT, aquaMeasure DOT, aquaMeasure SAL, and/or VR2AR sensors from a single sensor string deployment.
 
-The purpose of this vignette is to provide detailed instruction on how to trim compiled CMP data following CMAR's workflow. The trimmed data is exported to the deployment folder and also formatted and exported to the appropriate county folder for transfer to the Open Data Portal. 
+The purpose of this vignette is to provide detailed instruction on how to trim compiled Coastal Monitoring Program data following CMAR's workflow. The trimmed data is exported to the deployment folder and also formatted and exported to the appropriate Open Data Portal county folder.
 
 Detailed instruction on how to compile data is in [SOP010](file:///C:/Users/Danielle%20Dempsey/Desktop/RProjects/strings/vignettes/SOP_010.html). 
 
-Section 3.1 provides a general overview of the `trim_data()` function. Section 3.2 is CMAR-specific, and shows how to trim and export CMP data using a template.
+Section 3.1 provides a general overview of the `trim_data()` function. Section 3.2 is CMAR-specific, and shows how to trim and export Coastal Monitoring Program data using a template.
  
 ## 2. **SCOPE/PRINCIPAL** 
 
   1. `trim_data()` function
-  1. CMAR Workflow: `Trim_Template_OpenData.R`
+  1. CMAR work flow: `Trim_Template.R`
 
 ## 3. **PROCEDURE**
-
 
 ### 3.1 **The `trim_data()` function**
 
 The `trim_data()` function trims the compiled data (in long/tidy format) to specified dates by filtering on the `TIMESTAMP` column. The function will only trim one variable at a time, so this function works best in a pipeline. You must also specify which sensors to trim. 
 
-See  `?trim_data` for more detail on function arguments.
+See `?trim_data` for more detail on function arguments.
 
 
+Start and end times of the raw data:
 ```{r, message=FALSE}
-# start and end times of the raw data:
 wide_data %>% 
   convert_to_tidydata() %>% 
   group_by(VARIABLE) %>% 
@@ -66,11 +62,9 @@ wide_data %>%
 ```
 
 
-```{r}
-# in this example, all variables are trimmed to the same start and end times. 
-# This does not have to be the case - you can provide different start/end times for each variable 
-# in the different sections of the pipe.
+In this example, all variables are trimmed to the same start and end times. This does not have to be the case - you can provide different start/end times for each variable in the different sections of the pipe.
 
+```{r}
 # specify the timestamp for the FIRST VALID measurement
 # (this can be copy/pasted from the _raw.csv file)
 start.timestamp <- "2019-07-12  7:48:51 PM"
@@ -91,7 +85,7 @@ sensors.sal <- c("aquaMeasure")
 # convert the wide data to long data
 dat_trim <- wide_data %>% 
   convert_to_tidydata() %>% 
-  # trim tempterature data
+  # trim temperature data
   trim_data(var.to.trim = "Temperature",
             start.datetime = start.timestamp ,
             end.datetime = last.timestamp,
@@ -109,33 +103,31 @@ dat_trim <- wide_data %>%
 
 ```
 
+Start and end times of the trimmed data:
 ```{r, message=FALSE}
-# start and end times of the trimmed data:
 dat_trim %>% 
   group_by(VARIABLE) %>% 
   summarise(MIN_TIMESTAMP = min(TIMESTAMP), MAX_TIMESTAMP = max(TIMESTAMP)) 
 
 ```
 
-
-
 An error will be printed if you try to trim a variable from a sensor that did not measure that variable.
 
 
-### 3.2 CMAR Workflow: `Trim_Template_OpenData.R`
+### 3.2 CMAR Workflow: `Trim_Template.R`
 
 Before trimming:
 * Check the STRING TRACKER to determine which deployments are a priority for sending to Open Data.
 
-Trimming data for a single deployment should be done by following `Trim_Template_OpenData.R` saved in the Data_Strings folder. This will export the trimmed data to the deployment folder and the Open Data folder. We will walk through each of the sections here.
+Trimming data for a single deployment should be done by following `Trim_Template.R` saved in the "Y:/Coastal Monitoring Program/Strings Files/Templates" folder. This will export the trimmed data to the deployment folder and the Open Data folder. We will walk through each of the sections here.
 
-Open `Trim_Template_OpenData.R` from the Data_Strings folder.
+Open `Trim_Template.R`.
 
-Save the file into the deployment folder with the name structure: “Trim_Deployment_Location_YYYY-MM-DD.” 
+Save the file into the deployment folder with the name structure: “Trim_Deployment_Location_yyyy-mm-dd.R”. 
 
-![Figure 1. Save `Trim_Template_OpenData.R` into the deployment folder of the string you are processing and re-name.](SOP011_figure1.png)
+![Figure 1. Save `Trim_Template.R` into the deployment folder of the string you are processing and re-name.](SOP011_figure1.png)
 
-At the top of `Trim_Template_OpenData.R`, fill in the current date, your name, the version of the `strings` package you are using, and any additional notes you deem necessary for future data management. 
+At the top of `Trim_Template.R`, fill in the current date, your name, the version of the `strings` package you are using, and any additional notes you deem necessary for future data management. 
 
 ```{r}
 # DATE: 2020-Sep-02
@@ -143,7 +135,6 @@ At the top of `Trim_Template_OpenData.R`, fill in the current date, your name, t
 # strings VERSION: 1.1.0
 # NOTES:
 ```
-
 
 The next comments describe the sections of the script:
 ```{r}
@@ -160,7 +151,6 @@ The next comments describe the sections of the script:
 # SECTION 4: Export for Open Data
 ```
 
-
 Load the necessary libraries
 ```{r, message=FALSE}
 # libraries
@@ -172,23 +162,22 @@ library(lubridate)     # for DO plot
 library(googlesheets4) # for county info
 ```
 
-
 **Section 1:**
-Update the `path` variable to the deployment folder you are processing. You do no need to change the `path.export` variable.
+Update the `path` variable to the deployment folder you are processing. You do not need to change the `path.export` variable.
 
 ```{r, eval=FALSE}
 
 # Section 1: Import and visualize raw data ---------------------------------------------------------------
 
 # path to the raw data file
-path <- file.path("Y:/Coastal Monitoring Program/Data_Strings/Madeline Point/Madeline Point 2019-04-25")
+path <- file.path("Y:/Coastal Monitoring Program/Data_Strings/Birchy Head/Birchy Head 2019-05-02")
 
 # path to export the trimmed and formatted data (county name pasted on below)
 path.export <- file.path("Y:/Coastal Monitoring Program/Open Data/")
 
 ```
 
-Change the file name to the name of the raw data csv file, but without the "_raw".
+Change the file name to the name of the raw data .csv file, but **without** the "_raw".
 
 ```{r}
 # Raw data ----------------------------------------------------------------
@@ -219,10 +208,9 @@ plot_variables_at_depth(dat_raw,
 
 ```
 
-
 **Section 2:**
 Determine where to trim the data for each variable. This can be an iterative process.
-Use the figure from the previous step to get a general idea of when to trim (e.g., the approximate value of the first reliable measurements), and the raw csv file to determine the timestamps of the first and last reliable measurements.
+Use the figure from the previous step to get a general idea of when to trim (e.g., the approximate value of the first reliable measurements), and the raw .csv file to determine the timestamps of the first and last reliable measurements.
 
 
 In our Birchy Head example, the first reliable temperature values are less than 5 degrees. Looking at data from one of the Hobos, we see that the temperature stabilizes around "2019-05-02  8:45:22 PM":
@@ -274,7 +262,6 @@ dat_trim <- dat_raw %>%
 
 ```
 
-
 **Section 3:**
 Use the `plot_variables_at_depth()` function to see if the outliers are removed. Modify the arguments as necessary.
 
@@ -287,10 +274,9 @@ plot_variables_at_depth(dat_trim,
 
 This looks pretty good for temperature and salinity. If there were still outliers, we would need to adjust the `start.datetime` or `end.datetime` arguments.
 
-The dissovled oxygen signal is consistent with biofouling and should be trimmed farther. See Open Data/Guysborough/Guysborough_Trim_Meeting.pptx for common dissolved oxygen signals and where to trim.
+The dissolved oxygen signal is consistent with biofouling and should be trimmed farther. 
 
 Let's adjust the `start.DO` argument, but leave the other timestamps the same.
-
 
 ```{r, fig.width = 8.5, fig.height = 6}
 # info  to trim the temperature data
@@ -356,7 +342,6 @@ write_csv(dat_trim, path = paste(path, "/", file.name, "_trimmed.csv", sep = "")
 
 **Section 4:** You should not need to change anything in this section. It formats the data for the Open Data Portal, and exports it to the appropriate county folder.
 
-
 ```{r, eval=FALSE}
 # SECTION 4: Export for Open Data ----------------------------------------------------
 
@@ -395,7 +380,7 @@ write_csv(dat_open, path = paste(path.export, "/", open.data.name, ".csv", sep =
 
 ```
 
-Make sure you indicate on the STRINGS TRACKING sheet that this deployment has been trimmed.
+Mark on the [STRING TRACKING](https://docs.google.com/spreadsheets/d/1a3QvJsvwr4dd64g3jxgewRtfutIpsKjT2yrMEAoxA3I/edit#gid=0) sheet that this deployment has been trimmed.
 
 
 
