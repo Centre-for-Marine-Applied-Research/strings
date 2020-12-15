@@ -4,6 +4,7 @@
 library(dplyr)   # for piping and data manipulation functions
 library(readr)   # to write csv file
 library(strings) # to compile data
+library(lubridate)
 
 # SECTION 1: Define the path and variables ------------------------------------------------------------------
 
@@ -51,9 +52,45 @@ ALL_data <- compile_all_data(path = path,
 
 wide_data <- ALL_data
 
-usethis::use_data(wide_data, overwrite = TRUE)
 
-write_csv(wide_data, "data-raw/wide_data.csv",  col_names = FALSE)
+# Thin out so data file is smaller ----------------------------------------
+
+metadata <- data.frame(wide_data[1:4, ])
+
+# HOBO data - measured every hour
+wide_data1 <- ALL_data[-c(1:4), 1:2] %>% na.omit() %>%
+  mutate(INDEX = c(1:n()))
+
+# aquaMeasure data - measured every 10 minutes
+wide_data2 <- ALL_data[-c(1:4), 3:6] %>% na.omit() %>%
+  filter(row_number() %% 6 == 0) %>%
+  mutate(INDEX = c(1:n()))
+
+# vemco data - measured every minute until 2019-06-13
+wide_data3 <- ALL_data[, 7:8]
+wide_data_fix <- wide_data3[-c(1:4), ] %>%
+  rename(TIMESTAMP = 1, VALUE = 2) %>%
+  mutate(TIMESTAMP = as_datetime(TIMESTAMP)) %>%
+  mutate(FILTER = if_else(TIMESTAMP < as_datetime("2019-06-13 18:00:00"), 60, 1)) %>%
+  filter(row_number() %% FILTER == 0) %>%
+  mutate(TIMESTAMP.y.y = as.character(TIMESTAMP), PLACEHOLDER.y.y = as.character(VALUE)) %>%
+  select(-TIMESTAMP, -VALUE, -FILTER) %>%
+  mutate(INDEX = c(1:n()))
+
+# join together
+wide_all <- full_join(wide_data1, wide_data2, by = "INDEX") %>%
+  full_join(wide_data_fix, by = "INDEX") %>%
+  select(-INDEX)
+
+wide_data <- rbind(metadata, wide_all)
+
+#x <- convert_to_tidydata(wide_data)
+
+#plot_variables_at_depth(x, vars.to.plot = c("Temperature", "Dissolved Oxygen"))
+
+
+
+usethis::use_data(wide_data, overwrite = TRUE)
 
 
 
