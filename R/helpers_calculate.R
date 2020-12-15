@@ -24,7 +24,7 @@ format_date_for_dd <- function(x.date, day1 = TRUE){
     x.date <- lubridate::parse_date_time(x.date, orders = parse.orders)
 
   } else {
-    stop(".start.date or .end.date is not in a format recognized by the strings package.
+    stop("start.date or end.date is not in a format recognized by the strings package.
            See help files for more information.")
   }
 
