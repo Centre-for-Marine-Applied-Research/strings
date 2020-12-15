@@ -40,17 +40,17 @@
 #'@export
 
 #' @examples
-#' data(tidydata)
+#' data(tidy_data)
 #'
 #' # degree-days averaged over all depths and the whole time series
-#' calculate_degree_days(tidydata)
+#' calculate_degree_days(tidy_data)
 #'
 #' # degree-days by DEPTH for whole time series
-#' calculate_degree_days(tidydata, DEPTH)
+#' calculate_degree_days(tidy_data, DEPTH)
 #'
 #' # degree-days by DEPTH and month from July 1 to September 30
-#' calculate_degree_days(tidydata, DEPTH, months(TIMESTAMP),
-#' start.date = "2019-06-01", end.date = "2019-09-30")
+#' calculate_degree_days(tidy_data, DEPTH, months(TIMESTAMP),
+#' start.date = "2019-07-01", end.date = "2019-09-30")
 
 calculate_degree_days <- function(dat.tidy,
                                   ...,
