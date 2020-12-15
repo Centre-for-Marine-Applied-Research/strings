@@ -55,3 +55,45 @@ get_xaxis_breaks <- function(dat.tidy){
              date.labels.format = date.labels.format)
 
 }
+
+
+
+#'@title Returns nice colour palette based on the number of unique DEPTH values
+#'@details If there are 6 or less unique values of \code{DEPTH}, returns a
+#'  discrete viridis colour palette with 6 colours (Option D). If there are more
+#'  than 6 unique values of \code{DEPTH}, returns a discrete colour palette with
+#'  the number of colours equal to the number of unique values of \code{DEPTH}.
+#'@param dat.tidy Data to be plotted, in tidy format, as returned by the
+#'  function \code{convert_to_tidydata()}. Must include the column
+#'  \code{DEPTH}.
+#'@return Returns a vector of hex colours from the viridis palette
+
+#'@family plot
+#'@author Danielle Dempsey
+#'@export
+#'
+
+set_colour_palette <- function(dat.tidy){
+
+  n.depth <- length(unique(dat.tidy$DEPTH))
+
+  if(n.depth > 6){
+    color.palette <- viridis(n.depth, option = "D", direction = -1)
+  } else{
+    color.palette <- viridis(6, option = "D", direction = -1)
+  }
+
+  color.palette
+
+}
+
+
+
+
+
+
+
+
+
+
+
