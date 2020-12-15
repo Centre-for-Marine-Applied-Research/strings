@@ -22,8 +22,8 @@ Returns a list with 5 elements. \code{deployment.dates} is a dataframe
 Extract information from deployment log
 }
 \details{
-The log must be saved in .csv, .xlsx or .xls format, and must include
- the following columns:
+The log must be saved in a folder called Log in .csv, .xlsx or .xls
+ format, and must include the following columns:
 
  \code{Deployment_Waterbody}: waterbody where string was deployed
 
@@ -63,6 +63,9 @@ The log must be saved in .csv, .xlsx or .xls format, and must include
  entry in \code{Deployment_Waterbody}, \code{Location_Description},
  \code{Deployment}, \code{Retrieval}, \code{Logger_Latitude}, or
  \code{Logger_Longitude}.
+
+ If there is more than one eligible file (csv, .xlsx or .xls) in the Log
+ folder, the function will stop with an error.
 }
 \seealso{
 Other compile: 

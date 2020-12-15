@@ -1,5 +1,5 @@
 #' Example data in wide format, as exported from compile_all_data()
-#' @format This example data is a dataframe with 28854 rows and 20 columns:
+#' @format This example data is a dataframe with 3409 rows and 8 columns:
 #'   Columns alternate between the timestamp (in the format "Y-m-d H:M:S") and
 #'   the variable value (rounded to three decimal places). Metadata at the top
 #'   of each column indicates the deployment dates, the sensor serial number,

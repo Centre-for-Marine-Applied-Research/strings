@@ -1,6 +1,6 @@
 #'@title Extract information from deployment log
-#'@details The log must be saved in .csv, .xlsx or .xls format, and must include
-#'  the following columns:
+#'@details The log must be saved in a folder called Log in .csv, .xlsx or .xls
+#'  format, and must include the following columns:
 #'
 #'  \code{Deployment_Waterbody}: waterbody where string was deployed
 #'
@@ -41,6 +41,9 @@
 #'  \code{Deployment}, \code{Retrieval}, \code{Logger_Latitude}, or
 #'  \code{Logger_Longitude}.
 #'
+#'  If there is more than one eligible file (csv, .xlsx or .xls) in the Log
+#'  folder, the function will stop with an error.
+#'
 #'@param path.log File path to the Log folder.
 #'@return Returns a list with 5 elements. \code{deployment.dates} is a dataframe
 #'  with two columns: \code{start.date} (the date of deployment) and
@@ -77,11 +80,7 @@ read_deployment_log <- function(path.log){
 
   }
 
-  # extract file extension
-  # extension <- dat.files %>%
-  #   data.frame() %>%
-  #   separate(col = 1, into = c(NA, "EXT"), sep = "\\.")
-  # extension <- extension$EXT
+  if(length(dat.files) > 1) stop("More than one file found in the Log file")
 
   file.type <- extract_file_extension(dat.files)
 

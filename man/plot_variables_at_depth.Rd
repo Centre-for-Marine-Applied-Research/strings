@@ -89,7 +89,8 @@ Exports ggplot2 object(s) of variables at depth over time
 }
 \seealso{
 Other plot: 
-\code{\link{get_xaxis_breaks}()}
+\code{\link{get_xaxis_breaks}()},
+\code{\link{set_colour_palette}()}
 }
 \author{
 Danielle Dempsey
