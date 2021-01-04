@@ -68,7 +68,7 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FA
         mutate(DEPLOYMENT_PERIOD = daterange,         # add DEPLOYMENT_PERIOD column
                SENSOR = sensor,               # Add SENSOR column
                VARIABLE = variable,           # Add VARIABLE column
-               DEPTH = factor(depth),         # Add DEPTH column (should be a factor or else the color scheme will be a gradient)
+               DEPTH = as.character(depth),         # Add DEPTH column (converted to ordered factor below)
                VALUE = as.numeric(VALUE))
     }
 
@@ -81,9 +81,9 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FA
     select(DEPLOYMENT_PERIOD, SENSOR, TIMESTAMP, VARIABLE, DEPTH, VALUE)
 
   # if DEPTH is numeric, convert DEPTH to an ORDERED factor (so 2 < 5 < 10 etc., no matter what order they appear in dat.wide)
-  if(!is.na(suppressWarnings(parse_number(as.character(var_depth[2]))))) {
+# if(!is.na(suppressWarnings(parse_number(as.character(var_depth[2]))))) {
     dat.tidy <- dat.tidy %>% convert_depth_to_ordered_factor()
-  }
+ # }
 
   # number of NAs in the TIMESTAMP and VALUE columns
   date.na <- sum(is.na(dat.tidy$TIMESTAMP))
