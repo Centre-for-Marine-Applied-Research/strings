@@ -23,7 +23,16 @@ combine_deployment_logs <- function(path) {
 
     d.i <- folders[i]                                    # path to deployment folder
 
-    file.i <- list.files(paste(d.i, "Log", sep = "/"))   # deployment log file name (including extension)
+    file.i <- list.files(paste(d.i, "Log", sep = "/"), pattern = "*xls|*xlsx|*csv")   # deployment log file name (including extension)
+
+    # remove files that start with "~"
+    if(any(substring(file.i, 1, 1) == "~")) {
+
+      message(paste("Note:", sum((substring(file.i, 1, 1)== "~")),
+                    "files on the path begin with ~ and were not imported.", sep = " "))
+      file.i <- file.i[-which(substring(file.i, 1, 1)== "~")]
+
+    }
 
     path.log.i <- paste(d.i, "Log", file.i, sep = "/")   # full path to the log, including file name
 
