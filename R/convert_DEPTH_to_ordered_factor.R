@@ -43,7 +43,8 @@ convert_depth_to_ordered_factor <- function(dat.tidy){
   # add a temporary column.
   # assign TRUE if DEPTH is a qualitative value and FALSE if DEPTH can be converted to a numeric value
   dat.tidy <- dat.tidy %>%
-    mutate(DEPTH_QUAL = if_else(is.na(suppressWarnings(as.numeric(DEPTH))), TRUE, FALSE))
+    mutate(#DEPTH_QUAL = as.character(DEPTH),
+      DEPTH_QUAL = if_else(is.na(suppressWarnings(as.numeric(DEPTH))), TRUE, FALSE))
 
   # keep only qualitative depths
   dat.qual <- dat.tidy %>%
@@ -71,6 +72,7 @@ convert_depth_to_ordered_factor <- function(dat.tidy){
 
     }
 
+
     # standardize DEPTH values and assign levels
     dat.qual <- dat.qual %>%
       mutate(DEPTH = case_when(DEPTH == "bottom" ~ "Bottom",
@@ -79,12 +81,33 @@ convert_depth_to_ordered_factor <- function(dat.tidy){
                                  DEPTH == "Sub Surface" | DEPTH == "Sub" |
                                  DEPTH == "sub"  ~ "Sub-surface",
                                DEPTH == "surface" ~ "Surface",
-                               TRUE ~ DEPTH)) %>%
-      mutate(DEPTH = factor(DEPTH)) %>%
-      mutate(DEPTH = ordered(DEPTH,
-                             levels = c( "Surface", "Sub-surface", "Middle", "Bottom"))) %>%
-      arrange(DEPTH)
+                               TRUE ~ DEPTH))
 
+    unique_depths <- unique(dat.qual$DEPTH)
+
+    if(("Surface" %in% unique_depths) & !("Sub-surface" %in% unique_depths)){
+      dat.qual <- dat.qual %>%
+        mutate(DEPTH = factor(DEPTH)) %>%
+        mutate(DEPTH = ordered(DEPTH,
+                               levels = c( "Surface", "Middle", "Bottom"))) %>%
+        arrange(DEPTH)
+    }
+
+    if(("Sub-surface" %in% unique_depths) & !("Surface" %in% unique_depths)){
+      dat.qual <- dat.qual %>%
+        mutate(DEPTH = factor(DEPTH)) %>%
+        mutate(DEPTH = ordered(DEPTH,
+                               levels = c("Sub-surface", "Middle", "Bottom"))) %>%
+        arrange(DEPTH)
+    }
+
+    if(("Sub-surface" %in% unique_depths) & ("Surface" %in% unique_depths)){
+      dat.qual <- dat.qual %>%
+        mutate(DEPTH = factor(DEPTH)) %>%
+        mutate(DEPTH = ordered(DEPTH,
+                               levels = c("Surface", "Sub-surface", "Middle", "Bottom"))) %>%
+        arrange(DEPTH)
+    }
   }
 
   # if there is numeric DEPTH data, assign levels
