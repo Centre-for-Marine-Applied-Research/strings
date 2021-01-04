@@ -21,7 +21,7 @@ start.temp <- "2019-05-30  7:34:00 PM"
 end.temp <- "2019-10-19  2:01:00 PM"
 
 # info to trim the DO data
-sensors.DO <- c("aquaMeasure")
+sensors.DO <- "aquaMeasure"
 start.DO <- "2019-05-30 7:34:00 PM"
 end.DO <- "2019-06-28 00:00:00 PM"
 
