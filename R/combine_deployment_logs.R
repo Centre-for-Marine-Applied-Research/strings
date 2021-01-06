@@ -19,7 +19,7 @@ combine_deployment_logs <- function(path) {
   LOG <- NULL
 
   # import the log file from each folder and bind together
-  for(i in 1:length(folders)){
+  for(i in seq_along(folders)){
 
     d.i <- folders[i]                                    # path to deployment folder
 

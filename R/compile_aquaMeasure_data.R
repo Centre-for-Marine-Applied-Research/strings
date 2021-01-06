@@ -93,7 +93,7 @@ compile_aquaMeasure_data <- function(path.aM,
 # Import data -------------------------------------------------------------
 
   # loop over each aM file
-  for(i in 1:length(dat.files)) {
+  for(i in seq_along(dat.files)) {
 
     # check whether file is .csv or .xlsx
     file.i <- dat.files[i]
@@ -177,7 +177,7 @@ compile_aquaMeasure_data <- function(path.aM,
         filter(TIMESTAMP >= start.date, TIMESTAMP <= (end.date + hours(4)))
     }
 
-    for(j in 1:length(vars.to.select)){
+    for(j in seq_along(vars.to.select)){
 
       var.j <- vars.to.select[j]
 

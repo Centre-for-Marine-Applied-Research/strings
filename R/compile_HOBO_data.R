@@ -121,7 +121,7 @@ compile_HOBO_data <- function(path.HOBO,
 
 
   # loop over each HOBO file
-  for(i in 1:length(dat.files)) {
+  for(i in seq_along(dat.files)) {
 
 # Import Data -------------------------------------------------------------
 
