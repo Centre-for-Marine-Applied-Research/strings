@@ -38,7 +38,7 @@
 #'@export
 #'
 compile_all_data <- function(path,
-                             area.name,
+                             area.name = "",
                              deployment.range,
                              trim = TRUE,
                              # hobo

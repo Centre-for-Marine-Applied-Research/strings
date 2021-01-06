@@ -89,7 +89,7 @@
 
 
 compile_HOBO_data <- function(path.HOBO,
-                              area.name,
+                              area.name = "",
                               serial.table.HOBO,
                               deployment.range,
                               trim = TRUE,

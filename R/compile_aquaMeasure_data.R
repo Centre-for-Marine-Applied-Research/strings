@@ -56,7 +56,7 @@
 
 
 compile_aquaMeasure_data <- function(path.aM,
-                                     area.name,
+                                     area.name = "",
                                      serial.table.aM,
                                      deployment.range,
                                      trim = TRUE,
