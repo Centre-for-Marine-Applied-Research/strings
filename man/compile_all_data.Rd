@@ -6,7 +6,7 @@
 \usage{
 compile_all_data(
   path,
-  area.name,
+  area.name = "",
   deployment.range,
   trim = TRUE,
   serial.table.HOBO = NULL,

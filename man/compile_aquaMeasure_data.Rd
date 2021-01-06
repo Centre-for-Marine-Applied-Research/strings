@@ -7,7 +7,7 @@
 \usage{
 compile_aquaMeasure_data(
   path.aM,
-  area.name,
+  area.name = "",
   serial.table.aM,
   deployment.range,
   trim = TRUE,

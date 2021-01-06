@@ -6,7 +6,7 @@
 \usage{
 create_deployment_log(
   path.tracking.sheet,
-  temp.sheet,
+  temp.sheet = "TempMetaData",
   path.export,
   station,
   deployment.date

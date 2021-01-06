@@ -6,7 +6,7 @@
 \usage{
 compile_HOBO_data(
   path.HOBO,
-  area.name,
+  area.name = "",
   serial.table.HOBO,
   deployment.range,
   trim = TRUE,

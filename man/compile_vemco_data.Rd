@@ -6,7 +6,7 @@
 \usage{
 compile_vemco_data(
   path.vemco,
-  area.name,
+  area.name = "",
   depth.vemco,
   deployment.range,
   trim = TRUE,
