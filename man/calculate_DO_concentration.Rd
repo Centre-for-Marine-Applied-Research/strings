@@ -4,7 +4,7 @@
 \alias{calculate_DO_concentration}
 \title{Calculates dissolved oxygen concentration (mg/L)}
 \usage{
-calculate_DO_concentration(dat.tidy, pressure)
+calculate_DO_concentration(dat.tidy, pressure, return.tidy = TRUE)
 }
 \arguments{
 \item{dat.tidy}{Data in tidy format, as returned by the function
@@ -16,11 +16,23 @@ Oxygen values must be in \% saturation. Other columns will be ignored.}
 
 \item{pressure}{Total pressure (water pressure + air pressure) in atm on the
 DO sensor. See Details section for how to determine an appropriate value.}
+
+\item{return.tidy}{Logical argument. If \code{TRUE} (the default), the
+function returns \code{dat.tidy} with additional observations in the
+\code{VARIABLE} column for "DO_concentration" and the corresponding value in
+the \code{VALUE} column. If \code{FALSE}, the function returns the output in
+a wide format - i.e., the values of temperature, dissolved oxygen (\%
+saturation), Cp, and dissolved oxygen (concentration) for a given timestamp
+are all in one row. This may be useful for checking the Cp value used to
+calculate the dissolved oxygen concentration.}
 }
 \value{
-Returns \code{dat.tidy} with additional observations in the
- \code{VARIABLE} column for "DO_concentration" and the corresponding value in
- the \code{VALUE} column.
+If \code{return.tidy = TRUE}, returns \code{dat.tidy} with additional
+ observations in the \code{VARIABLE} column for "DO_concentration" and the
+ corresponding value in the \code{VALUE} column. If \code{return.tidy =
+ FALSE}, returns the output in a wide format (the values of temperature,
+ dissolved oxygen (\% saturation), Cp, and dissolved oxygen (concentration)
+ for a given timestamp in one row).
 }
 \description{
 Converts dissolved oxygen from percent saturation to

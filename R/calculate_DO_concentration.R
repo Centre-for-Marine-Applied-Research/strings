@@ -38,9 +38,20 @@
 #'  Oxygen values must be in \% saturation. Other columns will be ignored.
 #'@param pressure Total pressure (water pressure + air pressure) in atm on the
 #'  DO sensor. See Details section for how to determine an appropriate value.
-#'@return Returns \code{dat.tidy} with additional observations in the
+#'@param return.tidy Logical argument. If \code{TRUE} (the default), the
+#'  function returns \code{dat.tidy} with additional observations in the
 #'  \code{VARIABLE} column for "DO_concentration" and the corresponding value in
-#'  the \code{VALUE} column.
+#'  the \code{VALUE} column. If \code{FALSE}, the function returns the output in
+#'  a wide format - i.e., the values of temperature, dissolved oxygen (\%
+#'  saturation), Cp, and dissolved oxygen (concentration) for a given timestamp
+#'  are all in one row. This may be useful for checking the Cp value used to
+#'  calculate the dissolved oxygen concentration.
+#'@return If \code{return.tidy = TRUE}, returns \code{dat.tidy} with additional
+#'  observations in the \code{VARIABLE} column for "DO_concentration" and the
+#'  corresponding value in the \code{VALUE} column. If \code{return.tidy =
+#'  FALSE}, returns the output in a wide format (the values of temperature,
+#'  dissolved oxygen (\% saturation), Cp, and dissolved oxygen (concentration)
+#'  for a given timestamp in one row).
 #'@family calculate
 #'@author Danielle Dempsey, Nicole Torrie
 #'@importFrom tidyr pivot_wider pivot_longer separate
@@ -49,7 +60,7 @@
 #'
 #'
 
-calculate_DO_concentration <- function(dat.tidy, pressure){
+calculate_DO_concentration <- function(dat.tidy, pressure, return.tidy = TRUE){
 
   dat <- dat.tidy %>%
     separate(SENSOR, into = c("SENSOR_NAME", NA), sep = "-", remove = FALSE) %>%
@@ -57,17 +68,23 @@ calculate_DO_concentration <- function(dat.tidy, pressure){
     pivot_wider(names_from = VARIABLE, values_from = VALUE) %>%
     mutate(
       cp = ((exp(7.7117-1.31403*log(Temperature+45.93))) *
-                   pressure *
-                   (1-exp(11.8571-(3840.7/(Temperature+273.15))-
-                            (216961/((Temperature+273.15)^2)))/pressure) *
-                   (1-(0.000975-(0.00001426*Temperature)+(0.00000006436*(Temperature^2)))*pressure)) /
-             (1-exp(11.8571-(3840.7/(Temperature+273.15))-(216961/((Temperature+273.15)^2)))) /
-             (1-(0.000975-(0.00001426*Temperature)+(0.00000006436*(Temperature^2))))
+              pressure *
+              (1-exp(11.8571-(3840.7/(Temperature+273.15))-
+                       (216961/((Temperature+273.15)^2)))/pressure) *
+              (1-(0.000975-(0.00001426*Temperature)+(0.00000006436*(Temperature^2)))*pressure)) /
+        (1-exp(11.8571-(3840.7/(Temperature+273.15))-(216961/((Temperature+273.15)^2)))) /
+        (1-(0.000975-(0.00001426*Temperature)+(0.00000006436*(Temperature^2))))
     ) %>%
-    mutate(DO_concentration = (cp * `Dissolved Oxygen`)/100) #%>%
-   select(-SENSOR_NAME, -cp) %>%
-   pivot_longer(cols= c("Temperature", "Dissolved Oxygen", "DO_concentration"),
-   names_to = "VARIABLE", values_to = "VALUE")
+    mutate(DO_concentration = (cp * `Dissolved Oxygen`)/100)
+
+  if(return.tidy == TRUE) {
+    dat <- dat %>%
+      select(-SENSOR_NAME, -cp) %>%
+      pivot_longer(cols= c("Temperature", "Dissolved Oxygen", "DO_concentration"),
+                   names_to = "VARIABLE", values_to = "VALUE")
+  }
+
+  dat
 
 
 }
