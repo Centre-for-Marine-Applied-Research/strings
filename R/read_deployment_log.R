@@ -61,22 +61,22 @@
 #'@importFrom lubridate ymd
 #'@import dplyr
 #'@export
-#'
+
 #'@examples
-#'# path to "Log" folder
+#' # path to "Log" folder
 #' path <- system.file("extdata", package = "strings")
 #'
-#'log <- read_deployment_log(path)
-#'# deployment and retrieval dates
-#'dates <- log$deployment.dates
-#'# deployment location information
-#'location <- log$area.info
-#'# serial number(s) and depth(s) of deployment for Hobo and TidiT sensors on the string
-#'serial.table.HOBO <- log$HOBO
-#'# serial number(s) and depth(s) of deployment for aquaMeasure sensors on the string
-#'serial.table.aM <- log$aM
-#'# depth of the vemco sensor
-#'depth.vemco <- log$vemco
+#' log <- read_deployment_log(path)
+#' # deployment and retrieval dates
+#' dates <- log$deployment.dates
+#' # deployment location information
+#' location <- log$area.info
+#' # serial number(s) and depth(s) of deployment for Hobo and TidiT sensors on the string
+#' serial.table.HOBO <- log$HOBO
+#' # serial number(s) and depth(s) of deployment for aquaMeasure sensors on the string
+#' serial.table.aM <- log$aM
+#' # depth of the vemco sensor
+#' depth.vemco <- log$vemco
 
 read_deployment_log <- function(path.log){
 
