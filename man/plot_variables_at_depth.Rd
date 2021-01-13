@@ -61,7 +61,7 @@ object. Default is the minimum value in the \code{TIMESTAMP} column.}
 object. Default is the maximum value in the \code{TIMESTAMP} column.}
 
 \item{standard.DO.ylims}{If \code{TRUE}, the y-limits for dissolved oxygen are
-set to c(60, 130) \%. If \code(FALSE), the y-limts are set to the
+set to c(60, 130) \%. If \code{FALSE}, the y-limits are set to the
 \code{ggplot} default.}
 
 \item{alpha.points}{Value indicating the transparency of the points. 0 is most

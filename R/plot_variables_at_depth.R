@@ -28,7 +28,7 @@
 #'@param date.max Last timestamp to include in the plot. Must be a POSIXct
 #'  object. Default is the maximum value in the \code{TIMESTAMP} column.
 #'@param standard.DO.ylims If \code{TRUE}, the y-limits for dissolved oxygen are
-#'  set to c(60, 130) \%. If \code(FALSE), the y-limts are set to the
+#'  set to c(60, 130) \%. If \code{FALSE}, the y-limits are set to the
 #'  \code{ggplot} default.
 #'@param alpha.points Value indicating the transparency of the points. 0 is most
 #'  transparent; 1 is opaque.
