@@ -48,8 +48,9 @@
 #'  "TidbiT-xxxxxxxx" (first column) and corresponding depth at which it was
 #'  deployed in the form "2m" (second column).
 #'@param deployment.range A dataframe with two columns. The first column holds
-#'  the deployment date (a Date object in the order year, month, day),  and the
-#'  second column holds the retrieval date (a Date object in the order year,
+#'  the deployment date (a Date object, POSIXct object, or character string in
+#'  the order year, month, day),  and the second column holds the retrieval date
+#'  (a Date object, POSIXct object, or character string in the order year,
 #'  month, day).
 #'@param trim Logical value indicating whether to trim the data to the dates
 #'  specified in \code{deployment.range}. (Note: four hours are added to the
@@ -86,6 +87,18 @@
 #'@importFrom tidyr separate
 #'@import dplyr
 #'@export
+
+#'@examples
+#'# path to "Hobo" folder
+#' path <- system.file("extdata", package = "strings")
+#' # Sensor and depth at which it was deployed
+#' serial.table <- data.frame("SENSOR" = "HOBO-10755220", "DEPTH" = "2m")
+#' # deployment and retrieval dates
+#' deployment <- data.frame("START" = "2019-05-30", "END" = "2019-10-19")
+#'
+#' hobo_data <- compile_HOBO_data(path.HOBO =  path,
+#' serial.table.HOBO = serial.table,
+#' deployment.range = deployment)
 
 
 compile_HOBO_data <- function(path.HOBO,

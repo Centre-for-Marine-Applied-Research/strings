@@ -20,8 +20,9 @@ compile_all_data(
 \item{area.name}{Area where the sensor string was deployed.}
 
 \item{deployment.range}{A dataframe with two columns. The first column holds
-the deployment date (a Date object in the order year, month, day),  and the
-second column holds the retrieval date (a Date object in the order year,
+the deployment date (a Date object, POSIXct object, or character string in
+the order year, month, day),  and the second column holds the retrieval date
+(a Date object, POSIXct object, or character string in the order year,
 month, day).}
 
 \item{trim}{Logical value indicating whether to trim the data to the dates
@@ -71,6 +72,23 @@ Calls \code{compile_HOBO_data()}, \code{compile_aquaMeasure_data()}
  If one type of sensor was not included in the deployment, set the argument
  related to that sensor to \code{NULL} (the default). For example, if there
  is no aquaMeaure data for the deployment, set \code{serial.table.aM = NULL}
+}
+\examples{
+# path to "Hobo", "aquaMeasure", and "Vemco" folders
+path <- system.file("extdata", package = "strings")
+# Hobo sensor and depth at which it was deployed
+serial.table.HOBO <- data.frame("SENSOR" = "HOBO-10755220", "DEPTH" = "2m")
+serial.table.aM <- data.frame("SENSOR" = "aquaMeasure-670364", "DEPTH" = "5m")
+depth.vemco <- "15m"
+# deployment and retrieval dates
+deployment <- data.frame("START" = "2019-05-30", "END" = "2019-10-19")
+
+all_data <- compile_all_data(path =  path,
+serial.table.HOBO = serial.table.HOBO,
+serial.table.aM = serial.table.aM,
+depth.vemco = depth.vemco,
+deployment.range = deployment)
+
 }
 \seealso{
 Other compile: 

@@ -41,7 +41,18 @@
 #'@importFrom readxl read_excel
 #'@import dplyr
 #'@export
+
+#'@examples
+#'# path to "Vemco" folder
+#' path <- system.file("extdata", package = "strings")
+#' # depth at which sensor was deployed
+#' depth <- "15m"
+#' # deployment and retrieval dates
+#' deployment <- data.frame("START" = "2019-05-30", "END" = "2019-10-19")
 #'
+#' vemco_data <- compile_vemco_data(path.vemco = path,
+#' depth.vemco = depth,
+#' deployment.range = deployment)
 
 compile_vemco_data <- function(path.vemco,
                               area.name = "",

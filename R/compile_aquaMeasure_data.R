@@ -54,6 +54,17 @@
 #'@import dplyr
 #'@export
 
+#'@examples
+#'# path to "aquaMeasure" folder
+#' path <- system.file("extdata", package = "strings")
+#' # Sensor and depth at which it was deployed
+#' serial.table <- data.frame("SENSOR" = "aquaMeasure-670364", "DEPTH" = "5m")
+#' # deployment and retrieval dates
+#' deployment <- data.frame("START" = "2019-05-30", "END" = "2019-10-19")
+#'
+#' aM_data <- compile_aquaMeasure_data(path.aM =  path,
+#' serial.table.aM = serial.table,
+#' deployment.range = deployment)
 
 compile_aquaMeasure_data <- function(path.aM,
                                      area.name = "",

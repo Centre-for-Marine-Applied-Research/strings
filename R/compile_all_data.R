@@ -36,7 +36,24 @@
 #'@importFrom readr read_csv write_csv
 #'@import dplyr
 #'@export
+
+#'@examples
+#'# path to "Hobo", "aquaMeasure", and "Vemco" folders
+#' path <- system.file("extdata", package = "strings")
+#' # Hobo sensor and depth at which it was deployed
+#' serial.table.HOBO <- data.frame("SENSOR" = "HOBO-10755220", "DEPTH" = "2m")
+#' serial.table.aM <- data.frame("SENSOR" = "aquaMeasure-670364", "DEPTH" = "5m")
+#' depth.vemco <- "15m"
+#' # deployment and retrieval dates
+#' deployment <- data.frame("START" = "2019-05-30", "END" = "2019-10-19")
 #'
+#' all_data <- compile_all_data(path =  path,
+#' serial.table.HOBO = serial.table.HOBO,
+#' serial.table.aM = serial.table.aM,
+#' depth.vemco = depth.vemco,
+#' deployment.range = deployment)
+#'
+
 compile_all_data <- function(path,
                              area.name = "",
                              deployment.range,

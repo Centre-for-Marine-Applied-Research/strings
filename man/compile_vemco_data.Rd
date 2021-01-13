@@ -24,8 +24,9 @@ in the folder will be ignored.}
 was deployed, in the format "10m".}
 
 \item{deployment.range}{A dataframe with two columns. The first column holds
-the deployment date (a Date object in the order year, month, day),  and the
-second column holds the retrieval date (a Date object in the order year,
+the deployment date (a Date object, POSIXct object, or character string in
+the order year, month, day),  and the second column holds the retrieval date
+(a Date object, POSIXct object, or character string in the order year,
 month, day).}
 
 \item{trim}{Logical value indicating whether to trim the data to the dates
@@ -69,6 +70,18 @@ The raw Vemco data must be saved in a folder named Vemco in .csv or
  extracted and compiled. If there are no "Temperature" entries, but there are
  "Average temperature" entries, these will be extracted and compiled.
  Otherwise, the function will stop with an error message.
+}
+\examples{
+# path to "Vemco" folder
+path <- system.file("extdata", package = "strings")
+# depth at which sensor was deployed
+depth <- "15m"
+# deployment and retrieval dates
+deployment <- data.frame("START" = "2019-05-30", "END" = "2019-10-19")
+
+vemco_data <- compile_vemco_data(path.vemco = path,
+depth.vemco = depth,
+deployment.range = deployment)
 }
 \seealso{
 Other compile: 
