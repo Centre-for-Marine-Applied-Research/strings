@@ -88,8 +88,6 @@ wide_data <- rbind(metadata, wide_all)
 
 #plot_variables_at_depth(x, vars.to.plot = c("Temperature", "Dissolved Oxygen"))
 
-
-
 usethis::use_data(wide_data, overwrite = TRUE)
 
 
