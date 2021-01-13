@@ -27,10 +27,13 @@
 #'  object. Default is the minimum value in the \code{TIMESTAMP} column.
 #'@param date.max Last timestamp to include in the plot. Must be a POSIXct
 #'  object. Default is the maximum value in the \code{TIMESTAMP} column.
+#'@param standard.DO.ylims If \code{TRUE}, the y-limits for dissolved oxygen are
+#'  set to c(60, 130) \%. If \code(FALSE), the y-limts are set to the
+#'  \code{ggplot} default.
 #'@param alpha.points Value indicating the transparency of the points. 0 is most
 #'  transparent; 1 is opaque.
-#'@param legend.name Name for the legend. Must be a character strings Default
-#'  is \code{legend.name = "Depth (m)"}.
+#'@param legend.name Name for the legend. Must be a character strings Default is
+#'  \code{legend.name = "Depth (m)"}.
 #'@param legend.position Position for the legend. Passed to \code{ggpubr}.
 #'  Default is \code{legend.position = "right"}.
 #'@param stacked Logical value indicating what figures to return.  If
@@ -65,6 +68,8 @@ plot_variables_at_depth <- function(dat.tidy,
 
                                     date.min = min(na.omit(dat.tidy$TIMESTAMP)),
                                     date.max = max(na.omit(dat.tidy$TIMESTAMP)),
+
+                                    standard.DO.ylims = TRUE,
 
                                     alpha.points = 1,
 
@@ -135,7 +140,11 @@ plot_variables_at_depth <- function(dat.tidy,
 
     # set y-label and y limits
     if(var.i == "Dissolved Oxygen"){
-      y.limits <- c(60, 130)
+
+      if(standard.DO.ylims == TRUE){
+        y.limits <- c(60, 130)
+      } else y.limits <- NULL
+
       y.lab <- "Dissolved Oxygen (%)"
     } else y.limits <- NULL
 

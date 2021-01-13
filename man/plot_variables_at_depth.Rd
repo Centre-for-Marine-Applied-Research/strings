@@ -15,6 +15,7 @@ plot_variables_at_depth(
   date.labels.format = "\%y-\%b",
   date.min = min(na.omit(dat.tidy$TIMESTAMP)),
   date.max = max(na.omit(dat.tidy$TIMESTAMP)),
+  standard.DO.ylims = TRUE,
   alpha.points = 1,
   legend.name = "Depth (m)",
   legend.position = "right",
@@ -59,11 +60,15 @@ object. Default is the minimum value in the \code{TIMESTAMP} column.}
 \item{date.max}{Last timestamp to include in the plot. Must be a POSIXct
 object. Default is the maximum value in the \code{TIMESTAMP} column.}
 
+\item{standard.DO.ylims}{If \code{TRUE}, the y-limits for dissolved oxygen are
+set to c(60, 130) \%. If \code(FALSE), the y-limts are set to the
+\code{ggplot} default.}
+
 \item{alpha.points}{Value indicating the transparency of the points. 0 is most
 transparent; 1 is opaque.}
 
-\item{legend.name}{Name for the legend. Must be a character strings Default
-is \code{legend.name = "Depth (m)"}.}
+\item{legend.name}{Name for the legend. Must be a character strings Default is
+\code{legend.name = "Depth (m)"}.}
 
 \item{legend.position}{Position for the legend. Passed to \code{ggpubr}.
 Default is \code{legend.position = "right"}.}
@@ -89,8 +94,8 @@ Exports ggplot2 object(s) of variables at depth over time
 }
 \seealso{
 Other plot: 
-\code{\link{get_xaxis_breaks}()},
-\code{\link{set_colour_palette}()}
+\code{\link{get_colour_palette}()},
+\code{\link{get_xaxis_breaks}()}
 }
 \author{
 Danielle Dempsey
