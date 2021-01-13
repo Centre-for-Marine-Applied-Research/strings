@@ -33,8 +33,8 @@ If the timespan in the \code{TIMESTAMP} column of \code{dat.tidy} is
 }
 \seealso{
 Other plot: 
-\code{\link{plot_variables_at_depth}()},
-\code{\link{set_colour_palette}()}
+\code{\link{get_colour_palette}()},
+\code{\link{plot_variables_at_depth}()}
 }
 \author{
 Danielle Dempsey

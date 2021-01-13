@@ -73,7 +73,7 @@ get_xaxis_breaks <- function(dat.tidy){
 #'@export
 #'
 
-set_colour_palette <- function(dat.tidy){
+get_colour_palette <- function(dat.tidy){
 
   n.depth <- length(unique(dat.tidy$DEPTH))
 
