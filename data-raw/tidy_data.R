@@ -38,12 +38,9 @@ dat_trim <- dat_raw %>%
             end.datetime = end.DO,
             sensors.to.trim = sensors.DO)
 
-# # keep every 5th observation to reduce size of file
-# tidy_data <- dat_trim %>%
-#   filter(row_number() %% 5 == 0)
-
-
-#tidy_data <- dat_trim
+# keep every 5th observation to reduce size of file
+ tidy_data <- dat_trim %>%
+   filter(row_number() %% 5 == 0)
 
 # plot_variables_at_depth(tidy_data,
 #                         vars.to.plot = c("Temperature", "Dissolved Oxygen"))
