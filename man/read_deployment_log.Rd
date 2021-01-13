@@ -67,6 +67,22 @@ The log must be saved in a folder called Log in .csv, .xlsx or .xls
  If there is more than one eligible file (csv, .xlsx or .xls) in the Log
  folder, the function will stop with an error.
 }
+\examples{
+# path to "Log" folder
+path <- system.file("extdata", package = "strings")
+
+log <- read_deployment_log(path)
+# deployment and retrieval dates
+dates <- log$deployment.dates
+# deployment location information
+location <- log$area.info
+# serial number(s) and depth(s) of deployment for Hobo and TidiT sensors on the string
+serial.table.HOBO <- log$HOBO
+# serial number(s) and depth(s) of deployment for aquaMeasure sensors on the string
+serial.table.aM <- log$aM
+# depth of the vemco sensor
+depth.vemco <- log$vemco
+}
 \seealso{
 Other compile: 
 \code{\link{compile_HOBO_data}()},
