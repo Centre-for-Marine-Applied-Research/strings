@@ -4,7 +4,7 @@
 \alias{write_report_table}
 \title{Writes deployment table for county report}
 \usage{
-write_report_table(dat.tidy, keep.waterbody)
+write_report_table(dat.tidy, keep.waterbody = FALSE)
 }
 \arguments{
 \item{dat.tidy}{Tidy data as formatted by \code{format_for_opendata()}.}

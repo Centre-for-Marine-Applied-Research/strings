@@ -11,7 +11,7 @@
 #'@import dplyr
 #'@export
 
-write_report_table <- function(dat.tidy, keep.waterbody){
+write_report_table <- function(dat.tidy, keep.waterbody = FALSE){
 
   table.out <- dat.tidy %>%
     select(Waterbody = WATERBODY,
@@ -20,17 +20,24 @@ write_report_table <- function(dat.tidy, keep.waterbody){
            Latitude = LATITUDE,
            Longitude = LONGITUDE,
            `Sensor Type` = VARIABLE,
-           `Depth (m)` = DEPTH) %>%
+           DEPTH) %>%
     distinct() %>%
+    convert_depth_to_ordered_factor() %>%
+    rename(`Depth (m)` = DEPTH) %>%
     separate(col = DEPLOYMENT_PERIOD, into = c("Deployment Date", "Retrieval Date"), sep = " to ")
 
-  if(is.numeric(table.out$`Depth (m)`)){
-    table.out <- table.out  %>%
-      mutate(`Depth (m)` = as.numeric(`Depth (m)`))
-  }
+    #
+    # mutate(DEPTH = if_else(!is.na(suppressWarnings(as.numeric(DEPTH))),
+    #                              as.numeric(DEPTH), DEPTH)) %>%
+    # rename(`Depth (m)` = DEPTH) %>%
+    # separate(col = DEPLOYMENT_PERIOD, into = c("Deployment Date", "Retrieval Date"), sep = " to ")
+
+  # if(!is.na(suppressWarnings(as.numeric(table.out$`Depth (m)`[1])))){
+  #   table.out <- table.out  %>%
+  #     mutate(`Depth (m)` = as.numeric(`Depth (m)`))
+  # }
 
   if(keep.waterbody == TRUE) table.out <- table.out %>% arrange(Waterbody, Station, `Deployment Date`, `Depth (m)`)
-
 
   if(keep.waterbody == FALSE) table.out <- table.out %>% arrange(Station, `Deployment Date`, `Depth (m)`) %>% select(-Waterbody)
 
