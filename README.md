@@ -7,7 +7,7 @@
 
 [![License: GPL
 v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![](https://img.shields.io/badge/devel%20version-1.3.3-blue.svg)](https://github.com/centre-for-marine-applied-research/strings)
+[![](https://img.shields.io/badge/devel%20version-1.4.3-blue.svg)](https://github.com/centre-for-marine-applied-research/strings)
 
 [![R build
 status](https://github.com/centre-for-marine-applied-research/strings/workflows/R-CMD-check/badge.svg)](https://github.com/centre-for-marine-applied-research/strings/actions)
@@ -16,6 +16,8 @@ status](https://github.com/centre-for-marine-applied-research/strings/workflows/
 Set up travis CI
 [![](https://travis-ci.org/centre-for-marine-applied-research/strings.svg?branch=master)](https://travis-ci.org/centre-for-marine-applied-research/strings)
 
+[![Travis build
+status](https://travis-ci.com/Centre-for-Marine-Applied-Research/strings.svg?branch=master)](https://travis-ci.com/Centre-for-Marine-Applied-Research/strings)
 <!-- badges: end -->
 
 The goal of strings is to help users compile, format, calculate, and

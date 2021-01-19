@@ -30,6 +30,7 @@ Set up travis CI
 `r badge_travis(repo)`
 
 
+[![Travis build status](https://travis-ci.com/Centre-for-Marine-Applied-Research/strings.svg?branch=master)](https://travis-ci.com/Centre-for-Marine-Applied-Research/strings)
 <!-- badges: end -->
 
 
