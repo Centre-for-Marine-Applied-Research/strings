@@ -1,7 +1,7 @@
 Package: strings
 Type: Package
 Title: Compile, format, and visualize sensor string data
-Version: 1.4.2
+Version: 1.4.3
 Author: Danielle Dempsey, Nicole Torrie, Leah Lewis-McCrea
 Maintainer: Danielle Dempsey <ddempsey@perennia.ca>
 Description: Facilitates analysis of oceanographic data collected as part of the Centre for Marine Applied Research's Coastal Monitoring Program. (Compatiable sensors: HOBO Pro V2, TidbiT MX2303, TidbiT MX2203, aquaMeasure DOT, aquaMeasure SAL, aquaMeasure SST, VR2AR.)
