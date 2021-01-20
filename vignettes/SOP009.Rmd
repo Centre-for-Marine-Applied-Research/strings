@@ -20,7 +20,7 @@ vignette: >
 The purpose of this vignette is to provide a detailed description of the folder and file structure required to compile data with the `strings` package. Section 3.1 describes the folder structure required for CMAR's workflow. Section 3.2 is more general, and describes the folder structure required for all `strings` users.
 
 
-See [SOP010](strings/vignettes/SOP_010.html) for direction on how to compile and format sensor string data and [SOP011](strings/vignettes/SOP_011.html) for direction on how to trim sensor string data.
+See SOP010 for direction on how to compile and format sensor string data and SOP011 for direction on how to trim sensor string data.
 
 
 ## 2. **SCOPE/PRINCIPAL** 
@@ -50,7 +50,7 @@ All of the data from CMAR's Coastal Monitoring Program is stored in the Data_Str
 If you are processing data from a new station, create a new folder with the appropriate name (this should be the same as the `Location_Description` in the log; see **Log folder** section below).  
 
 
-![Figure 1. Station folders inside the Data_Strings folder](figure1.png)
+![Figure 1. Station folders inside the Data_Strings folder](figure1.jpg)
 
 #### Station folders
 
