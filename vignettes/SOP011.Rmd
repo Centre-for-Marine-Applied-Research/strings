@@ -34,7 +34,7 @@ library(dplyr)
 
 The purpose of this vignette is to provide detailed instruction on how to trim compiled Coastal Monitoring Program data following CMAR's workflow. The trimmed data is exported to the deployment folder and also formatted and exported to the appropriate Open Data Portal county folder.
 
-Detailed instruction on how to compile data is in [SOP010](file:///C:/Users/Danielle%20Dempsey/Desktop/RProjects/strings/vignettes/SOP_010.html). 
+Detailed instruction on how to compile data is in SOP010. 
 
 Section 3.1 provides a general overview of the `trim_data()` function. Section 3.2 is CMAR-specific, and shows how to trim and export Coastal Monitoring Program data using a template.
  

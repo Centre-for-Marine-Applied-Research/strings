@@ -32,7 +32,7 @@ library(strings)
 ## 1. **PURPOSE** 
 `strings` is an R package developed to help users compile, format, calculate, and visualize oceanographic data collected by the Centre for Marine Applied REsearch's (CMAR) Coastal Monitoring Program. The package can process temperature, dissolved oxygen, and salinity data measured by HOBO Pro V2, TidBiT, aquaMeasure DOT, aquaMeasure SAL, and/or VR2AR sensors from a single sensor string deployment.
 
-The purpose of this vignette is to provide detailed instruction on how to compile data from a deployment into a single spreadsheet, assuming the data is structured as described in [SOP009](file:///C:/Users/Danielle%20Dempsey/Desktop/RProjects/strings/vignettes/SOP_009.html). Section 3.1 provides a general overview of the `compile_*_data()` family of functions. Section 3.2 is CMAR-specific, and shows how to compile CMP data using a template.
+The purpose of this vignette is to provide detailed instruction on how to compile data from a deployment into a single spreadsheet, assuming the data is structured as described in SOP009. Section 3.1 provides a general overview of the `compile_*_data()` family of functions. Section 3.2 is CMAR-specific, and shows how to compile CMP data using a template.
 
 ## 2. **SCOPE/PRINCIPAL** 
 
