@@ -1,6 +1,6 @@
 Package: strings
 Type: Package
-Title: Compile, format, and visualize sensor string data
+Title: Compile, Format, and Visualize Sensor String Data
 Version: 1.4.3
 Author: Danielle Dempsey, Nicole Torrie, Leah Lewis-McCrea
 Maintainer: Danielle Dempsey <ddempsey@perennia.ca>
