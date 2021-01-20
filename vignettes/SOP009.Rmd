@@ -20,7 +20,7 @@ vignette: >
 The purpose of this vignette is to provide a detailed description of the folder and file structure required to compile data with the `strings` package. Section 3.1 describes the folder structure required for CMAR's workflow. Section 3.2 is more general, and describes the folder structure required for all `strings` users.
 
 
-See [SOP010](file:///C:/Users/Danielle%20Dempsey/Desktop/RProjects/strings/vignettes/SOP_010.html) for direction on how to compile and format sensor string data and [SOP011](file:///C:/Users/Danielle%20Dempsey/Desktop/RProjects/strings/vignettes/SOP_011.html) for direction on how to trim sensor string data.
+See [SOP010](strings/vignettes/SOP_010.html) for direction on how to compile and format sensor string data and [SOP011](strings/vignettes/SOP_011.html) for direction on how to trim sensor string data.
 
 
 ## 2. **SCOPE/PRINCIPAL** 
