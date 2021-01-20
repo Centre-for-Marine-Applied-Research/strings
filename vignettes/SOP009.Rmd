@@ -50,7 +50,7 @@ All of the data from CMAR's Coastal Monitoring Program is stored in the Data_Str
 If you are processing data from a new station, create a new folder with the appropriate name (this should be the same as the `Location_Description` in the log; see **Log folder** section below).  
 
 
-![Figure 1. Station folders inside the Data_Strings folder](figure1.jpg)
+![Figure 1. Station folders inside the Data_Strings folder](figure1.png)
 
 #### Station folders
 
