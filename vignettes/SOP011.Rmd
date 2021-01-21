@@ -125,7 +125,7 @@ Open `Trim_Template.R`.
 
 Save the file into the deployment folder with the name structure: “Trim_Deployment_Location_yyyy-mm-dd.R”. 
 
-![Figure 1. Save `Trim_Template.R` into the deployment folder of the string you are processing and re-name.](SOP011_figure1.png)
+![Figure 1. Save `Trim_Template.R` into the deployment folder of the string you are processing and re-name.](SOP011_figure1.PNG)
 
 At the top of `Trim_Template.R`, fill in the current date, your name, the version of the `strings` package you are using, and any additional notes you deem necessary for future data management. 
 

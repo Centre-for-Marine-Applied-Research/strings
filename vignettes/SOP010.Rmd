@@ -120,7 +120,7 @@ Open `Compile_Template.R`.
 
 Save the file into the deployment folder with the name structure: “Compile_Deployment_Location_yyyy-mm-dd.R” 
 
-![Figure 1. Save `Compile_Template.R` into the deployment folder of the string you are processing and re-name.](SOP010_figure1.png)
+![Figure 1. Save `Compile_Template.R` into the deployment folder of the string you are processing and re-name.](SOP010_figure1.PNG)
 
 At the top of `Compile_Template.R`, fill in the current date, your name, the version of the `strings` package you are using, and any additional notes you deem necessary for future data management. 
 
@@ -224,7 +224,7 @@ write_csv(ALL_data, paste(path, "/", file_name, "_raw.csv", sep = ""), col_names
 
 The naming convention for the csv is Station Name_Deployment-Date_Variable_raw, where "raw" indicates that the data has not been trimmed. The csv file will be saved to the deployment folder (Fig. 2).
 
-![Figure 2. The csv of compiled data will be saved to the deployment folder](SOP010_figure2.png)
+![Figure 2. The csv of compiled data will be saved to the deployment folder](SOP010_figure2.PNG)
 
 **Section 4:**
 This section is meant as a check to ensure the data compiled properly (don't worry if the figure is not pretty). Compare the variables and depths in the figure to those recorded in the log. You may need to modify some of the arguments in the `plot_variables_at_depth()` function, for example `vars.to.plot` and `ylab.units` will need to be updated if the only variable in the data is temperature. `color.palette` will need to be updated for deployments with sensors at more than six depths. See the help files for more detail.

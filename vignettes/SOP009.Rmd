@@ -50,7 +50,7 @@ All of the data from CMAR's Coastal Monitoring Program is stored in the Data_Str
 If you are processing data from a new station, create a new folder with the appropriate name (this should be the same as the `Location_Description` in the log; see **Log folder** section below).  
 
 
-![Figure 1. Station folders inside the Data_Strings folder](figure1.png)
+![Figure 1. Station folders inside the Data_Strings folder](figure1.PNG)
 
 #### Station folders
 
@@ -63,13 +63,13 @@ The Deployment History tracks the string coordinates, sensor serial numbers and 
 Pay attention to separators (e.g., "_", "-", and "space ") when naming deployment folders and history files.
 
 
-![Figure 2. The Birchy Head station folder, which contains four deployment folders and a Deployment History file.](figure2.png)
+![Figure 2. The Birchy Head station folder, which contains four deployment folders and a Deployment History file.](figure2.PNG)
  
 #### Deployment folders
  
 Within each deployment folder, there is a "Log" folder and a folder for each type of sensor on the string, e.g., "Hobo", "aquaMeasure", and/or "Vemco". Spelling and case of these folder names must be exactly as presented here. The following sub-section describes content of the Log folder, and Section 3.2 describes the content of the remaining folders. Other folders in the deployment folder are ignored by the `strings` package. 
 
-![Figure 3. The deployment folder for the string deployed at Birchy Head on May 2, 2019.](figure3.png)
+![Figure 3. The deployment folder for the string deployed at Birchy Head on May 2, 2019.](figure3.PNG)
 
 
 #### Log folder
@@ -94,7 +94,7 @@ The deployment log should have a row for each sensor on the string, and must con
 Column names must be spelled as presented above to ensure that R can find and use the information within each column. All other columns will be ignored.
 
 
-![Figure 4. Deployment log for the string deployed at Birchy Head on May 2, 2019. The string had 7 sensors.](figure4.png)
+![Figure 4. Deployment log for the string deployed at Birchy Head on May 2, 2019. The string had 7 sensors.](figure4.PNG)
 
 
 ### **3.2 General `strings` folders**
@@ -116,7 +116,7 @@ This section provides details on the content of the aquaMeasure, Hobo, and Vemco
 Note the capital "M" in the folder name.
 This folder contains all files downloaded from aquaCurrent for the deployment, in .csv or .xlsx format (Fig. 5). You do not need to modify the raw files, although sometimes the package has a hard time parsing the `Text` column, which can be safely deleted for CMAR purposes. The file name does not matter.
 
-![Figure 5. The aquaMeasure folder for the May 2, 2019 Birchy Head deployment. There is one file for each aquaMeasure sensor noted in the log.](figure5.png)
+![Figure 5. The aquaMeasure folder for the May 2, 2019 Birchy Head deployment. There is one file for each aquaMeasure sensor noted in the log.](figure5.PNG)
 
  
 #### Hobo folder 
@@ -125,10 +125,10 @@ This folder contains the extracted Hobo and TidbiT files, in .csv or .xlsx forma
 
 CMAR users: Extract the Hobo data in UTC (set Offset from GMT to 0; Fig. 7) and export as a .csv file. See `?compile_HOBO_data` for more information.
 
-![Figure 6. The Hobo folder for the May 2, 2019 Birchy Head deployment. There is one raw Hobo file and one extracted csv file for each Hobo sensor noted in the log. The file names correspond to the serial numbers in the log.](figure6.png)
+![Figure 6. The Hobo folder for the May 2, 2019 Birchy Head deployment. There is one raw Hobo file and one extracted csv file for each Hobo sensor noted in the log. The file names correspond to the serial numbers in the log.](figure6.PNG)
 
 #### Vemco folder
 
 This folder contains the extracted VR2 data, in .csv or .xlsx format (Fig. 8). The file name does not matter. The raw VR2 files may also be saved in this folder, but other Excel files (those not extracted from VR2 files) will cause an error.
 
-![Figure 8. The Vemco folder for the May 2, 2019 Birchy Head deployment. The raw vrl files and extracted data can both be saved in this folder.](figure8.png)
+![Figure 8. The Vemco folder for the May 2, 2019 Birchy Head deployment. The raw vrl files and extracted data can both be saved in this folder.](figure8.PNG)
