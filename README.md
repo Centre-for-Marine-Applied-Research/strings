@@ -9,12 +9,16 @@
 v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![](https://img.shields.io/badge/devel%20version-1.4.3-blue.svg)](https://github.com/centre-for-marine-applied-research/strings)
 
-[![R build
-status](https://github.com/centre-for-marine-applied-research/strings/workflows/R-CMD-check/badge.svg)](https://github.com/centre-for-marine-applied-research/strings/actions)
 [![CodeFactor](https://www.codefactor.io/repository/github/centre-for-marine-applied-research/strings/badge)](https://www.codefactor.io/repository/github/centre-for-marine-applied-research/strings)
 
-[![](https://travis-ci.org/centre-for-marine-applied-research/strings.svg?branch=master)](https://travis-ci.org/centre-for-marine-applied-research/strings)
+r badge\_travis(repo)
 
+These two should be the same:
+
+[![R build
+status](https://github.com/centre-for-marine-applied-research/strings/workflows/R-CMD-check/badge.svg)](https://github.com/centre-for-marine-applied-research/strings/actions)
+[![R build
+status](https://github.com/Centre-for-Marine-Applied-Research/strings/workflows/R-CMD-check/badge.svg)](https://github.com/Centre-for-Marine-Applied-Research/strings/actions)
 <!-- badges: end -->
 
 The goal of strings is to help users compile, format, calculate, and

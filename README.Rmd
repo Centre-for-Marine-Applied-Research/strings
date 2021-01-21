@@ -24,10 +24,14 @@ repo <- "centre-for-marine-applied-research/strings"
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) `r badge_devel(repo, "blue")`
 
-`r badge_github_actions(repo)` `r badge_codefactor(repo)`
+`r badge_codefactor(repo)`
 
-`r badge_travis(repo)`
+r badge_travis(repo)
 
+These two should be the same:
+
+`r badge_github_actions(repo)`
+[![R build status](https://github.com/Centre-for-Marine-Applied-Research/strings/workflows/R-CMD-check/badge.svg)](https://github.com/Centre-for-Marine-Applied-Research/strings/actions)
 <!-- badges: end -->
 
 
