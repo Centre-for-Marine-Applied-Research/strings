@@ -17,6 +17,7 @@
 #'@importFrom readxl read_excel
 #'@importFrom stats na.omit
 #'@importFrom tidyr separate
+#'@importFrom tibble as_tibble
 #'@import dplyr
 #'@export
 
@@ -28,6 +29,8 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FA
   }
 
   ind <- seq(1, ncol(dat.wide), 2)    # index for every second column
+
+  dat.wide <- tibble::as_tibble(dat.wide)     # convert dat.wide to a tibble (for files NOT imported with readr)
   dat.tidy <- data.frame(NULL)        # initialize dat.tidy
 
   for(i in ind){
