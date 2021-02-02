@@ -78,11 +78,10 @@ This function gives the option to export as a csv file and/or an rds
  (readr::write_csv took an average of 350 seconds).
 }
 \seealso{
-Other OpenData: 
-\code{\link{import_strings_data}()},
-\code{\link{write_report_table}()}
+Other OpenData CMAR: 
+\code{\link{import_strings_data}()}
 }
 \author{
 Danielle Dempsey
 }
-\concept{OpenData}
+\concept{OpenData CMAR}

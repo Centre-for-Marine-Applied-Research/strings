@@ -53,7 +53,7 @@
 #'  should be returned to the global environment. Default is \code{FALSE}.
 #'@return Returns the assembled data as a .csv, and/or .rds, and/or as a
 #'  dataframe to the global environment.
-#'@family OpenData
+#'@family OpenData CMAR
 #'@author Danielle Dempsey
 #'
 #'@importFrom purrr map_dfr

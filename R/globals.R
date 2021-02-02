@@ -77,6 +77,10 @@ utils::globalVariables(c(
   # convert_depth_to_ordered_factor
   "DEPTH_QUAL",
 
+  # import_strings_data
+  "County",
+  "COUNTY",
+
   # create_deployment_log & combine_deployment_logs
   "Acoustic_Release?",
   "Anchor_Wgt",
