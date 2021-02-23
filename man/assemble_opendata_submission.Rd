@@ -58,10 +58,17 @@ Only users connected to the CMAR Operations shared drive can use
  are exported to different folders on the shared drive.
 }
 \details{
-This function gives the option to export as a csv file and/or an rds
- file. For the CMAR work flow, the csv file is for submission to the Open
- Data Portal and the rds file should be used for the county report and other
- R analyses (it is much faster to import the rds file than the csv file).
+Right now can only handle files as exported from
+ \code{format_for_opendata()}. Future versions will also be able to assemble
+ data from \code{convert_to_tidydata()}.
+
+
+
+
+ This function gives the option to export as a csv file and/or an rds file.
+ For the CMAR work flow, the csv file is for submission to the Open Data
+ Portal and the rds file should be used for the county report and other R
+ analyses (it is much faster to import the rds file than the csv file).
 
  Note: data.table::fread and data.table::fwrite were investigated as a faster
  alternative to reading and writing rds files. The data.table functions were

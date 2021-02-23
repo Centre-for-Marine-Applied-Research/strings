@@ -67,11 +67,15 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FA
       # compile the tidy data
       dat.i.tidy <- dat.i %>% slice(-c(1:4)) %>%      # remove first four rows of data
         select(TIMESTAMP = 1, VALUE = 2)  %>%         # name column 1 TIMESTAMP and column 2 VALUE
+        mutate(VALUE = if_else(VALUE == "NA",
+                               NA_character_, VALUE), # in case NA values were read in as characters,
+               TIMESTAMP = if_else(TIMESTAMP == "NA", # convert to true NA
+                                   NA_character_, TIMESTAMP)) %>%
         convert_timestamp_to_datetime() %>%           # convert the timestamp to a POSIXct object
         mutate(DEPLOYMENT_PERIOD = daterange,         # add DEPLOYMENT_PERIOD column
-               SENSOR = sensor,               # Add SENSOR column
-               VARIABLE = variable,           # Add VARIABLE column
-               DEPTH = as.character(depth),         # Add DEPTH column (converted to ordered factor below)
+               SENSOR = sensor,                       # Add SENSOR column
+               VARIABLE = variable,                   # Add VARIABLE column
+               DEPTH = as.character(depth),           # Add DEPTH column (converted to ordered factor below)
                VALUE = as.numeric(VALUE))
     }
 
@@ -81,12 +85,9 @@ convert_to_tidydata <- function(dat.wide, remove.NA = TRUE, show.NA.message = FA
 
   # select columns of interest
   dat.tidy <- dat.tidy %>%
-    select(DEPLOYMENT_PERIOD, SENSOR, TIMESTAMP, VARIABLE, DEPTH, VALUE)
-
-  # if DEPTH is numeric, convert DEPTH to an ORDERED factor (so 2 < 5 < 10 etc., no matter what order they appear in dat.wide)
-# if(!is.na(suppressWarnings(parse_number(as.character(var_depth[2]))))) {
-    dat.tidy <- dat.tidy %>% convert_depth_to_ordered_factor()
- # }
+    select(DEPLOYMENT_PERIOD, SENSOR, TIMESTAMP, VARIABLE, DEPTH, VALUE) %>%
+    # convert DEPTH to an ORDERED factor (so 2 < 5 < 10 etc.)
+    convert_depth_to_ordered_factor()
 
   # number of NAs in the TIMESTAMP and VALUE columns
   date.na <- sum(is.na(dat.tidy$TIMESTAMP))

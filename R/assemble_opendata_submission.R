@@ -3,15 +3,17 @@
 #'@description Only users connected to the CMAR Operations shared drive can use
 #'  the default \code{input_path} and \code{output_path}.The csv and rds files
 #'  are exported to different folders on the shared drive.
-#'@details
+#'@details Right now can only handle files as exported from
+#'  \code{format_for_opendata()}. Future versions will also be able to assemble
+#'  data from \code{convert_to_tidydata()}.
 #'
 #'
 #'
 #'
-#'This function gives the option to export as a csv file and/or an rds
-#'  file. For the CMAR work flow, the csv file is for submission to the Open
-#'  Data Portal and the rds file should be used for the county report and other
-#'  R analyses (it is much faster to import the rds file than the csv file).
+#'  This function gives the option to export as a csv file and/or an rds file.
+#'  For the CMAR work flow, the csv file is for submission to the Open Data
+#'  Portal and the rds file should be used for the county report and other R
+#'  analyses (it is much faster to import the rds file than the csv file).
 #'
 #'  Note: data.table::fread and data.table::fwrite were investigated as a faster
 #'  alternative to reading and writing rds files. The data.table functions were
@@ -87,11 +89,12 @@ assemble_opendata_submission <- function(input_path = NULL,
                     pattern = ".csv") %>%
     purrr::map_dfr(data.table::fread,
                    colClasses = list(
-                     character = c("DEPLOYMENT_PERIOD", "SENSOR", "DEPTH", "VARIABLE"),
+                     character = c("STATION", "LEASE", "DEPLOYMENT_PERIOD", "SENSOR", "DEPTH", "VARIABLE"),
                      POSIXct = "TIMESTAMP"
-                   ))
+                   )) %>%
+    mutate(LEASE = if_else(LEASE == "NA", NA_character_, LEASE))
 
-  if(exists("dat$LEASE")) dat <- dat %>%  mutate(LEASE = if_else(LEASE == "NA", NA_character_, LEASE))
+ # if(exists("dat$LEASE")) dat <- dat %>%  mutate(LEASE = if_else(LEASE == "NA", NA_character_, LEASE))
 
 # Export csv --------------------------------------------------------------
 
