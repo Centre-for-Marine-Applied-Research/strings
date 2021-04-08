@@ -29,7 +29,9 @@ create_log_from_NSDFA_tracking <- function(path.tracking.sheet,
                                            station,
                                            deployment.date){
 
-  dat_raw <- read_excel(path.tracking.sheet, sheet = temp.sheet)
+  dat_raw <- read_excel(path.tracking.sheet,
+                        sheet = temp.sheet,
+                        na = c("", "n/a"))
 
   LOG <- dat_raw %>%
     transmute(
