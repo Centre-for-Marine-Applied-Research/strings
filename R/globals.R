@@ -115,7 +115,8 @@ utils::globalVariables(c(
   "Sounding" ,
   "Station_Name" ,
   "Status",
-  "Waterbody"
+  "Waterbody",
+   "Location_lower"
 
 
 
