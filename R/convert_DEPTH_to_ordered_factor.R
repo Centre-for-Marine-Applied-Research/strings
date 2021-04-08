@@ -43,8 +43,10 @@ convert_depth_to_ordered_factor <- function(dat.tidy){
   # add a temporary column.
   # assign TRUE if DEPTH is a qualitative value and FALSE if DEPTH can be converted to a numeric value
   dat.tidy <- dat.tidy %>%
-    mutate(#DEPTH_QUAL = as.character(DEPTH),
-      DEPTH_QUAL = if_else(is.na(suppressWarnings(as.numeric(DEPTH))), TRUE, FALSE))
+    mutate(
+      DEPTH_QUAL = if_else(is.na(suppressWarnings(as.numeric(DEPTH))),
+                           TRUE, FALSE)
+    )
 
   # keep only qualitative depths
   dat.qual <- dat.tidy %>%
