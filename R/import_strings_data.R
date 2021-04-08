@@ -65,8 +65,8 @@ import_strings_data <- function(input_path = NULL,
 
       if(!("WATERBODY" %in% colnames(dat) & "STATION" %in% colnames(dat))) {
       stop("Can't add COUNTY column because WATERBODY and/or STATION columns do not exist. \n
-           HINT: Set add_county_col = FALSE, check input_path is correct,
-           or re-export files in input_path so they include the WATERBODY and STATION columns.")
+           HINT: Set add_county_col = FALSE, check input_path is correct, make sure you
+           are connected to the VPN, or re-export files in input_path so they include the WATERBODY and STATION columns.")
     }
 
     # allow access to the google sheet
