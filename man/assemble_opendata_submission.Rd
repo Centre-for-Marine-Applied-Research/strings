@@ -9,7 +9,6 @@ assemble_opendata_submission(
   input_path = NULL,
   output_path = NULL,
   county = "",
-  submission_folder = "",
   export_csv = TRUE,
   export_rds = TRUE,
   return_global = FALSE
@@ -32,14 +31,12 @@ the same folder.}
 file(s). Additionally, if \code{input_path = NULL}, \code{county} is the
 next folder on the path.}
 
-\item{submission_folder}{A character string to finish the default
-\code{input_path} (e.g., the date the folder with the deployment csv files).
-For non-CMAR users (or any non-Open Data Portal data query), the default
-value \code{submission_folder = ""} value should be used.}
-
 \item{export_csv}{Logical argument indicating whether the assembled data
 should be exported as a *.csv file. File name will be
-county_todays-date.csv. Default is \code{TRUE}.}
+county_todays-date.csv. Default is \code{TRUE}. Note: \code{TIMESTAMP} is
+converted to a character before exporting to remove UTC formatting
+(2018-12-23T05:00:00Z). When re-imported into R, the UTC timezone should be
+added using the \code{force_tz()} function from the lubridate package.}
 
 \item{export_rds}{Logical argument indicating whether the assembled data
 should be exported as a *.rds file. File name will be
@@ -61,8 +58,6 @@ Only users connected to the CMAR Operations shared drive can use
 Right now can only handle files as exported from
  \code{format_for_opendata()}. Future versions will also be able to assemble
  data from \code{convert_to_tidydata()}.
-
-
 
 
  This function gives the option to export as a csv file and/or an rds file.
