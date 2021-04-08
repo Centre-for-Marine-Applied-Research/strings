@@ -95,7 +95,7 @@ read_deployment_log <- function(path.log){
 
   }
 
-  if(length(dat.files) > 1) stop("More than one file found in the Log file")
+  if(length(dat.files) > 1) stop("More than one file found in the Log folder")
 
   file.type <- extract_file_extension(dat.files)
 
@@ -133,6 +133,8 @@ read_deployment_log <- function(path.log){
   if(length(long) > 1) message("Multiple longitudes recorded in log")
   if(length(station) > 1) message("Multiple location descriptions recorded in log")
   if(length(lease) > 1) message("Multiple leases recorded in log")
+
+  if(long > 0) stop("Longitude must be a negative value")
 
   area.info <- data.frame(waterbody = log$Deployment_Waterbody[1],
                           latitude = log$Logger_Latitude[1],
