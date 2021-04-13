@@ -5,7 +5,7 @@
 #' @param superchill Logical
 #'
 #' @return ggplot object
-#' @import ggplot
+#' @import ggplot2
 #' @import dplyr
 #'
 #' @export
