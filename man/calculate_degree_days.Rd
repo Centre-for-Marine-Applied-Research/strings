@@ -14,8 +14,8 @@ calculate_degree_days(
 \arguments{
 \item{dat.tidy}{Data in tidy format, as returned by the function
 \code{convert_to_tidydata()}. Must include three columns: \code{TIMESTAMP}
-(POSIXct), \code{VARIABLE} (character), and \code{VALUE} (numeric). May also
-include columns with grouping variables passed to \code{...}. Other
+(POSIXct), \code{VARIABLE} (character), and \code{VALUE} (numeric). May
+also include columns with grouping variables passed to \code{...}. Other
 columns will be ignored.}
 
 \item{...}{Columns in \code{dat.tidy} to use for grouping in
@@ -23,26 +23,26 @@ columns will be ignored.}
 calculated for each combination of groups.}
 
 \item{start.date}{First day to include in the calculation. If
-\code{start.date} does not include a time, then the start time is assumed to
-be midnight. Accepted orders for \code{start.date} are: "ymd IMS p", "Ymd
-IMS p", "Ymd HM", "Ymd HMS", "dmY HM", "dmY HMS", "Ymd", "ymd". Default is
-the first TIMESTAMP in \code{dat.tidy}.}
+\code{start.date} does not include a time, then the start time is assumed
+to be midnight. Accepted orders for \code{start.date} are: "ymd IMS p",
+"Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY HM", "dmY HMS", "Ymd", "ymd".
+Default is the first TIMESTAMP in \code{dat.tidy}.}
 
 \item{end.date}{Last day to include in the calculation. If \code{end.date}
 does not include a time, then the end time is assumed to be "23:59:59".
-Accepted orders for \code{end.date} are: "ymd IMS p", "Ymd IMS p", "Ymd HM",
-"Ymd HMS", "dmY HM", "dmY HMS", "Ymd", "ymd". Default is the last TIMESTAMP
-in \code{dat.tidy}.}
+Accepted orders for \code{end.date} are: "ymd IMS p", "Ymd IMS p", "Ymd
+HM", "Ymd HMS", "dmY HM", "dmY HMS", "Ymd", "ymd". Default is the last
+TIMESTAMP in \code{dat.tidy}.}
 }
 \value{
 Returns a tibble with at least five columns: \code{PERIOD} (start and
- end date used to calculate mean temperature and number of days),
- \code{n_DAYS} (the number of days, \emph{n}, used in the calculation),
- \code{n_OBSERVATIONS} (the number of observations used to calculate the
- average temperature), \code{AVG_TEMPERATURE} (the average temperature in the
- time period), \code{DEGREE_DAYS} (degree-days, the product of
- \code{AVG_TEMPERATURE} and \code{n_DAYS}). Additional columns are returned
- for each grouping variable in \code{...}.
+  end date used to calculate mean temperature and number of days),
+  \code{n_DAYS} (the number of days, \emph{n}, used in the calculation),
+  \code{n_OBSERVATIONS} (the number of observations used to calculate the
+  average temperature), \code{AVG_TEMPERATURE} (the average temperature in
+  the time period), \code{DEGREE_DAYS} (degree-days, the product of
+  \code{AVG_TEMPERATURE} and \code{n_DAYS}). Additional columns are returned
+  for each grouping variable in \code{...}.
 }
 \description{
 Calculates temperature in degree-days
@@ -50,10 +50,15 @@ Calculates temperature in degree-days
 \details{
 Degree-days = average temperature over \emph{n} days * \emph{n} days
 
- \emph{n} is calculated using the \code{difftime()} function:
+  \emph{n} is calculated as the number of unique dates in the TIMESTAMP
+  column. This means that days without data (e.g. due to sensor mal-function
+  or deliberately filtered out) will NOT be included in the degree-day
+  calculation.
 
- \code{n_DAYS = round(as.numeric(difftime(max(TIMESTAMP), min(TIMESTAMP),
- units = "days")), digits = 3)}
+  For example: a sensor is deployed from September 1, 2021 to September 14,
+  2021 (14 days). The temperature for several observations on September 3 was
+  > 20 degree Celcius, and so that day is filtered out of the analysis. In
+  the degree-day calculation \emph{n} = 13 days.
 }
 \examples{
 data(tidy_data)
