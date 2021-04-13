@@ -80,8 +80,8 @@ calculate_degree_days <- function(dat.tidy,
     group_by(...) %>%
     mutate(DATE = date(TIMESTAMP)) %>%
     summarise(
-      START_DAY = format(min(TIMESTAMP), "%Y-%b-%d"),
-      END_DAY = format(max(TIMESTAMP), "%Y-%b-%d"),
+      START_DAY = format(min(DATE), "%Y-%b-%d"),
+      END_DAY = format(max(DATE), "%Y-%b-%d"),
       # number of observations in each group
       n_OBSERVATIONS = n(),
       # number of days in group
