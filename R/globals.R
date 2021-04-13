@@ -68,6 +68,7 @@ utils::globalVariables(c(
   "START_DAY",
   "END_DAY",
   "PERIOD",
+  "DATE",
 
   # write_report_table
   "Deployment Date",
