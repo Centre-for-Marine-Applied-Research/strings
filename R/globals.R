@@ -70,6 +70,10 @@ utils::globalVariables(c(
   "PERIOD",
   "DATE",
 
+  # filter_days
+  "EXCEED_THRESH",
+  "n_obs",
+
   # write_report_table
   "Deployment Date",
   "Depth (m)",
