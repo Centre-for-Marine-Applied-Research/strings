@@ -2,8 +2,9 @@
 #' Plot variables at depth with faceted ggplot
 #'
 #' @param dat.tidy Tidy data
-#' @param superchill Logical
-#'
+#' @param superchill Superchill threshold
+#' @param heatstress Threshold where heat stress begins
+#' @param trending_up Trending up threshold
 #' @return ggplot object
 #' @import ggplot2
 #' @import dplyr
@@ -12,18 +13,19 @@
 #'
 
 
-ggplot_variables_at_depth <- function(dat.tidy, superchill = FALSE){
+ggplot_variables_at_depth <- function(dat.tidy,
+                                      superchill = NULL,
+                                      heatstress = NULL,
+                                      trending_up = NULL){
 
   dat.tidy <- dat.tidy %>%
     convert_depth_to_ordered_factor()
 
   color.pal <- get_colour_palette(dat.tidy)
   axis.breaks <- get_xaxis_breaks(dat.tidy)
-  n.facet <- length(unique(dat.tidy$VARIABLE))
 
   p <- ggplot(dat.tidy, aes(x = TIMESTAMP, y = VALUE, col = DEPTH)) +
     geom_point(size = 0.25) +
-    facet_wrap(~VARIABLE, ncol = 1, scales = "free_y") +
     scale_x_datetime(
       breaks = axis.breaks$date.breaks.major,
       minor_breaks = axis.breaks$date.breaks.minor,
@@ -33,22 +35,22 @@ ggplot_variables_at_depth <- function(dat.tidy, superchill = FALSE){
                         values = color.pal,
                         drop = FALSE) +
     guides(color = guide_legend(override.aes = list(size = 4))) +
+    geom_hline(yintercept = superchill, col = "deepskyblue", lty = 2) +
+    geom_hline(yintercept = trending_up, col = "grey", lty = 2) +
+    geom_hline(yintercept = heatstress, col = "red", lty = 2) +
     theme_light()
 
-  #if(n.facet == 1) p <- p + theme(strip.background = element_rect(NA))
+  if("VARIABLE" %in% colnames(dat.tidy)){
 
-  if(isTRUE(superchill)) p <- p + geom_hline(yintercept = -0.7, col = 2, lty = 2)
+    if(length(unique(dat.tidy$VARIABLE)) > 1) {
+
+      p <- p + facet_wrap(~VARIABLE, ncol = 1, scales = "free_y")
+    }
+  }
 
   p
 
 
 }
-
-
-
-
-
-
-
 
 

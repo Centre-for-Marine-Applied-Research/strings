@@ -4,12 +4,21 @@
 \alias{ggplot_variables_at_depth}
 \title{Plot variables at depth with faceted ggplot}
 \usage{
-ggplot_variables_at_depth(dat.tidy, superchill = FALSE)
+ggplot_variables_at_depth(
+  dat.tidy,
+  superchill = FALSE,
+  heatstress = FALSE,
+  trending_up
+)
 }
 \arguments{
 \item{dat.tidy}{Tidy data}
 
 \item{superchill}{Logical}
+
+\item{heatstress}{Logical}
+
+\item{trending_up}{Logical}
 }
 \value{
 ggplot object
