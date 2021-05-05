@@ -12,7 +12,7 @@
 #'  \code{vars.to.plot}. Only required when \code{vars.to.plot} is NOT some
 #'  combination of "Temperature", "Dissolved Oxygen", and "salinity". Units for
 #'  "Temperature", "Dissolved Oxygen", and "Salinity" are hard-coded ((degree
-#'  C), (\%), and (ppt)).
+#'  C), (\%), and (PSU)).
 
 #'@param color.palette Color palette of hex colors onto which \code{DEPTH} will
 #'  be mapped. Required if there are more than 6 levels in \code{DEPTH}. Default
@@ -150,7 +150,7 @@ plot_variables_at_depth <- function(dat.tidy,
 
     # set y-label
     if(var.i == "Salinity"){
-      y.lab <-  "Salinity (ppt)"
+      y.lab <-  "Salinity (PSU)"
     }
 
     # General y-label, supplied by user
