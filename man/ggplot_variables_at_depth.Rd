@@ -6,19 +6,19 @@
 \usage{
 ggplot_variables_at_depth(
   dat.tidy,
-  superchill = FALSE,
-  heatstress = FALSE,
-  trending_up
+  superchill = NULL,
+  heatstress = NULL,
+  trending_up = NULL
 )
 }
 \arguments{
 \item{dat.tidy}{Tidy data}
 
-\item{superchill}{Logical}
+\item{superchill}{Superchill threshold}
 
-\item{heatstress}{Logical}
+\item{heatstress}{Threshold where heat stress begins}
 
-\item{trending_up}{Logical}
+\item{trending_up}{Trending up threshold}
 }
 \value{
 ggplot object

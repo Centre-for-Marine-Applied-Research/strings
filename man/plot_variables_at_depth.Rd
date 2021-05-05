@@ -39,7 +39,7 @@ title. Must be in the same order as the associated variables in
 \code{vars.to.plot}. Only required when \code{vars.to.plot} is NOT some
 combination of "Temperature", "Dissolved Oxygen", and "salinity". Units for
 "Temperature", "Dissolved Oxygen", and "Salinity" are hard-coded ((degree
-C), (\%), and (ppt)).}
+C), (\%), and (PSU)).}
 
 \item{color.palette}{Color palette of hex colors onto which \code{DEPTH} will
 be mapped. Required if there are more than 6 levels in \code{DEPTH}. Default
