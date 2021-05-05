@@ -67,10 +67,6 @@ DO concentration is calculated as:
  \item Total pressure = water pressure + air pressure. Use the total pressure
  value as the \code{pressure} argument. }
 }
-\seealso{
-Other calculate: 
-\code{\link{calculate_degree_days}()}
-}
 \author{
 Danielle Dempsey, Nicole Torrie
 }
