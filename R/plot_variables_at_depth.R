@@ -150,11 +150,11 @@ plot_variables_at_depth <- function(dat.tidy,
 
     # set y-label
     if(var.i == "Salinity"){
-      y.lab <-  "Salinity (PSU)"
+      y.lab <- "Salinity (PSU)"
     }
 
     # General y-label, supplied by user
-    if(!(var.i %in% c("Temperature", "Dissolved Oxygen", "Salintiy"))){
+    if(!(var.i %in% c("Temperature", "Dissolved Oxygen", "Salinity"))){
       y.lab <- paste(var.i, ylab.units[i], sep = " ")
     }
 
