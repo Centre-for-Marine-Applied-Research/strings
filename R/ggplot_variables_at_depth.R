@@ -2,9 +2,7 @@
 #' Plot variables at depth with faceted ggplot
 #'
 #' @param dat.tidy Tidy data
-#' @param superchill Superchill threshold
-#' @param heatstress Threshold where heat stress begins
-#' @param trending_up Trending up threshold
+
 #' @return ggplot object
 #' @import ggplot2
 #' @import dplyr
@@ -13,10 +11,7 @@
 #'
 
 
-ggplot_variables_at_depth <- function(dat.tidy,
-                                      superchill = NULL,
-                                      heatstress = NULL,
-                                      trending_up = NULL){
+ggplot_variables_at_depth <- function(dat.tidy){
 
   dat.tidy <- dat.tidy %>%
     convert_depth_to_ordered_factor()
@@ -35,9 +30,6 @@ ggplot_variables_at_depth <- function(dat.tidy,
                         values = color.pal,
                         drop = FALSE) +
     guides(color = guide_legend(override.aes = list(size = 4))) +
-    geom_hline(yintercept = superchill, col = "deepskyblue", lty = 2) +
-    geom_hline(yintercept = trending_up, col = "grey", lty = 2) +
-    geom_hline(yintercept = heatstress, col = "red", lty = 2) +
     theme_light()
 
   if("VARIABLE" %in% colnames(dat.tidy)){
