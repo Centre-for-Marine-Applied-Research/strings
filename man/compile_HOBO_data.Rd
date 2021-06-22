@@ -11,6 +11,7 @@ compile_HOBO_data(
   deployment.range,
   trim = TRUE,
   rm.DST = FALSE,
+  DO.percent.sat = TRUE,
   export.csv = FALSE
 )
 }
@@ -45,6 +46,11 @@ is as defined for Nova Scotia, Canada (begins in March and end in November).
 Only works for 2015 - 2021. It is strongly recommended that the data is in
 the correct timezone before using this function, and that the default
 \code{rm.DST = FALSE} is used.}
+
+\item{DO.percent.sat}{Logical value indicating dissolved oxygen units. If
+\code{TRUE}, dissolved oxygen is converted from concentration (mg / L) to
+percent saturation (\%). If \code{FALSE}, dissolved oxygen concentration (mg
+/ L) is returned. Default is \code{DO.percent = TRUE}. Other}
 
 \item{export.csv}{Logical value indicating whether to export the compiled data
 as a .csv file. If \code{export.csv = TRUE}, the compiled data will not be

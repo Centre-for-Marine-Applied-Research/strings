@@ -62,6 +62,10 @@
 #'  Only works for 2015 - 2021. It is strongly recommended that the data is in
 #'  the correct timezone before using this function, and that the default
 #'  \code{rm.DST = FALSE} is used.
+#'@param DO.percent.sat Logical value indicating dissolved oxygen units. If
+#'  \code{TRUE}, dissolved oxygen is converted from concentration (mg / L) to
+#'  percent saturation (\%). If \code{FALSE}, dissolved oxygen concentration (mg
+#'  / L) is returned. Default is \code{DO.percent = TRUE}. Other
 #'@param export.csv Logical value indicating whether to export the compiled data
 #'  as a .csv file. If \code{export.csv = TRUE}, the compiled data will not be
 #'  returned to the global environment. Default is \code{export.csv = FALSE}.
@@ -107,6 +111,9 @@ compile_HOBO_data <- function(path.HOBO,
                               deployment.range,
                               trim = TRUE,
                               rm.DST = FALSE,
+
+                              DO.percent.sat = TRUE,
+
                               export.csv = FALSE){
 
   # make sure columns of serial.table are named correctly
@@ -124,7 +131,7 @@ compile_HOBO_data <- function(path.HOBO,
   HOBO_dat <- data.frame(INDEX = as.character())
 
 
-# List files to be compiled -----------------------------------------------
+  # List files to be compiled -----------------------------------------------
 
   # finish path
   path.HOBO <- file.path(paste(path.HOBO, "Hobo", sep = "/"))
@@ -136,7 +143,7 @@ compile_HOBO_data <- function(path.HOBO,
   # loop over each HOBO file
   for(i in seq_along(dat.files)) {
 
-# Import Data -------------------------------------------------------------
+    # Import Data -------------------------------------------------------------
 
     file.name <- dat.files[i]
 
@@ -144,30 +151,26 @@ compile_HOBO_data <- function(path.HOBO,
     file.type <- extract_file_extension(file.name)
 
     # import HOBO file i. Remove the first row if the first cell is the Plot Title
-    if(file.type == "xlsx") {
-      hobo.i_dat <- read_excel(paste(path.HOBO, file.name, sep = "/"),
-                               col_names = FALSE,
-                               col_types = "text")
-
-      if(hobo.i_dat[1,1] != "#")  hobo.i_dat <- hobo.i_dat %>% slice(-1)
-    }
+    # if(file.type == "xlsx") {
+    #   # hobo.i_dat <- read_excel(paste(path.HOBO, file.name, sep = "/"),
+    #   #                          col_names = FALSE,
+    #   #                          col_types = "text")
+    #   #
+    #   # if(hobo.i_dat[1,1] != "#")  hobo.i_dat <- hobo.i_dat %>% slice(-1)
+    # }
     if(file.type == "csv") {
       hobo.i_dat <- read_csv(paste(path.HOBO,  file.name, sep = "/"),
-                             col_names = FALSE, skip = 1,
+                             col_names = TRUE, skip = 1,
                              col_types = cols(.default = col_character()))
 
-      if(hobo.i_dat[1,1] != "#") {
+      if(names(hobo.i_dat)[1] != "#") {
         hobo.i_dat <- read_csv(paste(path.HOBO,  file.name, sep = "/"),
-                               col_names = FALSE,
+                               col_names = TRUE,
                                col_types = cols(.default = col_character()))
       }
     }
 
-    # select the first three columns
-    hobo.i <- hobo.i_dat %>%
-      select(c(1:3))
-
-# Extract metadata --------------------------------------------------------
+    # Extract metadata --------------------------------------------------------
 
     # extract serial number from file name
     serial.i <- data.frame(file.name) %>%
@@ -189,25 +192,53 @@ compile_HOBO_data <- function(path.HOBO,
     sensor.i <- paste(serial.table.HOBO$SENSOR[i], serial.table.HOBO$SERIAL[i], sep = "-")
 
     # extract date column header (includes GMT offset)
-    if(file.type == "xlsx") date_ref <- hobo.i[1,2]$...2
-    if(file.type == "csv") date_ref <- hobo.i[1,2]$X2
+    date_ref <- names(hobo.i_dat)[2]
 
     # extract temperature column header (includes units)
-    temp_ref <- data.frame(hobo.i[1,3]) %>%
-      rename("temp_ref" = 1) %>%
-      separate(col = "temp_ref", into = c("temp_ref", NA), sep = 8)
+    temp_ref <- hobo.i_dat %>%
+      colnames() %>%
+      data.frame() %>%
+      rename(COL_NAME = 1) %>%
+      filter(str_detect(COL_NAME, "Temp")) %>%
+      separate(col = COL_NAME, into = c("temp_ref", NA), sep = 8)
     temp_ref <- temp_ref$temp_ref
 
     # format deployment date range for metadata
     deployment_ref <- paste(format(start.date, "%Y-%b-%d"), "to", format(end.date, "%Y-%b-%d"))
 
+    # Select columns of interest ----------------------------------------------
 
-# Format data -------------------------------------------------------------
+    # make sure units are NOT in ppm
+    do_units <- hobo.i_dat %>%
+      select(DO = contains("DO conc, ppm"))
 
+    if(ncol(do_units) > 0) {
+      stop("Check dissolved oxygen units.
+           \nDissolved oxygen must be in units of mg/L.")
+    }
+
+    # select columns of interest
+    hobo.i <- hobo.i_dat %>%
+      select(
+        TIMESTAMP = contains("Date"),
+        Temperature = contains("Temp"),
+        DO_concentration =  contains("DO conc, mg/L")
+      ) %>%
+      convert_timestamp_to_datetime()
+
+    # convert DO to %saturation
+    if("DO_concentration" %in% names(hobo.i) && isTRUE(DO.percent.sat)) {
+      hobo.i <- hobo.i %>%
+        calculate_DO_percent_saturation()
+    }
+
+    vars.to.select <- colnames(hobo.i)[-1]
+
+    # convert INDEX and TIMESTAMP columns to characters so can add metadata (below)
     hobo.i <- hobo.i %>%
-      slice(-1) %>%                                       # remove column headings
-      select(INDEX = 1, TIMESTAMP = 2, TEMPERATURE = 3) %>%    # rename columns (will be dropped for export)
-      convert_timestamp_to_datetime()                     # convert the timestamp to a POSIXct object
+      mutate(TIMESTAMP = format(TIMESTAMP,  "%Y-%m-%d %H:%M:%S"))
+
+    # Format data -------------------------------------------------------------
 
     # un-account for daylight savings time
     # (subtract 1 hour from each datetime within the range of DST)
@@ -218,28 +249,38 @@ compile_HOBO_data <- function(path.HOBO,
     # (e.g., in case the sensor was retrieved after 20:00 AST, which is 00:00 UTC **The next day**)
     if(trim == TRUE) {
       hobo.i <- hobo.i %>%
-        filter(TIMESTAMP >= start.date, TIMESTAMP <= (end.date + hours(4))) %>%
-        mutate(INDEX = c(1:n()))
+        filter(TIMESTAMP >= start.date, TIMESTAMP <= (end.date + hours(4)))
     }
 
-    # convert columns to class character so can add in the meta data
     hobo.i <- hobo.i %>%
-      mutate(INDEX = as.character(round(as.numeric(INDEX), digits = 0)), # make sure INDEX will have the same class and format for each sheet
-             TIMESTAMP = format(TIMESTAMP,  "%Y-%m-%d %H:%M:%S"),
-             PLACEHOLDER = as.character(round(as.numeric(TEMPERATURE), digits = 3)))  %>%
-      select(INDEX, TIMESTAMP, PLACEHOLDER) %>%
-      add_metadata(row1 = deployment_ref,
-                   row2 = sensor.i,
-                   row3 = (paste("Temperature", depth, sep = "-")),
-                   row4 = c(date_ref, temp_ref))
+      mutate(INDEX = as.character(c(1:n())))
 
-    # merge data on the INDEX row
-    HOBO_dat <- full_join(HOBO_dat, hobo.i, by = "INDEX")
+    for(j in seq_along(vars.to.select)){
 
-  } # end for loop
+      var.j <- vars.to.select[j]
 
+      if(var.j == "Temperature") var_ref <- temp_ref
+      if(var.j == "Dissolved Oxygen") var_ref <- "DO, % saturation"
 
-# Return compiled data ----------------------------------------------------
+      hobo.j <- hobo.i %>%
+        select(INDEX, TIMESTAMP, all_of(var.j)) %>%
+        rename(PLACEHOLDER = 3) %>%
+        mutate(
+          PLACEHOLDER = as.character(round(as.numeric(PLACEHOLDER), digits = 3))
+        ) %>%
+        add_metadata(row1 = deployment_ref,
+                     row2 = sensor.i,
+                     row3 = paste(var.j, depth, sep = "-"),
+                     row4 = c(date_ref, var_ref))
+
+      # merge data on the INDEX column
+      HOBO_dat <- full_join(HOBO_dat, hobo.j, by = "INDEX")
+
+    } # end loop over variables
+
+  } # end loop over files
+
+  # Return compiled data ----------------------------------------------------
 
   if(export.csv == TRUE){
     # format start date for file name
