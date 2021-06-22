@@ -11,6 +11,7 @@ utils::globalVariables(c(
   "TIMESTAMP",
   "INDEX",
   "TEMPERATURE",
+  "COL_NAME",
 
   # compile_aquaMeasure_data()
   "Timestamp(UTC)",
@@ -59,20 +60,27 @@ utils::globalVariables(c(
   # trim_data
   "SENSOR_TYPE",
 
+  # calculate_DO_percent_calculation
+  "DO_concentration",
+  "DO_percent_sat",
+
   # format_for_opendata
   "LATITUDE", "LEASE", "LONGITUDE", "STATION", "TIMESTAMP", "WATERBODY",
 
-  # calculate_degree_days
-  "n_DAYS",
-  "AVG_TEMPERATURE",
+  # name_for_open_data
   "START_DAY",
-  "END_DAY",
-  "PERIOD",
-  "DATE",
 
-  # filter_days
-  "EXCEED_THRESH",
-  "n_obs",
+  # calculate_degree_days
+  # "n_DAYS",
+  # "AVG_TEMPERATURE",
+  # "START_DAY",
+  # "END_DAY",
+  # "PERIOD",
+  # "DATE",
+
+  # # filter_days
+  # "EXCEED_THRESH",
+  # "n_obs",
 
   # write_report_table
   "Deployment Date",

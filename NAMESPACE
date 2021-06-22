@@ -2,6 +2,7 @@
 
 export(assemble_opendata_submission)
 export(calculate_DO_concentration)
+export(calculate_DO_percent_saturation)
 export(combine_deployment_logs)
 export(compile_HOBO_data)
 export(compile_all_data)
