@@ -21,8 +21,8 @@ compile_all_data(
 
 \item{deployment.range}{A dataframe with two columns. The first column holds
 the deployment date (a Date object, POSIXct object, or character string in
-the order year, month, day),  and the second column holds the retrieval date
-(a Date object, POSIXct object, or character string in the order year,
+the order year, month, day),  and the second column holds the retrieval
+date (a Date object, POSIXct object, or character string in the order year,
 month, day).}
 
 \item{trim}{Logical value indicating whether to trim the data to the dates
