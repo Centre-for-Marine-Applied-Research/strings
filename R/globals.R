@@ -12,6 +12,7 @@ utils::globalVariables(c(
   "INDEX",
   "TEMPERATURE",
   "COL_NAME",
+  "sensor.depth",
 
   # compile_aquaMeasure_data()
   "Timestamp(UTC)",
@@ -45,6 +46,20 @@ utils::globalVariables(c(
   "cp",
   "SENSOR_NAME",
 
+  # calculate_cp
+  "T_Kelvin",
+  "C_star",
+  "PP_wv",
+  "theta",
+  "C_p",
+  "Salinity",
+  "P_wv",
+  "Pressure",
+  "alt_correction",
+
+  # apply_salinity_correction
+  "F_s",
+
   # dates_to_fix
   "inx_fix",
   "n_fix",
@@ -69,18 +84,6 @@ utils::globalVariables(c(
 
   # name_for_open_data
   "START_DAY",
-
-  # calculate_degree_days
-  # "n_DAYS",
-  # "AVG_TEMPERATURE",
-  # "START_DAY",
-  # "END_DAY",
-  # "PERIOD",
-  # "DATE",
-
-  # # filter_days
-  # "EXCEED_THRESH",
-  # "n_obs",
 
   # write_report_table
   "Deployment Date",

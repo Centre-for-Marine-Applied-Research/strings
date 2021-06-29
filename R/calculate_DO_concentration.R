@@ -1,90 +1,68 @@
-#'@title Calculates dissolved oxygen concentration (mg/L)
-#'@description Converts dissolved oxygen from percent saturation to
-#'  concentration (mg/L) based on temperature and pressure.
+#' @title Calculates dissolved oxygen concentration (mg/L)
+
+#' @description Converts dissolved oxygen from percent saturation to
+#'  concentration (mg/L) based on temperature, salinity, and barometric pressure.
 #'
-#'@details DO concentration is calculated as:
+
+#'@details DO concentration is calculated as: Where C_p is the solubility of
+#'  oxygen at the observed temperature, pressure, and salinity.
 #'
-#'  \deqn{DO_{mg/L} = C_p * DO_{\% Saturation} / 100}
+#'  C_p is calculated using equations 24 and 32, and Table 2 from Benson and
+#'  Krause 1984.
 #'
-#'  To see the calculation for \eqn{C_p}, go to
-#'  \url{https://www.waterontheweb.org/under/waterquality/oxygen.html}.
+#'  Benson, Bruce B., Krause, Daniel, (1984), The concentration and isotopic
+#'  fractionation of oxygen dissolved in freshwater and seawater in equilibrium
+#'  with the atmosphere, Limnology and Oceanography, 3, doi:
 #'
-#'  To determine what value to use for the \code{pressure} argument:
+#'@inheritParams calculate_DO_percent_saturation
 #'
-#'  \enumerate{
+#'@param dat.wide Dataframe with columns \code{TIMESTAMP}, \code{Temperature}
+#'  (degrees Celsius), and \code{DO_percent_sat} (\% saturation). Other columns
+#'  will be ignored.
 #'
-#'  \item Calculate water pressure: Navigate to:
-#'  \url{https://bluerobotics.com/learn/pressure-depth-calculator/?waterType=fresh}.
-#'   Choose "Freshwater" or "Saltwater" and use the calculator to determine the
-#'  pressure of water above the DO sensor in atm.
+#' @param return.cp Logical parameter. If \code{TRUE}, the function returns a
+#'   wide dataframe with columns: \code{TIMESTAMP}, \code{Temperature},
+#'   \code{DO_concentraion} (in mg/L), the parameters used to calculate
+#'   \code{C_p}, \code{C_p}, and \code{DO_percent_sat}.
 #'
-#'  \item Calculate air pressure:
+#'   If \code{FALSE}, the function returns a wide dataframe with columns:
+#'   \code{TIMESTAMP}, \code{Temperature}, \code{DO_concentration} (dissolved
+#'   oxygen in units of mg/L).
 #'
-#'  If the body of water is at sea level, air pressure is 1 atm.
 #'
-#'  If the body of water is not at sea level, first determine the altitude from:
-#'  \url{https://www.mapcoordinates.net/en}. Next, determine the air pressure in
-#'  atm from \url{https://www.mide.com/air-pressure-at-altitude-calculator}
-#'  (using the "Calculate Air Pressure at Altitude" calculator).
-#'
-#'  \item Total pressure = water pressure + air pressure. Use the total pressure
-#'  value as the \code{pressure} argument. }
-#'
-#'@param  dat.tidy Data in tidy format, as returned by the function
-#'  \code{convert_to_tidydata()}. Must include three columns: \code{SENSOR}
-#'  (character, must include "aquaMeasure-xxxxxx"), \code{VARIABLE} (character,
-#'  must include "Temperature" and "Dissolved Oxygen"), and \code{VALUE}
-#'  (numeric). Temperature values must be in degrees Celsius, and Dissolved
-#'  Oxygen values must be in \% saturation. Other columns will be ignored.
-#'@param pressure Total pressure (water pressure + air pressure) in atm on the
-#'  DO sensor. See Details section for how to determine an appropriate value.
-#'@param return.tidy Logical argument. If \code{TRUE} (the default), the
-#'  function returns \code{dat.tidy} with additional observations in the
-#'  \code{VARIABLE} column for "DO_concentration" and the corresponding value in
-#'  the \code{VALUE} column. If \code{FALSE}, the function returns the output in
-#'  a wide format - i.e., the values of temperature, dissolved oxygen (\%
-#'  saturation), Cp, and dissolved oxygen (concentration) for a given timestamp
-#'  are all in one row. This may be useful for checking the Cp value used to
-#'  calculate the dissolved oxygen concentration.
-#'@return If \code{return.tidy = TRUE}, returns \code{dat.tidy} with additional
-#'  observations in the \code{VARIABLE} column for "DO_concentration" and the
-#'  corresponding value in the \code{VALUE} column. If \code{return.tidy =
-#'  FALSE}, returns the output in a wide format (the values of temperature,
-#'  dissolved oxygen (\% saturation), Cp, and dissolved oxygen (concentration)
-#'  for a given timestamp in one row).
 #'@family calculate
+#'
 #'@author Danielle Dempsey, Nicole Torrie
-#'@importFrom tidyr pivot_wider pivot_longer separate
-#'@import dplyr
+#'
+#'@importFrom tidyr pivot_longer separate
+#'
+#'@importFrom dplyr mutate
+#'
 #'@export
 #'
-#'
 
-calculate_DO_concentration <- function(dat.tidy, pressure, return.tidy = TRUE){
 
-  dat <- dat.tidy %>%
-    separate(SENSOR, into = c("SENSOR_NAME", NA), sep = "-", remove = FALSE) %>%
-    filter(SENSOR_NAME == "aquaMeasure") %>%
-    pivot_wider(names_from = VARIABLE, values_from = VALUE) %>%
-    mutate(
-      cp = ((exp(7.7117-1.31403*log(Temperature+45.93))) *
-              pressure *
-              (1-exp(11.8571-(3840.7/(Temperature+273.15))-
-                       (216961/((Temperature+273.15)^2)))/pressure) *
-              (1-(0.000975-(0.00001426*Temperature)+(0.00000006436*(Temperature^2)))*pressure)) /
-        (1-exp(11.8571-(3840.7/(Temperature+273.15))-(216961/((Temperature+273.15)^2)))) /
-        (1-(0.000975-(0.00001426*Temperature)+(0.00000006436*(Temperature^2))))
-    ) %>%
-    mutate(DO_concentration = (cp * `Dissolved Oxygen`)/100)
+calculate_DO_concentration <- function(dat.wide,
+                                       Sal = NULL,
+                                       P_atm = NULL,
+                                       return.cp = FALSE){
 
-  if(return.tidy == TRUE) {
-    dat <- dat %>%
-      select(-SENSOR_NAME, -cp) %>%
-      pivot_longer(cols= c("Temperature", "Dissolved Oxygen", "DO_concentration"),
-                   names_to = "VARIABLE", values_to = "VALUE")
+  dat.out <- dat.wide %>%
+    mutate(Temperature = as.numeric(Temperature),
+           DO_percent_sat = as.numeric(DO_percent_sat)) %>%
+    calculate_cp() %>%
+    mutate(DO_concentration = (C_p * DO_percent_sat)/100)
+
+
+  if(isFALSE(return.cp)){
+
+    dat.out <- dat.out %>%
+      select(-DO_percent_sat, -Salinity, -Pressure,
+             -T_Kelvin, -theta, -P_wv, -C_star, -alt_correction, -C_p)
+
   }
 
-  dat
+  dat.out
 
 
 }
