@@ -25,10 +25,10 @@
 #'
 #'  All other columns will be ignored.
 #'
-#'  Entries in the \code{Logger_Model} column can be "HOBO Pro V2", "TidbiT
-#'  MX2303", "TidbiT MX2203"  "aquaMeasure DOT", "aquaMeasure SAL", "aquaMeasure
-#'  SST", or "VR2AR". (Some mis-spellings are accepted: ("HOBO pro V2",
-#'  "HOBO_Pro_V2", "aquameasure DOT", "aquameasure SAL", "aquameasure SST")
+#'  Entries in the \code{Logger_Model} column can be "HOBO Pro V2", "HOBO DO",
+#'  "TidbiT MX2303", "TidbiT MX2203"  "aquaMeasure DOT", "aquaMeasure SAL",
+#'  "aquaMeasure SST", or "VR2AR". (Some mis-spellings are accepted: "HOBO pro
+#'  V2", "HOBO_Pro_V2", "aquameasure DOT", "aquameasure SAL", "aquameasure SST")
 #'
 #'  A Warning message is printed to the console when the function does not
 #'  recognize a sensor in the log.
@@ -143,7 +143,9 @@ read_deployment_log <- function(path.log){
                           lease = log$`Lease#`[1])
 
   # HOBO & TidBit sensors
-  hobo.sensors <- c("HOBO Pro V2", "HOBO pro V2", "HOBO_Pro_V2", "TidbiT MX2303", "TidbiT MX2203")
+  hobo.sensors <- c("HOBO Pro V2", "HOBO pro V2", "HOBO_Pro_V2",
+                    "HOBO DO",
+                    "TidbiT MX2303", "TidbiT MX2203")
 
   hobos <- log %>%
     filter(Logger_Model %in% hobo.sensors) %>%

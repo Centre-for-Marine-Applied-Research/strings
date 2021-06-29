@@ -48,10 +48,10 @@ The log must be saved in a folder called Log in .csv, .xlsx or .xls
 
  All other columns will be ignored.
 
- Entries in the \code{Logger_Model} column can be "HOBO Pro V2", "TidbiT
- MX2303", "TidbiT MX2203"  "aquaMeasure DOT", "aquaMeasure SAL", "aquaMeasure
- SST", or "VR2AR". (Some mis-spellings are accepted: ("HOBO pro V2",
- "HOBO_Pro_V2", "aquameasure DOT", "aquameasure SAL", "aquameasure SST")
+ Entries in the \code{Logger_Model} column can be "HOBO Pro V2", "HOBO DO",
+ "TidbiT MX2303", "TidbiT MX2203"  "aquaMeasure DOT", "aquaMeasure SAL",
+ "aquaMeasure SST", or "VR2AR". (Some mis-spellings are accepted: "HOBO pro
+ V2", "HOBO_Pro_V2", "aquameasure DOT", "aquameasure SAL", "aquameasure SST")
 
  A Warning message is printed to the console when the function does not
  recognize a sensor in the log.
