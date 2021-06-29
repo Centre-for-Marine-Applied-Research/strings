@@ -25,8 +25,8 @@ was deployed, in the format "10m".}
 
 \item{deployment.range}{A dataframe with two columns. The first column holds
 the deployment date (a Date object, POSIXct object, or character string in
-the order year, month, day),  and the second column holds the retrieval date
-(a Date object, POSIXct object, or character string in the order year,
+the order year, month, day),  and the second column holds the retrieval
+date (a Date object, POSIXct object, or character string in the order year,
 month, day).}
 
 \item{trim}{Logical value indicating whether to trim the data to the dates
@@ -35,9 +35,10 @@ retrieval date to account for AST, e.g., in case the sensor was retrieved
 after 20:00 AST, which is 00:00 UTC the next day.) Default is \code{trim =
 TRUE}.}
 
-\item{export.csv}{Logical value indicating whether to export the compiled data
-as a .csv file. If \code{export.csv = TRUE}, the compiled data will not be
-returned to the global environment. Default is \code{export.csv = FALSE}.}
+\item{export.csv}{Logical value indicating whether to export the compiled
+data as a .csv file. If \code{export.csv = TRUE}, the compiled data will
+not be returned to the global environment. Default is \code{export.csv =
+FALSE}.}
 }
 \value{
 Returns a dataframe or exports a spreadsheet with the formatted Vemco
