@@ -11,7 +11,8 @@ compile_HOBO_data(
   deployment.range,
   trim = TRUE,
   rm.DST = FALSE,
-  DO.percent.sat = TRUE,
+  correct.DO = FALSE,
+  Sal = NULL,
   export.csv = FALSE
 )
 }
@@ -19,8 +20,8 @@ compile_HOBO_data(
 \item{path.HOBO}{File path to the Hobo folder. All of the excel files in the
 Hobo folder will be compiled. The name of each file must be the serial
 number of the sensor, and the excel files must be in either .csv or .xlsx
-format. The timestamp columns must be in the order "ymd IMS p", "Ymd IMS p",
-"Ymd HM", "Ymd HMS", "dmY HM", or "dmY HMS".}
+format. The timestamp columns must be in the order "ymd IMS p", "Ymd IMS
+p", "Ymd HM", "Ymd HMS", "dmY HM", or "dmY HMS".}
 
 \item{area.name}{Area where the sensor(s) was deployed.}
 
@@ -31,8 +32,8 @@ deployed in the form "2m" (second column).}
 
 \item{deployment.range}{A dataframe with two columns. The first column holds
 the deployment date (a Date object, POSIXct object, or character string in
-the order year, month, day),  and the second column holds the retrieval date
-(a Date object, POSIXct object, or character string in the order year,
+the order year, month, day),  and the second column holds the retrieval
+date (a Date object, POSIXct object, or character string in the order year,
 month, day).}
 
 \item{trim}{Logical value indicating whether to trim the data to the dates
@@ -42,74 +43,83 @@ after 20:00 AST, which is 00:00 UTC the next day.) Default is \code{trim =
 TRUE}.}
 
 \item{rm.DST}{Option to remove daylight savings time. Here, daylight savings
-is as defined for Nova Scotia, Canada (begins in March and end in November).
-Only works for 2015 - 2021. It is strongly recommended that the data is in
-the correct timezone before using this function, and that the default
-\code{rm.DST = FALSE} is used.}
+is as defined for Nova Scotia, Canada (begins in March and end in
+November). Only works for 2015 - 2021. It is strongly recommended that the
+data is in the correct timezone before using this function, and that the
+default \code{rm.DST = FALSE} is used.}
 
-\item{DO.percent.sat}{Logical value indicating dissolved oxygen units. If
-\code{TRUE}, dissolved oxygen is converted from concentration (mg / L) to
-percent saturation (\%). If \code{FALSE}, dissolved oxygen concentration (mg
-/ L) is returned. Default is \code{DO.percent = TRUE}. Other}
+\item{correct.DO}{Logical value. If \code{TRUE}, dissolved oxygen will be
+  corrected for salinity (argument \code{Sal} must be specified).
 
-\item{export.csv}{Logical value indicating whether to export the compiled data
-as a .csv file. If \code{export.csv = TRUE}, the compiled data will not be
-returned to the global environment. Default is \code{export.csv = FALSE}.}
+  If \code{FALSE}, no correction factor will be applied. If the sensor did
+  not record dissolved oxygen data, use the default \code{correct.DO =
+  FALSE}.}
+
+\item{Sal}{A single value of salinity (psu), used to calculate the salinity
+correction factor for dissolved oxygen.}
+
+\item{export.csv}{Logical value indicating whether to export the compiled
+data as a .csv file. If \code{export.csv = TRUE}, the compiled data will
+not be returned to the global environment. Default is \code{export.csv =
+FALSE}.}
 }
 \value{
 Returns a dataframe or exports a spreadsheet with the data compiled
- from each of the HOBO and TidbiT sensors. Columns alternate between
- timestamp (in the format "Y-m-d H:M:S") and temperature value (rounded to
- three decimal places). Metadata at the top of each column indicates the
- deployment and retrieval dates, the sensor serial number, the depth of the
- sensor, the temperature units, and the timezone of the timestamp.
+  from each of the HOBO and TidbiT sensors. Columns alternate between
+  timestamp (in the format "Y-m-d H:M:S") and temperature value (rounded to
+  three decimal places). Metadata at the top of each column indicates the
+  deployment and retrieval dates, the sensor serial number, the depth of the
+  sensor, the temperature units, and the timezone of the timestamp.
 
- To include the metadata, all values were converted to class
- \code{character}. To manipulate the data, the values must be converted to
- the appropriate class (e.g., \code{POSIXct} for the timestamps and
- \code{numeric} for temperature values). This can be done using the function
- \code{convert_to_tidydata()}.
+  To include the metadata, all values were converted to class
+  \code{character}. To manipulate the data, the values must be converted to
+  the appropriate class (e.g., \code{POSIXct} for the timestamps and
+  \code{numeric} for temperature values). This can be done using the function
+  \code{convert_to_tidydata()}.
 }
 \description{
 Compiles and formats data from HOBO and TidbiT sensors.
 }
 \details{
 The raw HOBO and TidBiT data must be saved in a folder named Hobo in
- .csv or .xlsx format.
+  .csv or .xlsx format.
 
- All columns are read in as characters to ensure the timestamp is parsed
- correctly. Timestamp must be saved in Excel as a number or a character in
- the order ""ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY HM", or "dmY
- HMS".
+  All columns are read in as characters to ensure the timestamp is parsed
+  correctly. Timestamp must be saved in Excel as a number or a character in
+  the order ""ymd IMS p", "Ymd IMS p", "Ymd HM", "Ymd HMS", "dmY HM", or "dmY
+  HMS".
 
- CMAR NOTES: Data should be exported from the Hobo software in GMT+00 as a
- csv file so that the timestamp is in UTC.
+  Dissolved oxygen can be corrected for salinity using equation 32 in Benson
+and Krause. See \code{?apply_salinity_correction} for more detail.
 
- If exported as a .xlsx file, the timestamp accounts for daylight savings
- time (this seems to be a bug in the HOBO software).
- \code{compile_HOBO_data()} can convert .xlsx files to true UTC by setting
- \code{rm.DST = TRUE}. This will subtract 1 hour from each datetime that
- occurs during daylight savings.
+  CMAR NOTES: Data should be exported from the Hobo software in GMT+00 as a
+  csv file so that the timestamp is in UTC.
 
- The functions used to convert to true UTC are
- \code{convert_HOBO_datetime_to_true_UTC()} and \code{dates_to_fix()}, which
- are NOT exported to the \code{strings} package (i.e., they are only used
- internally).
+  If exported as a .xlsx file, the timestamp accounts for daylight savings
+  time (this seems to be a bug in the HOBO software).
+  \code{compile_HOBO_data()} can convert .xlsx files to true UTC by setting
+  \code{rm.DST = TRUE}. This will subtract 1 hour from each datetime that
+  occurs during daylight savings.
 
- \code{convert_HOBO_datetime_to_true_UTC()} identifies which datetimes are
- during daylight savings by creating two additional columns: \code{ADT_force
- = force_tz(TIMESTAMP, tzone = "America/Halifax")}, and
- \code{DAYLIGHT_SAVINGS = dst(ADT_force)}. Where \code{DAYLIGHT_SAVINGS ==
- TRUE}, the \code{TIMESTAMP} is shifted back by 1 hour.
+  The functions used to convert to true UTC are
+  \code{convert_HOBO_datetime_to_true_UTC()} and \code{dates_to_fix()}, which
+  are NOT exported to the \code{strings} package (i.e., they are only used
+  internally).
 
- This leaves apparent duplicates for the hour of 1 am on the day that
- daylight savings ends. \code{dates_to_fix()} identifies these \code{n}
- observations (e.g. 1:00, 1:15, 1:30, 1:45, 1:00, 1:15, 1:30, 1:45), and
- shifts the first \code{n/2} back by one hour (e.g. 00:00, 00:15, 00:30,
- 00:45, 1:00, 1:15, 1:30, 1:45).The function is hard-coded 2015 - 2021.
+  \code{convert_HOBO_datetime_to_true_UTC()} identifies which datetimes are
+  during daylight savings by creating two additional columns: \code{ADT_force
+  = force_tz(TIMESTAMP, tzone = "America/Halifax")}, and
+  \code{DAYLIGHT_SAVINGS = dst(ADT_force)}. Where \code{DAYLIGHT_SAVINGS ==
+  TRUE}, the \code{TIMESTAMP} is shifted back by 1 hour.
 
- If for some reason, there is an ODD number of duplicates, the function might
- break.
+  This leaves apparent duplicates for the hour of 1 am on the day that
+  daylight savings ends. \code{dates_to_fix()} identifies these \code{n}
+  observations (e.g. 1:00, 1:15, 1:30, 1:45, 1:00, 1:15, 1:30, 1:45), and
+  shifts the first \code{n/2} back by one hour (e.g. 00:00, 00:15, 00:30,
+  00:45, 1:00, 1:15, 1:30, 1:45).The function is hard-coded 2015 - 2021.
+
+  If for some reason, there is an ODD number of duplicates, the function
+  might break.
 }
 \examples{
 # path to "Hobo" folder
