@@ -13,6 +13,7 @@ utils::globalVariables(c(
   "TEMPERATURE",
   "COL_NAME",
   "sensor.depth",
+  "DO_corrected",
 
   # compile_aquaMeasure_data()
   "Timestamp(UTC)",
