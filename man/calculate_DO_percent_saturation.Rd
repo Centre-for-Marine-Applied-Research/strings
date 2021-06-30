@@ -44,10 +44,13 @@ Converts dissolved oxygen from concentration (mg/L) to percent
 \details{
 DO percent saturation is calculated as:
 
-  \deqn{DO_{\% Saturation} = 100 * DO_{mg/L} / C_p}
+  \deqn{DO_{\% Saturation} = 100 * DO_{mg/L} / C_{p}}
 
-  Where C_p is the solubility of oxygen at the observed temperature,
-  pressure, and salinity.
+  DO_{mg/L} is the concentration of dissolved oxygen in mg/L (make sure the
+  salinity and/or pressure-corrected concentration is used if required).
+
+  C_p is the solubility of oxygen at the observed temperature, pressure, and
+  salinity.
 
   C_p is calculated using equations 24 and 32, and Table 2 from Benson and
   Krause 1984.

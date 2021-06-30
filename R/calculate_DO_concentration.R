@@ -1,24 +1,31 @@
 #' @title Calculates dissolved oxygen concentration (mg/L)
-
+#'
 #' @description Converts dissolved oxygen from percent saturation to
-#'  concentration (mg/L) based on temperature, salinity, and barometric pressure.
+#'   concentration (mg/L) based on temperature, salinity, and barometric
+#'   pressure.
 #'
-
-#'@details DO concentration is calculated as: Where C_p is the solubility of
-#'  oxygen at the observed temperature, pressure, and salinity.
+#' @details DO concentration is calculated as:
 #'
-#'  C_p is calculated using equations 24 and 32, and Table 2 from Benson and
-#'  Krause 1984.
+#'   \deqn{DO_{mg/L} = C_{p} * DO_{\% Saturation} /100 }
 #'
-#'  Benson, Bruce B., Krause, Daniel, (1984), The concentration and isotopic
-#'  fractionation of oxygen dissolved in freshwater and seawater in equilibrium
-#'  with the atmosphere, Limnology and Oceanography, 3, doi:
+#'   DO_{\% Saturation} is the percent saturation of dissolved oxygen (make sure
+#'   the salinity and/or pressure-corrected value is used if required).
 #'
-#'@inheritParams calculate_DO_percent_saturation
+#'   Where C_p is the solubility of oxygen at the observed temperature,
+#'   pressure, and salinity.
 #'
-#'@param dat.wide Dataframe with columns \code{TIMESTAMP}, \code{Temperature}
-#'  (degrees Celsius), and \code{DO_percent_sat} (\% saturation). Other columns
-#'  will be ignored.
+#'   C_p is calculated using equations 24 and 32, and Table 2 from Benson and
+#'   Krause 1984.
+#'
+#'   Benson, Bruce B., Krause, Daniel, (1984), The concentration and isotopic
+#'   fractionation of oxygen dissolved in freshwater and seawater in equilibrium
+#'   with the atmosphere, Limnology and Oceanography, 3, doi:
+#'
+#' @inheritParams calculate_DO_percent_saturation
+#'
+#' @param dat.wide Dataframe with columns \code{TIMESTAMP}, \code{Temperature}
+#'   (degrees Celsius), and \code{DO_percent_sat} (\% saturation). Other columns
+#'   will be ignored.
 #'
 #' @param return.cp Logical parameter. If \code{TRUE}, the function returns a
 #'   wide dataframe with columns: \code{TIMESTAMP}, \code{Temperature},
@@ -30,15 +37,15 @@
 #'   oxygen in units of mg/L).
 #'
 #'
-#'@family calculate
+#' @family calculate
 #'
-#'@author Danielle Dempsey, Nicole Torrie
+#' @author Danielle Dempsey, Nicole Torrie
 #'
-#'@importFrom tidyr pivot_longer separate
+#' @importFrom tidyr pivot_longer separate
 #'
-#'@importFrom dplyr mutate
+#' @importFrom dplyr mutate
 #'
-#'@export
+#' @export
 #'
 
 
