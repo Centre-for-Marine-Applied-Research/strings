@@ -60,6 +60,9 @@ compile_all_data <- function(path,
                              trim = TRUE,
                              # hobo
                              serial.table.HOBO = NULL,
+                             correct.DO = FALSE,
+                             Sal = NULL,
+
                              # aquaMeaure
                              serial.table.aM = NULL,
                              # vemco
@@ -74,7 +77,10 @@ compile_all_data <- function(path,
                               area.name = area.name,
                               serial.table.HOBO = serial.table.HOBO,
                               deployment.range = deployment.range,
-                              trim = trim)
+                              trim = trim,
+
+                              correct.DO = correct.DO,
+                              Sal = Sal)
 
     ALL <- full_join(ALL, HOBO, by = "INDEX")
   }

@@ -10,6 +10,8 @@ compile_all_data(
   deployment.range,
   trim = TRUE,
   serial.table.HOBO = NULL,
+  correct.DO = FALSE,
+  Sal = NULL,
   serial.table.aM = NULL,
   depth.vemco = NULL
 )
@@ -35,6 +37,16 @@ TRUE}.}
 TidBiT sensor on the string, in the form "HOBO-xxxxxxxx" or
 "TidbiT-xxxxxxxx" (first column) and corresponding depth at which it was
 deployed in the form "2m" (second column).}
+
+\item{correct.DO}{Logical value. If \code{TRUE}, dissolved oxygen will be
+  corrected for salinity (argument \code{Sal} must be specified).
+
+  If \code{FALSE}, no correction factor will be applied. If the sensor did
+  not record dissolved oxygen data, use the default \code{correct.DO =
+  FALSE}.}
+
+\item{Sal}{A single value of salinity (psu), used to calculate the salinity
+correction factor for dissolved oxygen.}
 
 \item{serial.table.aM}{A table with the serial number of each aquaMeasure on
 the string, in the form "aquaMeasure-xxxxxx" (first column; note the capital
