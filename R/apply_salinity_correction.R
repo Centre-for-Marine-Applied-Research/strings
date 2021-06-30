@@ -1,22 +1,28 @@
 #' Apply salinity correction factor to dissolved oxygen measurements
 #'
-#' @details Dissolved oxygen **needs to be corrected
+#' @details Dissolved oxygen measured by HOBO sensors needs to be corrected for
+#'   salinity (see manual:
+#'   \url{https://www.onsetcomp.com/files/manual_pdfs/15603-B-MAN-U26x.pdf}).
 #'
-#' Equation
+#'   The salinity correction factor is calculated from the final term in
+#'   equation 32 in Benson and Krause 1984:
 #'
+#'   \deqn{F_{s} = exp(-Salinity * (0.017674 - 10.754 / T_{Kelvin} + 2140.7 /
+#'   T_{Kelvin}^2))}
 #'
+#'   T_{Kelvin} is the temperature in Kelvin and \eqn{Salinity} is the salinity
+#'   in ppt.
 #'
-#'    calculated using the
-#'   equations in Benson and Krause 1984.
+#'   Results from this function should match those from the USGS DOTABLES (part
+#'   C) at \url{https://water.usgs.gov/water-resources/software/DOTABLES/}.
 #'
-#'   These equations should only be used when temperature is between 0 and 40
+#'   This equation should only be used when temperature is between 0 and 40
 #'   degrees-Celsius and salinity is between 0 and 40 psu.
 #'
-#'   Results from this function should match those from the USGS DOTABLES at
-#'   \url{https://water.usgs.gov/water-resources/software/DOTABLES/}.
-#'
-#'   For more info see equations 24 and 32, and Table 2 from Benson and Krause
-#'   1984.
+#'   Note: the HOBO Dissolved Oxygen Assistant Software uses a different
+#'   equation to calculate the correction factor, but the results for a given
+#'   temperature and salinity are typically the same as the Benson and Krause
+#'   equation (until the fourth decimal place).
 #'
 #'   Benson, Bruce B., Krause, Daniel, (1984), The concentration and isotopic
 #'   fractionation of oxygen dissolved in freshwater and seawater in equilibrium
@@ -71,7 +77,6 @@ apply_salinity_correction <- function(dat.wide, Sal = NULL, return.Fs = FALSE){
       # correction factor
       F_s = exp(-Salinity * (0.017674 -
                                10.754 / T_Kelvin + 2140.7 / T_Kelvin^2)),
-
       # corrected DO
       DO_corrected = `Dissolved Oxygen` * F_s
     )
@@ -83,6 +88,7 @@ apply_salinity_correction <- function(dat.wide, Sal = NULL, return.Fs = FALSE){
 
   }
 
+  print("salinity correction factor applied to dissolved oxygen data")
   dat.out
 
 }
