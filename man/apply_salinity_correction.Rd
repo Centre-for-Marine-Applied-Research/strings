@@ -4,7 +4,12 @@
 \alias{apply_salinity_correction}
 \title{Apply salinity correction factor to dissolved oxygen measurements}
 \usage{
-apply_salinity_correction(dat.wide, Sal = NULL, return.Fs = FALSE)
+apply_salinity_correction(
+  dat.wide,
+  Sal = NULL,
+  method = "garcia-gordon",
+  return.Fs = FALSE
+)
 }
 \arguments{
 \item{dat.wide}{Dataframe with at least two columns: \code{Temperature} and
@@ -16,14 +21,15 @@ there is no \code{Salinity} column in \code{dat.wide}. Default is \code{Sal
 = NULL}. Note: if \code{Sal} is specified when there is a \code{Salinity}
 column in \code{dat.wide}, the function will stop with an error.}
 
-\item{return.Fs}{Logical parameter. If \code{TRUE} the function returns a
-  dataframe with columns: \code{TIMESTAMP}, \code{Temperature},
-  \code{Dissolved Oxygen} (uncorrected values), the parameters used to
-  calculate \code{Salinity}, \code{T_Kelvin} (temperature in Kelvin),
-  \code{F_s} (salinity correction factor), and\code{DO_corrected}.
+\item{method}{Equation to use to calculate dissolved oxygen solubility.
+Options are \code{"garcia-gordon"} (the default) and \code{benson-krause}.}
 
-  If \code{FALSE}, the function returns a wide dataframe with columns:
-  \code{TIMESTAMP}, \code{Temperature}, \code{DO_corrected}.}
+\item{return.Fs}{Logical parameter. If \code{TRUE} the function returns a
+  dataframe with columns of uncorrected DO values, the parameters used to
+  calculate \code{F_s} (salinity correction factor), and \code{DO_corrected}.
+
+  If \code{FALSE}, the function returns \code{dat.wide} with additional
+  column \code{DO_corrected}.}
 }
 \description{
 Apply salinity correction factor to dissolved oxygen measurements

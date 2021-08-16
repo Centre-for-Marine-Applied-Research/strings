@@ -58,8 +58,12 @@ utils::globalVariables(c(
   "Pressure",
   "alt_correction",
 
-  # apply_salinity_correction
+  # DO_salinity_correction
+  "T_s",
   "F_s",
+
+  # DO_pressure_correction
+  "F_p",
 
   # dates_to_fix
   "inx_fix",

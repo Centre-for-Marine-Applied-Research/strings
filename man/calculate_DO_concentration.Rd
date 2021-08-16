@@ -16,11 +16,10 @@ calculate_DO_concentration(
 (degrees Celsius), and \code{DO_percent_sat} (\% saturation). Other columns
 will be ignored.}
 
-\item{Sal}{A single value of salinity (ppt). This value should be specified
-if there is no \code{Salinity} column in \code{dat.wide}. Default is
-\code{Sal = NULL}. Note: if \code{Sal} is specified when there is a
-\code{Salinity} column in \code{dat.wide}, function will stop with an
-error.}
+\item{Sal}{A single value of salinity (psu). This value must be specified if
+there is no \code{Salinity} column in \code{dat.wide}. Default is \code{Sal
+= NULL}. Note: if \code{Sal} is specified when there is a \code{Salinity}
+column in \code{dat.wide}, the function will stop with an error.}
 
 \item{P_atm}{A single value of barometric pressure (atm). This value should
 be specified if there is no \code{Pressure} column in \code{dat.wide}.

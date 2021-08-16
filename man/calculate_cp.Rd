@@ -4,45 +4,70 @@
 \alias{calculate_cp}
 \title{Calculate the solubility of dissolved oxygen}
 \usage{
-calculate_cp(dat.wide, Sal = NULL, P_atm = NULL)
+calculate_cp(
+  dat.wide,
+  Sal = NULL,
+  P_atm = NULL,
+  method = "garcia-gordon",
+  return.factors = FALSE
+)
 }
 \arguments{
 \item{dat.wide}{Dataframe with at least one column: \code{Temperature}.
 Corresponding salinity (psu) and pressure (atm) data may be included in
 columns \code{Salinity} and \code{Pressure}.}
 
-\item{Sal}{A single value of salinity (ppt). This value should be specified
-if there is no \code{Salinity} column in \code{dat.wide}. Default is
-\code{Sal = NULL}. Note: if \code{Sal} is specified when there is a
-\code{Salinity} column in \code{dat.wide}, function will stop with an
-error.}
+\item{Sal}{A single value of salinity (psu). This value must be specified if
+there is no \code{Salinity} column in \code{dat.wide}. Default is \code{Sal
+= NULL}. Note: if \code{Sal} is specified when there is a \code{Salinity}
+column in \code{dat.wide}, the function will stop with an error.}
 
 \item{P_atm}{A single value of barometric pressure (atm). This value should
 be specified if there is no \code{Pressure} column in \code{dat.wide}.
 Default is \code{P_atm = NULL}. Note: if \code{P_atm} is specified when
 there is a \code{Pressure} column in \code{dat.wide}, function will stop
 with an error.}
+
+\item{method}{Equation to use to calculate dissolved oxygen solubility.
+Options are \code{"garcia-gordon"} (the default) and \code{benson-krause}.}
+
+\item{return.factors}{Logical parameter. If \code{TRUE} the function returns
+  a dataframe with columns of uncorrected DO values, the parameters used to
+  calculate \code{F_s} and \code{F_p}, and \code{C_p}.
+
+  If \code{FALSE}, the function returns \code{dat.wide} with additional
+  column(s) \code{Salinity}, \code{Pressure}, and \code{C_p}.}
 }
 \description{
 Calculate the solubility of dissolved oxygen based on
   temperature, salinity and barometric pressure, following the equations in
-  Benson and Krause 1984.
+  Benson and Krause 1984 or Garcia and Gordon 1992.
 }
 \details{
 Solubility of dissolved oxygen (mg/L) is calculated using the
-  equations in Benson and Krause 1984.
+  equations in Benson and Krause 1984, or the or Garcia and Gordon 1992
+  refit. These equations should only be used when 0 < Temperature < 40
+  degrees Celcius, 0 < Salinity < 40 PSU and 0.5 < Pressue < 1.1 atm.
 
-  These equations should only be used when temperature is between 0 and 40
-  degrees-Celsius and salinity is between 0 and 40 psu.
-
-  Results from this function should match those from the USGS DOTABLES at
+  Results from this function should closely match those from the USGS
+  DOTABLES (output from GG may differ in the second decimal place)  at
   \url{https://water.usgs.gov/water-resources/software/DOTABLES/}.
 
   For more info see equations 24 and 32, and Table 2 from Benson and Krause
-  1984.
+  1984 or Equation 8 and Table 1 from Garcia and Gordon 1992.
+
+  For the Garcia and Gordon equation, coefficients from the first column of
+  Table 1 were used here. Conversion factor of 1.42905 was used to convert
+  from cm^3/dm^3 (mL/L) to mg/L (USGS 2011).
 
   Benson, Bruce B., Krause, Daniel, (1984), The concentration and isotopic
   fractionation of oxygen dissolved in freshwater and seawater in equilibrium
   with the atmosphere, Limnology and Oceanography, 3, doi:
   10.4319/lo.1984.29.3.0620.
+
+  Garcia, H., and L. Gordon (1992), \emph{Oxygen solubility in seawater:
+  Better fitting equations}, Limnol. Oceanogr., 37(6).
+
+  USGS. \emph{Change to Solubility Equations for Oxygen in Water.} Technical
+  Memorandum 2011.03. USGS Office of Water Quality, 2011.
 }
