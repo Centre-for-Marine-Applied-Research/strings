@@ -1,4 +1,4 @@
-#' Salinity correction factor for dissolved oxygen measurements
+#' Salinity correction factor for dissolved oxygen concentration measurements
 #'
 #' @details Dissolved oxygen concentration measured by HOBO sensors needs to be
 #'   corrected for salinity (see manual:
@@ -7,7 +7,7 @@
 #'   The salinity correction factor can be calculated using the Benson and
 #'   Krause 1984 equations or the Garcia and Gordon 1992 equations. These
 #'   equations should only be used when 0 < Temperature < 40 degrees Celcius, 0
-#'   < Salinity < 40 PSU and 0.5 < Pressue < 1.1 atm.
+#'   < Salinity < 40 PSU and 0.5 < Pressure < 1.1 atm.
 #'
 #'   \bold{Benson & Krause, 1984}:
 #'
@@ -24,19 +24,24 @@
 #'   \bold{Garcia &  Gordon, 1992:}
 #'
 #'   Garcia & Gordon re-fit the Benson & Krause data with a higher order
-#'   polynomial and defined a scaled temperature (\eqn{T_s}).
+#'   polynomial and defined a scaled temperature (\eqn{T_{s}}).
 #'
 #'   This correction factor is used in the SCOR WG 142 (Part C).
 #'
 #'   Results from this equation are very similar to the Benson & Krause
 #'   correction factor (to ~4 decimal places).
 #'
-#'   \eqn{F_{s} = exp(Salinity x (-6.24523E-3 -7.37614E-3 x T_s -1.03410E-2 x
-#'   T_s^2 -8.17083E-3 x T_s^3) -4.88682E-7 * Salinity^2)}
+#'   \deqn{B0 = -6.24523E-3} \deqn{B1 = -7.37614E-3} \deqn{B2 = -1.03410E-2}
+#'   \deqn{B3 = -8.17083E-3} \deqn{C0 = -4.88682E-7}
+#'
+#'   \deqn{F_{s} = exp(Salinity * (B0 + B1 * T_{s} + B2 * T_{s}^2 + B3 *
+#'   T_{s}^3) + C0 * Salinity^2)}
+#'
+#'   \deqn{T_{s} = log((298.15 - Temperature) / (273.15 + Temperature))}
 #'
 #'   Note: the HOBO Dissolved Oxygen Assistant Software salinity correction
 #'   factor uses the same form as the Garcia and Gordon equation, but different
-#'   coefficients (negligible difference in the resulting \deqn{F_s}).
+#'   coefficients (although the results are similar).
 #'
 #'   \bold{References}
 #'
@@ -57,20 +62,23 @@
 #'   USGS. \emph{Change to Solubility Equations for Oxygen in Water.} Technical
 #'   Memorandum 2011.03. USGS Office of Water Quality, 2011.
 #'
-#'
 #' @param dat.wide Dataframe with at least one column: \code{Temperature}.
 #'   Corresponding salinity (psu) data may be included in column
-#'   \code{Salinity}.
+#'   \code{Salinity}. Additional columns will be ignored and returned.
 #'
 #' @param Sal A single value of salinity (psu). This value must be specified if
 #'   there is no \code{Salinity} column in \code{dat.wide}. Default is \code{Sal
 #'   = NULL}. Note: if \code{Sal} is specified when there is a \code{Salinity}
 #'   column in \code{dat.wide}, the function will stop with an error.
 #'
-#' @param method Equation to use to calculate dissolved oxygen solubility.
-#'   Options are \code{"garcia-gordon"} (the default) and \code{benson-krause}.
+#' @param method Equation to use to calculate salinity correction factor.
+#'   Options are \code{method = "garcia-gordon"} (the default) and \code{method
+#'   = "benson-krause"}.
 #'
-#' @return Returns \code{dat.wide} with an additional column, \code{F_s}.
+#' @return Returns \code{dat.wide} with additional column(s), \code{F_s} and
+#'   \code{Salinity}.
+#'
+#' @family Dissolved Oxygen
 #'
 #' @export
 
@@ -102,6 +110,7 @@ DO_salinity_correction <- function(dat.wide,
 
   if(!is.null(Sal)) dat.wide <- mutate(dat.wide, Salinity = Sal)
 
+# Benson-Krause Method ----------------------------------------------------
 
   if(tolower(method) == "benson-krause"){
 
@@ -117,10 +126,13 @@ DO_salinity_correction <- function(dat.wide,
         T_Kelvin = Temperature + 273.15,
 
         # correction factor
-        F_s = exp(-Salinity * (B0_BK + B1_BK / T_Kelvin + B2_BK / T_Kelvin^2))
+        F_s = exp(-Salinity * (B0_BK + B1_BK / T_Kelvin + B2_BK / T_Kelvin^2)),
+        F_s = round(F_s, digits = 4)
       ) %>%
       select(-T_Kelvin)
   }
+
+# Garcia-Gordon Method ----------------------------------------------------
 
   if(tolower(method) == "garcia-gordon"){
 
@@ -135,16 +147,16 @@ DO_salinity_correction <- function(dat.wide,
         Temperature = as.numeric(Temperature),
 
         # scaled temperature
-        T_s = log((298.15 - Temperature)/(273.15 + Temperature)),
+        T_s = log((298.15 - Temperature) / (273.15 + Temperature)),
 
         # correction factor
         F_s = exp(Salinity * (B0_GG + B1_GG * T_s + B2_GG * T_s^2 + B3_GG * T_s^3)
-                    + C0_GG * Salinity^2)
+                    + C0_GG * Salinity^2),
+        F_s = round(F_s, digits = 4)
       ) %>%
       select(-T_s)
 
   }
-
 
   dat.out
 
@@ -158,21 +170,22 @@ DO_salinity_correction <- function(dat.wide,
 #'   substantially from 1 atm (Benson & Krause, 1984).
 #'
 #'   This function calculates pressure correction factor following Benson and
-#'   Krause (1984), as suggested by USGS (2011), similar to what is described in
-#'   the HOBO manual HOBO U26 Percent Saturation Calculation.pdf (except this
-#'   function account for salinity in the water vapour calculation).
+#'   Krause (1984), as suggested by USGS (2011). This is similar to what is
+#'   described in the HOBO manual HOBO U26 Percent Saturation Calculation.pdf
+#'   (except this function account for salinity in the water vapour
+#'   calculation).
 #'
 #'   Equation 24 in Benson & Krause 1984:
 #'
-#'   \deqn{C_{p} = C_star x Pressure x (((1 - P_{wv} / Pressure) x (1 - theta x
-#'   Pressure)) / ((1 - P_{wv}) x (1 - theta)))}
+#'   \deqn{C_{p} = C_{star} * Pressure * (((1 - P_{wv} / Pressure) * (1 - theta
+#'   * Pressure)) / ((1 - P_{wv}) * (1 - theta)))}
 #'
-#'   \deqn{F_{p} = Pressure x (((1 - P_{wv} / Pressure) x (1 - theta x
-#'   Pressure)) / ((1 - P_{wv}) x (1 - theta)))}
+#'   \deqn{F_{p} = Pressure * (((1 - P_{wv} / Pressure) * (1 - theta *
+#'   Pressure)) / ((1 - P_{wv}) * (1 - theta)))}
 #'
 #'   \eqn{P_{wv}} is water vapour pressure, which depends on temperature and
 #'   salinity and \eqn{theta} depends on the second virial coefficient of
-#'   oxygen, and is calculated using temperature (see Table 1 of Benson and
+#'   oxygen, and is calculated using temperature (see Table 2 of Benson and
 #'   Krause 1984).
 #'
 #'   \bold{References}
@@ -186,8 +199,8 @@ DO_salinity_correction <- function(dat.wide,
 #'   Memorandum 2011.03. USGS Office of Water Quality, 2011.
 #'
 #' @param dat.wide Dataframe with at least one column: \code{Temperature}.
-#'   Corresponding presure (atm) data may be included in column
-#'   \code{Pressure}.
+#'   Corresponding pressure (atm) data may be included in column
+#'   \code{Pressure}. Additional columns will be ignored and returned.
 #'
 #' @param P_atm A single value of barometric pressure (atm). This value should
 #'   be specified if there is no \code{Pressure} column in \code{dat.wide}.
@@ -195,12 +208,19 @@ DO_salinity_correction <- function(dat.wide,
 #'   there is a \code{Pressure} column in \code{dat.wide}, function will stop
 #'   with an error.
 #'
-#' @return Returns \code{dat.wide} with an additional column, \code{F_p}.
+#' @return Returns \code{dat.wide} with additional column(s), \code{F_p} and
+#'   \code{Pressure}.
+#'
+#' @family Dissolved Oxygen
+#'
+#' @importFrom dplyr mutate
 #'
 #' @export
 
 
 DO_pressure_correction <- function(dat.wide, P_atm = NULL){
+
+  # Error Messages ----------------------------------------------------------
 
   cols <- names(dat.wide)
 
@@ -211,6 +231,8 @@ DO_pressure_correction <- function(dat.wide, P_atm = NULL){
 
   }
 
+
+# Calculate F_p -----------------------------------------------------------
 
   if(!is.null(P_atm)) dat.wide <- mutate(dat.wide, Pressure = P_atm)
 
@@ -223,11 +245,9 @@ DO_pressure_correction <- function(dat.wide, P_atm = NULL){
       T_Kelvin = Temperature + 273.15,
 
       # Coefficient that depends on the Second Virial Coefficient of oxygen
-      # Table 2
       theta = 0.000975 - (1.426e-5) * Temperature + (6.436e-8) * Temperature^2,
 
       # partial pressure of water vapour in atm
-      # Table 2
       P_wv = (1 - 5.370e-4 * Salinity) *
         exp(
           18.1973 * (1 - 373.16 / T_Kelvin) +
@@ -240,7 +260,8 @@ DO_pressure_correction <- function(dat.wide, P_atm = NULL){
       alt_correction = (((1 - P_wv / Pressure) * (1 - theta * Pressure)) /
         ((1 - P_wv) * (1 - theta))),
 
-      F_p = Pressure * alt_correction
+      F_p = Pressure * alt_correction,
+      F_p = round(F_p, digits = 4)
 
     )
 

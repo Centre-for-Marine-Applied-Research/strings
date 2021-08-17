@@ -8,13 +8,14 @@ calculate_DO_concentration(
   dat.wide,
   Sal = NULL,
   P_atm = NULL,
-  return.cp = FALSE
+  method = "garcia-gordon",
+  return.factors = FALSE
 )
 }
 \arguments{
-\item{dat.wide}{Dataframe with columns \code{TIMESTAMP}, \code{Temperature}
-(degrees Celsius), and \code{DO_percent_sat} (\% saturation). Other columns
-will be ignored.}
+\item{dat.wide}{Dataframe with columns \code{Temperature} (degrees Celsius),
+and \code{DO_percent_sat} (\% saturation). Other columns will be ignored
+and returned.}
 
 \item{Sal}{A single value of salinity (psu). This value must be specified if
 there is no \code{Salinity} column in \code{dat.wide}. Default is \code{Sal
@@ -27,14 +28,18 @@ Default is \code{P_atm = NULL}. Note: if \code{P_atm} is specified when
 there is a \code{Pressure} column in \code{dat.wide}, function will stop
 with an error.}
 
-\item{return.cp}{Logical parameter. If \code{TRUE}, the function returns a
-  wide dataframe with columns: \code{TIMESTAMP}, \code{Temperature},
-  \code{DO_concentraion} (in mg/L), the parameters used to calculate
-  \code{C_p}, \code{C_p}, and \code{DO_percent_sat}.
+\item{method}{Equation to use to calculate dissolved oxygen solubility.
+Options are \code{method = "garcia-gordon"} (the default) and \code{method
+= "benson-krause"}.}
 
-  If \code{FALSE}, the function returns a wide dataframe with columns:
-  \code{TIMESTAMP}, \code{Temperature}, \code{DO_concentration} (dissolved
-  oxygen in units of mg/L).}
+\item{return.factors}{Logical parameter. If \code{TRUE} the function returns
+  \code{dat.wide} with additional columns for the parameters used to
+  calculate \code{C_p} (DO solubility), and  \code{DO_concentraion} (in
+  mg/L).
+
+  If \code{FALSE} (the default), the function returns \code{dat.wide} with
+  additional column \code{DO_concentraion} (in mg/L) instead of
+  \code{DO_percent_sat}.}
 }
 \description{
 Converts dissolved oxygen from percent saturation to
@@ -46,24 +51,20 @@ DO concentration is calculated as:
 
   \deqn{DO_{mg/L} = C_{p} * DO_{\% Saturation} /100 }
 
-  DO_{\% Saturation} is the percent saturation of dissolved oxygen (make sure
-  the salinity and/or pressure-corrected value is used if required).
+  Where \eqn{DO_{\% Saturation}} is the percent saturation of dissolved
+  oxygen, and \eqn{C_{p}} is the solubility of oxygen at the observed
+  temperature, pressure, and salinity.
 
-  Where C_p is the solubility of oxygen at the observed temperature,
-  pressure, and salinity.
-
-  C_p is calculated using equations 24 and 32, and Table 2 from Benson and
-  Krause 1984.
-
-  Benson, Bruce B., Krause, Daniel, (1984), The concentration and isotopic
-  fractionation of oxygen dissolved in freshwater and seawater in equilibrium
-  with the atmosphere, Limnology and Oceanography, 3, doi:
+  See \code{?calculate_cp} for information on how \eqn{C_{p}} is calculated.
 }
 \seealso{
-Other calculate: 
-\code{\link{calculate_DO_percent_saturation}()}
+Other Dissolved Oxygen: 
+\code{\link{DO_pressure_correction}()},
+\code{\link{DO_salinity_correction}()},
+\code{\link{calculate_DO_percent_saturation}()},
+\code{\link{calculate_cp}()}
 }
 \author{
 Danielle Dempsey, Nicole Torrie
 }
-\concept{calculate}
+\concept{Dissolved Oxygen}

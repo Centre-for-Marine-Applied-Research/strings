@@ -7,18 +7,20 @@
 #' @details Solubility of dissolved oxygen (mg/L) is calculated using the
 #'   equations in Benson and Krause 1984, or the or Garcia and Gordon 1992
 #'   refit. These equations should only be used when 0 < Temperature < 40
-#'   degrees Celcius, 0 < Salinity < 40 PSU and 0.5 < Pressue < 1.1 atm.
+#'   degrees Celcius, 0 < Salinity < 40 PSU and 0.5 < Pressure < 1.1 atm.
 #'
 #'   Results from this function should closely match those from the USGS
-#'   DOTABLES (output from GG may differ in the second decimal place)  at
-#'   \url{https://water.usgs.gov/water-resources/software/DOTABLES/}.
+#'   DOTABLES Table B (output from GG method may differ in the second decimal
+#'   place) at \url{https://water.usgs.gov/water-resources/software/DOTABLES/}.
 #'
-#'   For more info see equations 24 and 32, and Table 2 from Benson and Krause
-#'   1984 or Equation 8 and Table 1 from Garcia and Gordon 1992.
+#'   For more information see Equations 24 and 32, and Table 2 from Benson and
+#'   Krause 1984 or Equation 8 and Table 1 from Garcia and Gordon 1992.
 #'
 #'   For the Garcia and Gordon equation, coefficients from the first column of
-#'   Table 1 were used here. Conversion factor of 1.42905 was used to convert
-#'   from cm^3/dm^3 (mL/L) to mg/L (USGS 2011).
+#'   Table 1 were used. Conversion factor of 1.42905 was applied to convert from
+#'   cm^3/dm^3 (mL/L) to mg/L (USGS 2011).
+#'
+#'   \bold{References}
 #'
 #'   Benson, Bruce B., Krause, Daniel, (1984), The concentration and isotopic
 #'   fractionation of oxygen dissolved in freshwater and seawater in equilibrium
@@ -36,14 +38,24 @@
 #'
 #' @param dat.wide Dataframe with at least one column: \code{Temperature}.
 #'   Corresponding salinity (psu) and pressure (atm) data may be included in
-#'   columns \code{Salinity} and \code{Pressure}.
+#'   columns \code{Salinity} and \code{Pressure}. Additional columns will be
+#'   ignored and returned.
+#'
+#' @param method Equation to use to calculate dissolved oxygen solubility.
+#'   Options are \code{method = "garcia-gordon"} (the default) and \code{method
+#'   = "benson-krause"}.
 #'
 #' @param return.factors Logical parameter. If \code{TRUE} the function returns
-#'   a dataframe with columns of uncorrected DO values, the parameters used to
-#'   calculate \code{F_s} and \code{F_p}, and \code{C_p}.
+#'   \code{dat.wide} with additional columns for the parameters used to
+#'   calculate \code{F_s} (salinity correction factor), \code{F_p} (pressure
+#'   correction factor), and \code{C_p} (DO solubility).
 #'
 #'   If \code{FALSE}, the function returns \code{dat.wide} with additional
 #'   column(s) \code{Salinity}, \code{Pressure}, and \code{C_p}.
+#'
+#' @family Dissolved Oxygen
+#'
+#' @importFrom dplyr mutate select
 #'
 #' @export
 
@@ -53,29 +65,6 @@ calculate_cp <- function(dat.wide,
                          Sal = NULL, P_atm = NULL,
                          method = "garcia-gordon",
                          return.factors = FALSE){
-
-
-# Error messages  ---------------------------------------------------------
-
-  cols <- names(dat.wide)
-
-  if("Salinity" %in% cols & !is.null(Sal)){
-
-    stop("Conflicting salinity values.
-         \nHINT: Remove column Salinity or set Sal argument to NULL.")
-
-  }
-
-  if("Pressure" %in% cols & !is.null(P_atm)){
-
-    stop("Conflicting pressure values.
-         \nHINT: Remove column Pressure or set P_atm argument to NULL.")
-
-  }
-
-  if(!is.null(Sal)) dat.wide <- mutate(dat.wide, Salinity = Sal)
-
-  if(!is.null(P_atm)) dat.wide <- mutate(dat.wide, Pressure = P_atm)
 
 # Benson Krause ------------------------------------------------------------
 
@@ -88,7 +77,6 @@ calculate_cp <- function(dat.wide,
         # temperature in Kelvin
         T_Kelvin = Temperature + 273.15,
 
-        # Unit standard atmospheric concentration (mg / L)
         # Equation 32 (modified to return units of mg / L)
         C_star = exp(
           -139.34411 +
@@ -96,14 +84,15 @@ calculate_cp <- function(dat.wide,
             6.642308e7 / T_Kelvin^2 +
             1.243800e10 / T_Kelvin^3 -
             8.621949e11 / T_Kelvin^4
-          # this term is accounted for in DO_salinity_correction
+          # this term is accounted for in DO_salinity_correction()
           # -Salinity * (0.017674 - 10.754 / T_Kelvin + 2140.7 / T_Kelvin^2)
         )
       ) %>%
-      DO_salinity_correction(method = "benson-krause") %>%
-      DO_pressure_correction() %>%
+      DO_salinity_correction(Sal = Sal, method = "benson-krause") %>%
+      DO_pressure_correction(P_atm = P_atm) %>%
       mutate(
-        C_p = C_star * F_s * F_p
+        C_p = C_star * F_s * F_p,
+        C_p = round(C_p, digits = 2)
       )
 
   }
@@ -134,7 +123,7 @@ calculate_cp <- function(dat.wide,
         Temperature = as.numeric(Temperature),
 
         # scaled temperature
-        T_s = log((298.15 - Temperature)/(273.15 + Temperature)),
+        T_s = log((298.15 - Temperature) / (273.15 + Temperature)),
 
         # oxygen solubility (equation 8, coefficients from first col Table 1)
         C_star = mg_L * exp(
@@ -149,10 +138,11 @@ calculate_cp <- function(dat.wide,
          # + C0_GG * Salinity^2
         )
       ) %>%
-      DO_salinity_correction(method = "garcia-gordon") %>%
-      DO_pressure_correction() %>%
+      DO_salinity_correction(Sal = Sal, method = "garcia-gordon") %>%
+      DO_pressure_correction(P_atm = P_atm) %>%
       mutate(
-        C_p = C_star * F_s * F_p
+        C_p = C_star * F_s * F_p,
+        C_p = round(C_p, digits = 2)
       )
 
   }
@@ -165,7 +155,5 @@ calculate_cp <- function(dat.wide,
   }
 
   dat.out
-
-
 
 }

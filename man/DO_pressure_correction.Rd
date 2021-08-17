@@ -8,8 +8,8 @@ DO_pressure_correction(dat.wide, P_atm = NULL)
 }
 \arguments{
 \item{dat.wide}{Dataframe with at least one column: \code{Temperature}.
-Corresponding presure (atm) data may be included in column
-\code{Pressure}.}
+Corresponding pressure (atm) data may be included in column
+\code{Pressure}. Additional columns will be ignored and returned.}
 
 \item{P_atm}{A single value of barometric pressure (atm). This value should
 be specified if there is no \code{Pressure} column in \code{dat.wide}.
@@ -18,7 +18,8 @@ there is a \code{Pressure} column in \code{dat.wide}, function will stop
 with an error.}
 }
 \value{
-Returns \code{dat.wide} with an additional column, \code{F_p}.
+Returns \code{dat.wide} with additional column(s), \code{F_p} and
+  \code{Pressure}.
 }
 \description{
 Pressure correction factor for dissolved oxygen measurements
@@ -29,21 +30,22 @@ Dissolved oxygen concentration (and partial pressure?) measurements
   substantially from 1 atm (Benson & Krause, 1984).
 
   This function calculates pressure correction factor following Benson and
-  Krause (1984), as suggested by USGS (2011), similar to what is described in
-  the HOBO manual HOBO U26 Percent Saturation Calculation.pdf (except this
-  function account for salinity in the water vapour calculation).
+  Krause (1984), as suggested by USGS (2011). This is similar to what is
+  described in the HOBO manual HOBO U26 Percent Saturation Calculation.pdf
+  (except this function account for salinity in the water vapour
+  calculation).
 
   Equation 24 in Benson & Krause 1984:
 
-  \deqn{C_{p} = C_star x Pressure x (((1 - P_{wv} / Pressure) x (1 - theta x
-  Pressure)) / ((1 - P_{wv}) x (1 - theta)))}
+  \deqn{C_{p} = C_{star} * Pressure * (((1 - P_{wv} / Pressure) * (1 - theta
+  * Pressure)) / ((1 - P_{wv}) * (1 - theta)))}
 
-  \deqn{F_{p} = Pressure x (((1 - P_{wv} / Pressure) x (1 - theta x
-  Pressure)) / ((1 - P_{wv}) x (1 - theta)))}
+  \deqn{F_{p} = Pressure * (((1 - P_{wv} / Pressure) * (1 - theta *
+  Pressure)) / ((1 - P_{wv}) * (1 - theta)))}
 
   \eqn{P_{wv}} is water vapour pressure, which depends on temperature and
   salinity and \eqn{theta} depends on the second virial coefficient of
-  oxygen, and is calculated using temperature (see Table 1 of Benson and
+  oxygen, and is calculated using temperature (see Table 2 of Benson and
   Krause 1984).
 
   \bold{References}
@@ -56,3 +58,11 @@ Dissolved oxygen concentration (and partial pressure?) measurements
   USGS. \emph{Change to Solubility Equations for Oxygen in Water.} Technical
   Memorandum 2011.03. USGS Office of Water Quality, 2011.
 }
+\seealso{
+Other Dissolved Oxygen: 
+\code{\link{DO_salinity_correction}()},
+\code{\link{calculate_DO_concentration}()},
+\code{\link{calculate_DO_percent_saturation}()},
+\code{\link{calculate_cp}()}
+}
+\concept{Dissolved Oxygen}

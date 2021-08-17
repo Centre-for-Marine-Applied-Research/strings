@@ -2,28 +2,30 @@
 % Please edit documentation in R/DO_correction_factors.R
 \name{DO_salinity_correction}
 \alias{DO_salinity_correction}
-\title{Salinity correction factor for dissolved oxygen measurements}
+\title{Salinity correction factor for dissolved oxygen concentration measurements}
 \usage{
 DO_salinity_correction(dat.wide, Sal = NULL, method = "garcia-gordon")
 }
 \arguments{
 \item{dat.wide}{Dataframe with at least one column: \code{Temperature}.
 Corresponding salinity (psu) data may be included in column
-\code{Salinity}.}
+\code{Salinity}. Additional columns will be ignored and returned.}
 
 \item{Sal}{A single value of salinity (psu). This value must be specified if
 there is no \code{Salinity} column in \code{dat.wide}. Default is \code{Sal
 = NULL}. Note: if \code{Sal} is specified when there is a \code{Salinity}
 column in \code{dat.wide}, the function will stop with an error.}
 
-\item{method}{Equation to use to calculate dissolved oxygen solubility.
-Options are \code{"garcia-gordon"} (the default) and \code{benson-krause}.}
+\item{method}{Equation to use to calculate salinity correction factor.
+Options are \code{method = "garcia-gordon"} (the default) and \code{method
+= "benson-krause"}.}
 }
 \value{
-Returns \code{dat.wide} with an additional column, \code{F_s}.
+Returns \code{dat.wide} with additional column(s), \code{F_s} and
+  \code{Salinity}.
 }
 \description{
-Salinity correction factor for dissolved oxygen measurements
+Salinity correction factor for dissolved oxygen concentration measurements
 }
 \details{
 Dissolved oxygen concentration measured by HOBO sensors needs to be
@@ -33,7 +35,7 @@ Dissolved oxygen concentration measured by HOBO sensors needs to be
   The salinity correction factor can be calculated using the Benson and
   Krause 1984 equations or the Garcia and Gordon 1992 equations. These
   equations should only be used when 0 < Temperature < 40 degrees Celcius, 0
-  < Salinity < 40 PSU and 0.5 < Pressue < 1.1 atm.
+  < Salinity < 40 PSU and 0.5 < Pressure < 1.1 atm.
 
   \bold{Benson & Krause, 1984}:
 
@@ -50,19 +52,24 @@ Dissolved oxygen concentration measured by HOBO sensors needs to be
   \bold{Garcia &  Gordon, 1992:}
 
   Garcia & Gordon re-fit the Benson & Krause data with a higher order
-  polynomial and defined a scaled temperature (\eqn{T_s}).
+  polynomial and defined a scaled temperature (\eqn{T_{s}}).
 
   This correction factor is used in the SCOR WG 142 (Part C).
 
   Results from this equation are very similar to the Benson & Krause
   correction factor (to ~4 decimal places).
 
-  \eqn{F_{s} = exp(Salinity x (-6.24523E-3 -7.37614E-3 x T_s -1.03410E-2 x
-  T_s^2 -8.17083E-3 x T_s^3) -4.88682E-7 * Salinity^2)}
+  \deqn{B0 = -6.24523E-3} \deqn{B1 = -7.37614E-3} \deqn{B2 = -1.03410E-2}
+  \deqn{B3 = -8.17083E-3} \deqn{C0 = -4.88682E-7}
+
+  \deqn{F_{s} = exp(Salinity * (B0 + B1 * T_{s} + B2 * T_{s}^2 + B3 *
+  T_{s}^3) + C0 * Salinity^2)}
+
+  \deqn{T_{s} = log((298.15 - Temperature) / (273.15 + Temperature))}
 
   Note: the HOBO Dissolved Oxygen Assistant Software salinity correction
   factor uses the same form as the Garcia and Gordon equation, but different
-  coefficients (negligible difference in the resulting \deqn{F_s}).
+  coefficients (although the results are similar).
 
   \bold{References}
 
@@ -83,3 +90,11 @@ Dissolved oxygen concentration measured by HOBO sensors needs to be
   USGS. \emph{Change to Solubility Equations for Oxygen in Water.} Technical
   Memorandum 2011.03. USGS Office of Water Quality, 2011.
 }
+\seealso{
+Other Dissolved Oxygen: 
+\code{\link{DO_pressure_correction}()},
+\code{\link{calculate_DO_concentration}()},
+\code{\link{calculate_DO_percent_saturation}()},
+\code{\link{calculate_cp}()}
+}
+\concept{Dissolved Oxygen}

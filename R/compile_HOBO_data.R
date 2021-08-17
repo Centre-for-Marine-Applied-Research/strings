@@ -11,7 +11,7 @@
 #'   HMS".
 #'
 #'   Dissolved oxygen can be corrected for salinity using equation 32 in Benson
-#' and Krause. See \code{?apply_salinity_correction} for more detail.
+#'   and Krause. See \code{?apply_salinity_correction} for more detail.
 #'
 #'   CMAR NOTES: Data should be exported from the Hobo software in GMT+00 as a
 #'   csv file so that the timestamp is in UTC.
@@ -41,6 +41,8 @@
 #'
 #'   If for some reason, there is an ODD number of duplicates, the function
 #'   might break.
+#'
+#' @inheritParams calculate_cp
 #'
 #' @param path.HOBO File path to the Hobo folder. All of the excel files in the
 #'   Hobo folder will be compiled. The name of each file must be the serial
@@ -137,6 +139,7 @@ compile_HOBO_data <- function(path.HOBO,
 
                               correct.DO = FALSE,
                               Sal = NULL,
+                              method = "garcia-gordon",
 
                               export.csv = FALSE){
 
@@ -232,15 +235,6 @@ compile_HOBO_data <- function(path.HOBO,
 
     # Select columns of interest ----------------------------------------------
 
-    # # make sure units are NOT in ppm
-    # do_units <- hobo.i_dat %>%
-    #   select(DO = contains("DO conc, ppm"))
-    #
-    # if(ncol(do_units) > 0) {
-    #   stop("Check dissolved oxygen units.
-    #        \nDissolved oxygen must be in units of mg/L.")
-    # }
-
     # select columns of interest
     hobo.i <- hobo.i_dat %>%
       select(
@@ -260,8 +254,15 @@ compile_HOBO_data <- function(path.HOBO,
       }
 
       hobo.i <- hobo.i %>%
-        apply_salinity_correction(Sal = Sal) %>%
-        dplyr::rename(`Dissolved Oxygen` = DO_corrected)
+        DO_salinity_correction(Sal = Sal, method = method) %>%
+        mutate(
+          `Dissolved Oxygen` = as.numeric(`Dissolved Oxygen`),
+          `Dissolved Oxygen` = `Dissolved Oxygen` * F_s
+          ) %>%
+        select(-F_s, -Salinity)
+
+        # apply_salinity_correction(Sal = Sal) %>%
+        # dplyr::rename(`Dissolved Oxygen` = DO_corrected)
     }
 
     vars.to.select <- colnames(hobo.i)[-1]
@@ -300,8 +301,6 @@ compile_HOBO_data <- function(path.HOBO,
         var_ref <- unit_ref %>% filter(str_detect(unit_ref, "DO"))
         var_ref <- var_ref$unit_ref
       }
-
-
 
       hobo.j <- hobo.i %>%
         select(INDEX, TIMESTAMP, all_of(var.j)) %>%

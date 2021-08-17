@@ -15,7 +15,8 @@ calculate_cp(
 \arguments{
 \item{dat.wide}{Dataframe with at least one column: \code{Temperature}.
 Corresponding salinity (psu) and pressure (atm) data may be included in
-columns \code{Salinity} and \code{Pressure}.}
+columns \code{Salinity} and \code{Pressure}. Additional columns will be
+ignored and returned.}
 
 \item{Sal}{A single value of salinity (psu). This value must be specified if
 there is no \code{Salinity} column in \code{dat.wide}. Default is \code{Sal
@@ -29,11 +30,13 @@ there is a \code{Pressure} column in \code{dat.wide}, function will stop
 with an error.}
 
 \item{method}{Equation to use to calculate dissolved oxygen solubility.
-Options are \code{"garcia-gordon"} (the default) and \code{benson-krause}.}
+Options are \code{method = "garcia-gordon"} (the default) and \code{method
+= "benson-krause"}.}
 
 \item{return.factors}{Logical parameter. If \code{TRUE} the function returns
-  a dataframe with columns of uncorrected DO values, the parameters used to
-  calculate \code{F_s} and \code{F_p}, and \code{C_p}.
+  \code{dat.wide} with additional columns for the parameters used to
+  calculate \code{F_s} (salinity correction factor), \code{F_p} (pressure
+  correction factor), and \code{C_p} (DO solubility).
 
   If \code{FALSE}, the function returns \code{dat.wide} with additional
   column(s) \code{Salinity}, \code{Pressure}, and \code{C_p}.}
@@ -47,18 +50,20 @@ Calculate the solubility of dissolved oxygen based on
 Solubility of dissolved oxygen (mg/L) is calculated using the
   equations in Benson and Krause 1984, or the or Garcia and Gordon 1992
   refit. These equations should only be used when 0 < Temperature < 40
-  degrees Celcius, 0 < Salinity < 40 PSU and 0.5 < Pressue < 1.1 atm.
+  degrees Celcius, 0 < Salinity < 40 PSU and 0.5 < Pressure < 1.1 atm.
 
   Results from this function should closely match those from the USGS
-  DOTABLES (output from GG may differ in the second decimal place)  at
-  \url{https://water.usgs.gov/water-resources/software/DOTABLES/}.
+  DOTABLES Table B (output from GG method may differ in the second decimal
+  place) at \url{https://water.usgs.gov/water-resources/software/DOTABLES/}.
 
-  For more info see equations 24 and 32, and Table 2 from Benson and Krause
-  1984 or Equation 8 and Table 1 from Garcia and Gordon 1992.
+  For more information see Equations 24 and 32, and Table 2 from Benson and
+  Krause 1984 or Equation 8 and Table 1 from Garcia and Gordon 1992.
 
   For the Garcia and Gordon equation, coefficients from the first column of
-  Table 1 were used here. Conversion factor of 1.42905 was used to convert
-  from cm^3/dm^3 (mL/L) to mg/L (USGS 2011).
+  Table 1 were used. Conversion factor of 1.42905 was applied to convert from
+  cm^3/dm^3 (mL/L) to mg/L (USGS 2011).
+
+  \bold{References}
 
   Benson, Bruce B., Krause, Daniel, (1984), The concentration and isotopic
   fractionation of oxygen dissolved in freshwater and seawater in equilibrium
@@ -71,3 +76,11 @@ Solubility of dissolved oxygen (mg/L) is calculated using the
   USGS. \emph{Change to Solubility Equations for Oxygen in Water.} Technical
   Memorandum 2011.03. USGS Office of Water Quality, 2011.
 }
+\seealso{
+Other Dissolved Oxygen: 
+\code{\link{DO_pressure_correction}()},
+\code{\link{DO_salinity_correction}()},
+\code{\link{calculate_DO_concentration}()},
+\code{\link{calculate_DO_percent_saturation}()}
+}
+\concept{Dissolved Oxygen}

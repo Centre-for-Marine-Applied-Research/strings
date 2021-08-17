@@ -13,6 +13,7 @@ compile_HOBO_data(
   rm.DST = FALSE,
   correct.DO = FALSE,
   Sal = NULL,
+  method = "garcia-gordon",
   export.csv = FALSE
 )
 }
@@ -58,6 +59,10 @@ default \code{rm.DST = FALSE} is used.}
 \item{Sal}{A single value of salinity (psu), used to calculate the salinity
 correction factor for dissolved oxygen.}
 
+\item{method}{Equation to use to calculate dissolved oxygen solubility.
+Options are \code{method = "garcia-gordon"} (the default) and \code{method
+= "benson-krause"}.}
+
 \item{export.csv}{Logical value indicating whether to export the compiled
 data as a .csv file. If \code{export.csv = TRUE}, the compiled data will
 not be returned to the global environment. Default is \code{export.csv =
@@ -90,7 +95,7 @@ The raw HOBO and TidBiT data must be saved in a folder named Hobo in
   HMS".
 
   Dissolved oxygen can be corrected for salinity using equation 32 in Benson
-and Krause. See \code{?apply_salinity_correction} for more detail.
+  and Krause. See \code{?apply_salinity_correction} for more detail.
 
   CMAR NOTES: Data should be exported from the Hobo software in GMT+00 as a
   csv file so that the timestamp is in UTC.
