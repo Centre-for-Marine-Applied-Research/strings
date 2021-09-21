@@ -50,9 +50,9 @@ deployed at a station for 6 – 12 months and data are measured every 1
 minute to 1 hour, resulting in tens- to hundreds- of thousands of
 observations for a single deployment.
 
-[](inst/image/README-fig1.PNG)
+![](README-fig1.PNG)
 
-<img src="inst/image/README-fig1.PNG" width="65%" style="display: block; margin: auto;" />
+[](inst/image/README-fig1.PNG)
 
 (After retrieval?) Data from each sensor is exported to a separate csv
 file (using manufacturer-specific software). Each type of sensor

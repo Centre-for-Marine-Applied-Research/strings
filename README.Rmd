@@ -19,6 +19,7 @@ library(badger)
 library(dplyr)
 library(kableExtra)
 library(usethis)
+library(png)
 
 repo <- "centre-for-marine-applied-research/strings"
 
@@ -50,20 +51,27 @@ The Centre for Marine Applied Research ([CMAR](https://cmar.ca/)) coordinates an
 
 Water quality data (temperature, dissolved oxygen, and salinity) is collected using “sensor strings”. Each string is attached to the seafloor by an anchor and suspended by a sub-surface buoy, with autonomous sensors attached at various depths (Figure 1). A string typically includes sensors from three manufacturers: Hobo (Onset?), aquaMeasure (InnovaSea?), and Vemco (Table X). Strings are typically deployed at a station for 6 – 12 months and data are measured every 1 minute to 1 hour, resulting in tens- to hundreds- of thousands of observations for a single deployment. 
 
+![](README-fig1.PNG)
 
 [](inst/image/README-fig1.PNG)
 
+
+
 ```{r, echo=FALSE, out.width="65%", fig.align='center'}
 
-knitr::include_graphics("inst/image/README-fig1.PNG")
+#knitr::include_graphics("inst/image/README-fig1.PNG")
 #knitr::include_graphics("man/figures/README-fig1.PNG")
+
+
+#p <- png::readPNG(system.file("image/README-fig1.PNG", package = "strings"))
+#plot(p)
 
 ```
 
 ```{r, echo=FALSE, out.width="65%", fig.align='center'}
 
 # knitr::include_graphics("inst/image/README_fig1.PNG")
-#knitr::include_graphics("README-fig1.PNG")
+# knitr::include_graphics("README-fig1.PNG")
 
 ```
 
