@@ -52,9 +52,9 @@ observations for a single deployment.
 
 [](inst/image/README-fig1.PNG)
 
-<img src="README-fig1.PNG" width="65%" style="display: block; margin: auto;" />
+<img src="inst/image/README-fig1.PNG" width="65%" style="display: block; margin: auto;" />
 
-(After retrieval?) Data from each sensor is exported to a separate \*csv
+(After retrieval?) Data from each sensor is exported to a separate csv
 file (using manufacturer-specific software). Each type of sensor
 generates a data file with unique columns and header fields, which poses
 a significant challenge for compiling all data from a deployment into a
@@ -187,8 +187,8 @@ VR2AR
 
 ### Title for this section (Raw data? Sensor export? Separate data files?)
 
-The data from each sensor is exported to a separate \*csv file, each
-with manufacturer-specific columns.
+The data from each sensor is exported to a separate csv file, each with
+manufacturer-specific columns.
 
 Import raw data files:
 
