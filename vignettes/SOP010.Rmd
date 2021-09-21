@@ -211,7 +211,7 @@ ALL_data <- compile_all_data(path = path,
                              # aquaMeasure
                              serial.table.aM = serial.table.aM,
                              # vemco
-                             depth.vemco = depth.vemco,)
+                             depth.vemco = depth.vemco)
 
 # Name the file
 file_name <- name_compiled_data(area.name = area,

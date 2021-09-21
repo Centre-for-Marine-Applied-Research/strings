@@ -7,15 +7,20 @@
 
 [![License: GPL
 v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![](https://img.shields.io/badge/devel%20version-1.6.2-blue.svg)](https://github.com/centre-for-marine-applied-research/strings)
+[![](https://img.shields.io/badge/devel%20version-1.5.0-blue.svg)](https://github.com/centre-for-marine-applied-research/strings)
+
 [![CodeFactor](https://www.codefactor.io/repository/github/centre-for-marine-applied-research/strings/badge)](https://www.codefactor.io/repository/github/centre-for-marine-applied-research/strings)
+
 [![R build
 status](https://github.com/centre-for-marine-applied-research/strings/workflows/R-CMD-check/badge.svg)](https://github.com/centre-for-marine-applied-research/strings/actions)
 
 <!-- badges: end -->
 
-Compile, format, and visualize water quality (temperature, dissolved
-oxygen, salinity) data measured by different brands of autonomous
+The goal of strings is to help users compile, format, calculate, and
+visualize oceanographic data, as collected by the Centre for Marine
+Applied Research’s (CMAR) Coastal Monitoring Program. The package can
+process temperature, dissolved oxygen, and salinity data measured by
+HOBO Pro V2, TidBiT, aquaMeasure DOT, aquaMeasure SAL, and/or VR2AR
 sensors.
 
 ## Installation
@@ -28,6 +33,7 @@ You can install the development version of strings from
 devtools::install_github("Centre-for-Marine-Applied-Research/strings")
 ```
 
+<<<<<<< HEAD
 ## Background
 
 The Centre for Marine Applied Research ([CMAR](https://cmar.ca/))
@@ -50,6 +56,9 @@ deployed at a station for 6 – 12 months and data are measured every 1
 minute to 1 hour, resulting in tens- to hundreds- of thousands of
 observations for a single deployment.
 
+<<<<<<< HEAD
+![](README-fig1.PNG)
+=======
 <div class="figure" style="text-align: center">
 
 <img src="inst/image/README_fig1.PNG" alt="Might crop out the text and put it in a table?" width="65%" />
@@ -61,8 +70,11 @@ Might crop out the text and put it in a table?
 </p>
 
 </div>
+>>>>>>> parent of 82c7917... docs: try to get figure to render
 
-(After retrieval?) Data from each sensor is exported to a separate \*csv
+[](inst/image/README-fig1.PNG)
+
+(After retrieval?) Data from each sensor is exported to a separate csv
 file (using manufacturer-specific software). Each type of sensor
 generates a data file with unique columns and header fields, which poses
 a significant challenge for compiling all data from a deployment into a
@@ -195,8 +207,8 @@ VR2AR
 
 ### Title for this section (Raw data? Sensor export? Separate data files?)
 
-The data from each sensor is exported to a separate \*csv file, each
-with manufacturer-specific columns.
+The data from each sensor is exported to a separate csv file, each with
+manufacturer-specific columns.
 
 Import raw data files:
 
@@ -292,62 +304,13 @@ format
 ### Compile data
 
 Compile data from the 3 sensors using `strings::compile_all_data()`:
+=======
+## Example
+
+Examples to come
+>>>>>>> parent of 62d22f1... docs: add example to README
 
 ``` r
-
-# deployment information for metadata:
-
-# deployment and retrieval dates
-deployment <- data.frame("START" = "2019-05-30", "END" = "2019-10-19")
-
-serial.table.HOBO <- data.frame("SENSOR" = "HOBO-10755220", "DEPTH" = "2m")
-serial.table.aM <- data.frame("SENSOR" = "aquaMeasure-670364", "DEPTH" = "5m")
-depth.vemco <- "15m"
-
-
-ALL_data <- compile_all_data(path = path,
-                             deployment.range = deployment,
-                             area.name = area,
-                             # hobo
-                             serial.table.HOBO = serial.table.HOBO,
-                             # aquaMeasure
-                             serial.table.aM = serial.table.aM,
-                             # vemco
-                             depth.vemco = depth.vemco)
-#> Warning: Missing column names filled in: 'X4' [4], 'X5' [5], 'X6' [6], 'X7' [7],
-#> 'X8' [8]
-#> Warning: Missing column names filled in: 'X4' [4]
-#> [1] "HOBO data compiled"
-#> [1] "found Temperature in file aquaMeasure-670364_2019-10-19_UTC.csv"     
-#> [2] "found Dissolved Oxygen in file aquaMeasure-670364_2019-10-19_UTC.csv"
-#> [1] "aquaMeasure data compiled"
-#> [1] "Vemco data compiled: Temperature"
+library(strings)
+## basic example code
 ```
-
-The data is compiled in a “wide” format, with metadata in the first four
-rows indicating the deployment period, the sensor serial number, the
-variable and depth of the sensor, and the timezone of the timestamps.
-The first column is an index column, starting at -4 to account for the
-metadata rows. The remaining columns alternate between timestamp (in the
-format “Y-m-d H:M:S”) and variable value (rounded to three decimal
-places). Note that because the sensors can be initialized at different
-times and record on different intervals, values in a single row do not
-necessarily correspond to the same timestamp.
-
-This format is convenient for human readers, who can quickly scan the
-metadata to determine the number of sensors deployed, the depths of
-deployment, etc. However, this format is less convenient for analysis
-(e.g., to include include the metadata, all values were converted to
-class character). Prior to analysis, the dataframe should be converted
-to a “long” (“tidy”) format, and the values should be converted to the
-appropriate class (e.g., POSIXct for the timestamps and numeric for
-variable values). This can be done using the `convert_to_tidydata()`
-function, which returns a dataframe with the following columns:
-
-  - `DEPLOYMENT_RANGE`: The deployment and retrieval dates (character)
-  - `SENSOR`: The sensor that recorded the measurement (character)
-  - `TIMESTAMP`: The timestamp of the measurement (POSIXct)
-  - `VARIABLE`: The parameter measured (Temperature, Dissolved Oxygen,
-    or Salinity) (character)
-  - `DEPTH`: The depth of the sensor (ordered factor)
-  - `VALUE:` The value of the measurement (numeric)

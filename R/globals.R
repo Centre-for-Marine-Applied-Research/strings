@@ -71,6 +71,11 @@ utils::globalVariables(c(
 
   # read_deployment_log
   "Logger_Model",
+  "Logger_Lower",
+  "detect_am",
+  "detect_hobo",
+  "detect_tidbit",
+  "detect_vemco",
   "Serial#",
   "Sensor_Depth",
   "sensor",
