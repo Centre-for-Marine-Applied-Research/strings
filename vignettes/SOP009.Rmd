@@ -99,7 +99,7 @@ Column names must be spelled as presented above to ensure that R can find and us
 
 ### **3.2 General `strings` folders**
 
-The sensor data *muSt* be saved into folders with specific names to use the `strings` package:
+The sensor data *must* be saved into folders with specific names to use the `strings` package:
 
   * aquaMeasure (DOT and SAL) data must be saved in a folder named "aquaMeasure" (note the capital "M")
   * Hobo and TidBiT data must be saved in a folder named "Hobo"
