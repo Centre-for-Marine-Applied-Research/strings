@@ -57,12 +57,17 @@ minute to 1 hour, resulting in tens- to hundreds- of thousands of
 observations for a single deployment.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ![](README-fig1.PNG)
 =======
 <div class="figure" style="text-align: center">
+=======
+![](README-fig1.PNG)
+>>>>>>> e2b76878e6771499494595745900e257f614594e
 
-<img src="inst/image/README_fig1.PNG" alt="Might crop out the text and put it in a table?" width="65%" />
+[](inst/image/README-fig1.PNG)
 
+<<<<<<< HEAD
 <p class="caption">
 
 Might crop out the text and put it in a table?
@@ -74,6 +79,8 @@ Might crop out the text and put it in a table?
 
 [](inst/image/README-fig1.PNG)
 
+=======
+>>>>>>> e2b76878e6771499494595745900e257f614594e
 (After retrieval?) Data from each sensor is exported to a separate csv
 file (using manufacturer-specific software). Each type of sensor
 generates a data file with unique columns and header fields, which poses

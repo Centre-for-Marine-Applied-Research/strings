@@ -69,7 +69,7 @@ Water quality data (temperature, dissolved oxygen, and salinity) is collected us
 
 ```
 
-```{r, echo=FALSE, out.width="65%", fig.align='center', fig.cap="Might crop out the text and put it in a table?"}
+```{r, echo=FALSE, out.width="65%", fig.align='center'}
 
 # knitr::include_graphics("inst/image/README_fig1.PNG")
 # knitr::include_graphics("README-fig1.PNG")
