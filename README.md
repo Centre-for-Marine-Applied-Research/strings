@@ -49,10 +49,6 @@ a station for 6 – 12 months and data are measured every 1 minute to 1
 hour, resulting in tens- to hundreds- of thousands of observations for a
 single deployment.
 
-[](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png)
-
-[](man/figures/README-fig1.png)
-
 <img src="https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png" width="65%" style="display: block; margin: auto;" />
 
 (After retrieval?) Data from each sensor is exported to a separate csv
@@ -73,6 +69,8 @@ Processed data from CMAR’s Coastal Monitoring Program can be viewed and
 downloaded from …. \[cheat sheet\].
 
 include example of compiled data here?
+
+use different data for the example?
 
 ## Example
 
@@ -379,3 +377,10 @@ plot_variables_at_depth(ALL_tidy, vars.to.plot = c("Temperature", "Dissolved Oxy
 ```
 
 ![](man/figures/README-fig2-1.png)<!-- -->
+
+## notes to self
+
+These both work for the image, BUT could not control figure size
+[](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png)
+
+[](man/figures/README-fig1.png)
