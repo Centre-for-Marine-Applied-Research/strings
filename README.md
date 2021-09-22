@@ -372,5 +372,8 @@ head(tibble(ALL_tidy))
 `ALL_tidy` can be plotted with `plot_variables_at_depth()`
 
 ``` r
-#plot_variables_at_depth(ALL_tidy, vars.to.plot = c("Temperature", "Dissolved Oxygen"))
+plot_variables_at_depth(ALL_tidy, vars.to.plot = c("Temperature", "Dissolved Oxygen"))
+#> Warning: Removed 7 rows containing missing values (geom_point).
 ```
+
+![](man/figures/README-fig2-1.png)<!-- -->
