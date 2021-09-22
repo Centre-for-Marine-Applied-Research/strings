@@ -20,7 +20,7 @@ library(usethis)
 repo <- "centre-for-marine-applied-research/strings"
 ```
 
-# strings
+# strings: DRAFT README
 
 <!-- badges: start -->
 
@@ -47,8 +47,13 @@ Water quality data (temperature, dissolved oxygen, and salinity) is collected us
 
 [](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png)
 
-![](man/figures/README-fig1.png){ width=100px }
+[](man/figures/README-fig1.png)
 
+```{r, echo=FALSE, out.width="65%", fig.align='center'}
+
+knitr::include_graphics("man/figures/README-fig1.PNG")
+
+```
 
 (After retrieval?) Data from each sensor is exported to a separate csv file (using manufacturer-specific software). Each type of sensor generates a data file with unique columns and header fields, which poses a significant challenge (for compiling all data from a deployment into a single format) for analysis.
 

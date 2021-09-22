@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# strings
+# strings: DRAFT README
 
 <!-- badges: start -->
 
@@ -51,7 +51,9 @@ single deployment.
 
 [](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png)
 
-![](man/figures/README-fig1.png)
+[](man/figures/README-fig1.png)
+
+<img src="man/figures/README-fig1.PNG" width="65%" style="display: block; margin: auto;" />
 
 (After retrieval?) Data from each sensor is exported to a separate csv
 file (using manufacturer-specific software). Each type of sensor
