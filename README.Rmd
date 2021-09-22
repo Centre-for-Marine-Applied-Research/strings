@@ -17,7 +17,6 @@ library(dplyr)
 library(kableExtra)
 library(usethis)
 
-
 repo <- "centre-for-marine-applied-research/strings"
 ```
 
@@ -44,16 +43,15 @@ devtools::install_github("Centre-for-Marine-Applied-Research/strings")
 
 The Centre for Marine Applied Research ([CMAR](https://cmar.ca/)) coordinates an extensive [Coastal Monitoring Program](https://cmar.ca/2020/07/14/coastal-monitoring-program/) that measures [Essential Ocean Variables](https://www.goosocean.org/index.php?option=com_content&view=article&id=14&Itemid=114) (e.g., temperature, dissolved oxygen, salinity, sea state, currents), typically within 1 km of the coast of Nova Scotia, Canada. The `strings` package is used to compile, format, and visualize water quality data collected through this program.
 
+Water quality data (temperature, dissolved oxygen, and salinity) is collected using “sensor strings”. Each string is attached to the seafloor by an anchor and suspended by a sub-surface buoy, with autonomous sensors attached at various depths (Figure 1). A string typically includes sensors from three manufacturers: Hobo (Onset?), aquaMeasure (InnovaSea?), and Vemco (Table X?). Strings are deployed at a station for 6 – 12 months and data are measured every 1 minute to 1 hour, resulting in tens- to hundreds- of thousands of observations for a single deployment. 
 
-Water quality data (temperature, dissolved oxygen, and salinity) is collected using “sensor strings”. Each string is attached to the seafloor by an anchor and suspended by a sub-surface buoy, with autonomous sensors attached at various depths (Figure 1). A string typically includes sensors from three manufacturers: Hobo (Onset?), aquaMeasure (InnovaSea?), and Vemco (Table X). Strings are typically deployed at a station for 6 – 12 months and data are measured every 1 minute to 1 hour, resulting in tens- to hundreds- of thousands of observations for a single deployment. 
+![](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/README-fig1.png)
 
-**Figure here**
+(After retrieval?) Data from each sensor is exported to a separate csv file (using manufacturer-specific software). Each type of sensor generates a data file with unique columns and header fields, which poses a significant challenge (for compiling all data from a deployment into a single format) for analysis.
 
-(After retrieval?) Data from each sensor is exported to a separate csv file (using manufacturer-specific software). Each type of sensor generates a data file with unique columns and header fields, which poses a significant challenge for compiling all data from a deployment into a single format for analysis.
+The strings package was originally built to address this challenge, and now offers functions to compile, format, convert units, and visualize sensor string data.
 
-The strings package was originally built to address this challenge, and now offers functions to compile, format, visualize, and convert sensor string data.
-
-`strings` was developed specifically to streamline CMAR’s workflow, but was designed to be flexible enough that other users can apply it to process data from the accepted sensors. Refer to vignettes for more detail.
+`strings` was developed specifically to streamline CMAR’s workflow, but is flexible enough that other users can apply it to process data from the accepted sensors (Table?). Refer to vignettes for more detail.
 
 Processed data from CMAR’s Coastal Monitoring Program can be viewed and downloaded from …. [cheat sheet].
 
@@ -67,12 +65,10 @@ include example of compiled data here?
 
 ```{r example}
 library(strings)
-
 library(readr)
 ```
 
 Consider a string deployed from May 31, 2019 to October 19, 2019 with three sensors:
-
 
 ```{r, echo=FALSE}
 
@@ -98,35 +94,32 @@ hobo_raw <- read_csv(paste0(path, "/HOBO/10755220.csv"))
 aquaMeasure_raw <- read_csv(paste0(path, "/aquaMeasure/aquaMeasure-670364_2019-10-19_UTC.csv"))
 
 vemco_raw <-  read_csv(paste0(path, "/Vemco/Vemco_Borgles_Island_2019_05_30.csv"))
-
 ```
+
+Examine the first rows of each raw data file:
 
 Raw Hobo data
 ```{r}
 head(hobo_raw)
-
 ```
 
 Raw aquaMeasure data
 ```{r}
 head(aquaMeasure_raw)
-
 ```
 
 Raw Vemco data
 ```{r}
 head(vemco_raw)
-
 ```
 
 Something here about messy to work with
 
 ### Compile and format with `strings`
 
-Can compile with  1 function
+Compile data from the 3 sensors using `strings::compile_all_data()`:
 
 ```{r}
-
 deployment <- data.frame("START" = "2019-05-30", "END" = "2019-10-19")
 
 serial.table.HOBO <- data.frame("SENSOR" = "HOBO-10755220", "DEPTH" = "2m")
@@ -144,12 +137,24 @@ ALL_data <- compile_all_data(path = path,
                              # vemco
                              depth.vemco = depth.vemco)
 
-
+head(tibble(ALL_data), n = 10)
 ```
 
-The remaining columns alternate between timestamp (in the format "Y-m-d H:M:S") and variable value (rounded to three decimal places). Note that because the sensors can be initialized at different times and record on different intervals, values in a single row do not necessarily correspond to the same timestamp. 
+The data is compiled in a "wide" format, with metadata in the first four rows indicating the deployment period, the sensor serial number, the variable and depth of the sensor, and the timezone of the timestamps.
 
-This format is convenient for human readers, who can quickly scan the metadata to determine the number of sensors deployed, the depths of deployment, etc. However, this format is less convenient for analysis (e.g., to include include the metadata, all values were converted to class character). Prior to analysis, the dataframe should be converted to a "long" ("tidy") format, and the values should be converted to the appropriate class (e.g., POSIXct for the timestamps and numeric for variable values). This can be done using the `convert_to_tidydata()` function, which returns a dataframe with the following columns:
+The remaining columns alternate between timestamp (in the format "Y-m-d H:M:S") and variable value (rounded to three decimal places). Sensors can be initialized at different times and record on different intervals, so values in a single row do not necessarily correspond to the same timestamp. 
+
+This format is convenient for human readers, who can quickly scan the metadata to determine the number of sensors deployed, the depths of deployment, etc. However, this format is less convenient for analysis. The dataframe should be converted to a "tidy" format using `strings::convert_to_tidydata()` prior to analysis.
+
+```{r}
+ALL_tidy <- convert_to_tidydata(ALL_data)
+
+
+head(tibble(ALL_tidy))
+```
+
+
+`ALL_tidy` as 6 columns:
 
 * `DEPLOYMENT_RANGE`: The deployment and retrieval dates (character)
 * `SENSOR`: The sensor that recorded the measurement (character)
@@ -157,3 +162,15 @@ This format is convenient for human readers, who can quickly scan the metadata t
 * `VARIABLE`: The parameter measured (Temperature, Dissolved Oxygen, or Salinity) (character)
 * `DEPTH`: The depth of the sensor (ordered factor)
 * `VALUE:` The value of the measurement (numeric)
+
+`ALL_tidy` can be plotted with `plot_variables_at_depth()`
+
+```{r}
+#plot_variables_at_depth(ALL_tidy, vars.to.plot = c("Temperature", "Dissolved Oxygen"))
+```
+
+
+
+
+
+

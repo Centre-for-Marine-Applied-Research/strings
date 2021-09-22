@@ -44,27 +44,26 @@ collected using “sensor strings”. Each string is attached to the
 seafloor by an anchor and suspended by a sub-surface buoy, with
 autonomous sensors attached at various depths (Figure 1). A string
 typically includes sensors from three manufacturers: Hobo (Onset?),
-aquaMeasure (InnovaSea?), and Vemco (Table X). Strings are typically
-deployed at a station for 6 – 12 months and data are measured every 1
-minute to 1 hour, resulting in tens- to hundreds- of thousands of
-observations for a single deployment.
+aquaMeasure (InnovaSea?), and Vemco (Table X?). Strings are deployed at
+a station for 6 – 12 months and data are measured every 1 minute to 1
+hour, resulting in tens- to hundreds- of thousands of observations for a
+single deployment.
 
-**Figure here**
+![](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/README-fig1.png)
 
 (After retrieval?) Data from each sensor is exported to a separate csv
 file (using manufacturer-specific software). Each type of sensor
 generates a data file with unique columns and header fields, which poses
-a significant challenge for compiling all data from a deployment into a
-single format for analysis.
+a significant challenge (for compiling all data from a deployment into a
+single format) for analysis.
 
 The strings package was originally built to address this challenge, and
-now offers functions to compile, format, visualize, and convert sensor
-string data.
+now offers functions to compile, format, convert units, and visualize
+sensor string data.
 
 `strings` was developed specifically to streamline CMAR’s workflow, but
-was designed to be flexible enough that other users can apply it to
-process data from the accepted sensors. Refer to vignettes for more
-detail.
+is flexible enough that other users can apply it to process data from
+the accepted sensors (Table?). Refer to vignettes for more detail.
 
 Processed data from CMAR’s Coastal Monitoring Program can be viewed and
 downloaded from …. \[cheat sheet\].
@@ -75,7 +74,6 @@ include example of compiled data here?
 
 ``` r
 library(strings)
-
 library(readr)
 ```
 
@@ -228,6 +226,8 @@ vemco_raw <-  read_csv(paste0(path, "/Vemco/Vemco_Borgles_Island_2019_05_30.csv"
 #> )
 ```
 
+Examine the first rows of each raw data file:
+
 Raw Hobo data
 
 ``` r
@@ -279,10 +279,9 @@ Something here about messy to work with
 
 ### Compile and format with `strings`
 
-Can compile with 1 function
+Compile data from the 3 sensors using `strings::compile_all_data()`:
 
 ``` r
-
 deployment <- data.frame("START" = "2019-05-30", "END" = "2019-10-19")
 
 serial.table.HOBO <- data.frame("SENSOR" = "HOBO-10755220", "DEPTH" = "2m")
@@ -307,23 +306,58 @@ ALL_data <- compile_all_data(path = path,
 #> [2] "found Dissolved Oxygen in file aquaMeasure-670364_2019-10-19_UTC.csv"
 #> [1] "aquaMeasure data compiled"
 #> [1] "Vemco data compiled: Temperature"
+
+head(tibble(ALL_data), n = 10)
+#> # A tibble: 10 x 8
+#>    TIMESTAMP.x    PLACEHOLDER.x   TIMESTAMP.x.x   PLACEHOLDER.x.x  TIMESTAMP.y  
+#>    <chr>          <chr>           <chr>           <chr>            <chr>        
+#>  1 2019-May-30 t~ 2019-May-30 to~ 2019-May-30 to~ 2019-May-30 to ~ 2019-May-30 ~
+#>  2 HOBO-10755220  HOBO-10755220   aquaMeasure-67~ aquaMeasure-670~ aquaMeasure-~
+#>  3 Temperature-2m Temperature-2m  Temperature-5m  Temperature-5m   Dissolved Ox~
+#>  4 Date Time, GM~ Temp, °C        Timestamp(UTC)  Temperature      Timestamp(UT~
+#>  5 2019-05-30 18~ 12.243          2019-05-30 01:~ 5.5              2019-05-30 0~
+#>  6 2019-05-30 19~ 7.87            2019-05-30 04:~ 5.6              2019-05-30 0~
+#>  7 2019-05-30 20~ 6.585           2019-05-30 07:~ 5.92             2019-05-30 0~
+#>  8 2019-05-30 21~ 6.661           2019-05-30 11:~ 5.88             2019-05-30 1~
+#>  9 2019-05-30 22~ 6.661           2019-05-30 14:~ 6.26             2019-05-30 1~
+#> 10 2019-05-30 23~ 7.293           2019-05-30 18:~ 12.62            2019-05-30 1~
+#> # ... with 3 more variables: PLACEHOLDER.y <chr>, TIMESTAMP.y.y <chr>,
+#> #   PLACEHOLDER.y.y <chr>
 ```
 
+The data is compiled in a “wide” format, with metadata in the first four
+rows indicating the deployment period, the sensor serial number, the
+variable and depth of the sensor, and the timezone of the timestamps.
+
 The remaining columns alternate between timestamp (in the format “Y-m-d
-H:M:S”) and variable value (rounded to three decimal places). Note that
-because the sensors can be initialized at different times and record on
-different intervals, values in a single row do not necessarily
-correspond to the same timestamp.
+H:M:S”) and variable value (rounded to three decimal places). Sensors
+can be initialized at different times and record on different intervals,
+so values in a single row do not necessarily correspond to the same
+timestamp.
 
 This format is convenient for human readers, who can quickly scan the
 metadata to determine the number of sensors deployed, the depths of
-deployment, etc. However, this format is less convenient for analysis
-(e.g., to include include the metadata, all values were converted to
-class character). Prior to analysis, the dataframe should be converted
-to a “long” (“tidy”) format, and the values should be converted to the
-appropriate class (e.g., POSIXct for the timestamps and numeric for
-variable values). This can be done using the `convert_to_tidydata()`
-function, which returns a dataframe with the following columns:
+deployment, etc. However, this format is less convenient for analysis.
+The dataframe should be converted to a “tidy” format using
+`strings::convert_to_tidydata()` prior to analysis.
+
+``` r
+ALL_tidy <- convert_to_tidydata(ALL_data)
+
+
+head(tibble(ALL_tidy))
+#> # A tibble: 6 x 6
+#>   DEPLOYMENT_PERIOD       SENSOR      TIMESTAMP           VARIABLE   DEPTH VALUE
+#>   <chr>                   <chr>       <dttm>              <chr>      <ord> <dbl>
+#> 1 2019-May-30 to 2019-Oc~ HOBO-10755~ 2019-05-30 18:00:00 Temperatu~ 2     12.2 
+#> 2 2019-May-30 to 2019-Oc~ HOBO-10755~ 2019-05-30 19:00:00 Temperatu~ 2      7.87
+#> 3 2019-May-30 to 2019-Oc~ HOBO-10755~ 2019-05-30 20:00:00 Temperatu~ 2      6.58
+#> 4 2019-May-30 to 2019-Oc~ HOBO-10755~ 2019-05-30 21:00:00 Temperatu~ 2      6.66
+#> 5 2019-May-30 to 2019-Oc~ HOBO-10755~ 2019-05-30 22:00:00 Temperatu~ 2      6.66
+#> 6 2019-May-30 to 2019-Oc~ HOBO-10755~ 2019-05-30 23:00:00 Temperatu~ 2      7.29
+```
+
+`ALL_tidy` as 6 columns:
 
   - `DEPLOYMENT_RANGE`: The deployment and retrieval dates (character)
   - `SENSOR`: The sensor that recorded the measurement (character)
@@ -332,3 +366,9 @@ function, which returns a dataframe with the following columns:
     or Salinity) (character)
   - `DEPTH`: The depth of the sensor (ordered factor)
   - `VALUE:` The value of the measurement (numeric)
+
+`ALL_tidy` can be plotted with `plot_variables_at_depth()`
+
+``` r
+#plot_variables_at_depth(ALL_tidy, vars.to.plot = c("Temperature", "Dissolved Oxygen"))
+```
