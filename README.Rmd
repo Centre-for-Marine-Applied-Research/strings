@@ -51,7 +51,7 @@ Water quality data (temperature, dissolved oxygen, and salinity) is collected us
 
 ```{r, echo=FALSE, out.width="65%", fig.align='center'}
 
-knitr::include_graphics("man/figures/README-fig1.PNG")
+knitr::include_graphics("https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png")
 
 ```
 

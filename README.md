@@ -53,7 +53,7 @@ single deployment.
 
 [](man/figures/README-fig1.png)
 
-<img src="man/figures/README-fig1.PNG" width="65%" style="display: block; margin: auto;" />
+<img src="https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png" width="65%" style="display: block; margin: auto;" />
 
 (After retrieval?) Data from each sensor is exported to a separate csv
 file (using manufacturer-specific software). Each type of sensor
