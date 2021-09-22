@@ -49,7 +49,7 @@ a station for 6 – 12 months and data are measured every 1 minute to 1
 hour, resulting in tens- to hundreds- of thousands of observations for a
 single deployment.
 
-![](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/README-fig1.png){ width = 50% }
+![](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png)
 
 (After retrieval?) Data from each sensor is exported to a separate csv
 file (using manufacturer-specific software). Each type of sensor
