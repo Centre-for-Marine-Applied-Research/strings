@@ -3,7 +3,7 @@
 
 # strings: DRAFT README
 
-Changes made from dev branch\!
+dev2 changes\!
 
 <!-- badges: start -->
 
