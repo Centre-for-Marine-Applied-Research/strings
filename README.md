@@ -3,7 +3,7 @@
 
 # strings: DRAFT README
 
-dev2 changes\!
+Nicole test test
 
 <!-- badges: start -->
 
@@ -81,109 +81,61 @@ include example of compiled data here?
 ``` r
 library(strings)
 library(readr)
+#> Warning: package 'readr' was built under R version 4.0.5
 ```
 
 Consider a string deployed from May 31, 2019 to October 19, 2019 with
 three sensors:
 
 <table>
-
 <thead>
-
 <tr>
-
 <th style="text-align:left;">
-
 Sensor
-
 </th>
-
 <th style="text-align:center;">
-
 Serial\#
-
 </th>
-
 <th style="text-align:center;">
-
 Depth
-
 </th>
-
 </tr>
-
 </thead>
-
 <tbody>
-
 <tr>
-
 <td style="text-align:left;">
-
 HOBO Pro V2
-
 </td>
-
 <td style="text-align:center;">
-
 10755220
-
 </td>
-
 <td style="text-align:center;">
-
 2
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 aquaMeasure DOT
-
 </td>
-
 <td style="text-align:center;">
-
 670364
-
 </td>
-
 <td style="text-align:center;">
-
 5
-
 </td>
-
 </tr>
-
 <tr>
-
 <td style="text-align:left;">
-
 VR2AR
-
 </td>
-
 <td style="text-align:center;">
-
 547109
-
 </td>
-
 <td style="text-align:center;">
-
 15
-
 </td>
-
 </tr>
-
 </tbody>
-
 </table>
 
 ### Title for this section (Raw data? Sensor export? Separate data files?)
@@ -197,39 +149,37 @@ Import raw data files:
 path <- system.file("extdata", package = "strings")
 
 hobo_raw <- read_csv(paste0(path, "/HOBO/10755220.csv"))
-#> 
+#> New names:
+#> * `` -> ...4
+#> Rows: 3408 Columns: 8
 #> -- Column specification --------------------------------------------------------
-#> cols(
-#>   `#` = col_double(),
-#>   `Date Time, GMT+00:00` = col_character(),
-#>   `Temp, °C (LGR S/N: 10755220, SEN S/N: 10755220)` = col_double(),
-#>   X4 = col_logical(),
-#>   `Coupler Attached (LGR S/N: 10755220)` = col_logical(),
-#>   `Host Connected (LGR S/N: 10755220)` = col_logical(),
-#>   `Stopped (LGR S/N: 10755220)` = col_logical(),
-#>   `End Of File (LGR S/N: 10755220)` = col_logical()
-#> )
+#> Delimiter: ","
+#> chr (3): Date Time, GMT+00:00, Stopped (LGR S/N: 10755220), End Of File (LGR...
+#> dbl (2): #, Temp, °C (LGR S/N: 10755220, SEN S/N: 10755220)
+#> lgl (3): ...4, Coupler Attached (LGR S/N: 10755220), Host Connected (LGR S/N...
+#> 
+#> i Use `spec()` to retrieve the full column specification for this data.
+#> i Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 aquaMeasure_raw <- read_csv(paste0(path, "/aquaMeasure/aquaMeasure-670364_2019-10-19_UTC.csv"))
-#> 
+#> Rows: 8482 Columns: 5
 #> -- Column specification --------------------------------------------------------
-#> cols(
-#>   `Timestamp(UTC)` = col_character(),
-#>   Sensor = col_character(),
-#>   `Record Type` = col_character(),
-#>   `Dissolved Oxygen` = col_double(),
-#>   Temperature = col_logical()
-#> )
+#> Delimiter: ","
+#> chr (3): Timestamp(UTC), Sensor, Record Type
+#> dbl (2): Dissolved Oxygen, Temperature
+#> 
+#> i Use `spec()` to retrieve the full column specification for this data.
+#> i Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 vemco_raw <-  read_csv(paste0(path, "/Vemco/Vemco_Borgles_Island_2019_05_30.csv"))
-#> 
+#> Rows: 2322 Columns: 4
 #> -- Column specification --------------------------------------------------------
-#> cols(
-#>   `Date and Time (UTC)` = col_character(),
-#>   Receiver = col_character(),
-#>   Description = col_character(),
-#>   Data = col_double()
-#> )
+#> Delimiter: ","
+#> chr (3): Date and Time (UTC), Receiver, Description
+#> dbl (1): Data
+#> 
+#> i Use `spec()` to retrieve the full column specification for this data.
+#> i Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ```
 
 Examine the first rows of each raw data file:
@@ -239,16 +189,16 @@ Raw Hobo data
 ``` r
 head(hobo_raw)
 #> # A tibble: 6 x 8
-#>     `#` `Date Time, GMT+0~ `Temp, °C (LGR S/N: 1075~ X4    `Coupler Attached (L~
-#>   <dbl> <chr>                                  <dbl> <lgl> <lgl>                
-#> 1     1 2019-05-30 18:00                       12.2  NA    NA                   
-#> 2     2 2019-05-30 19:00                        7.87 NA    NA                   
-#> 3     3 2019-05-30 20:00                        6.58 NA    NA                   
-#> 4     4 2019-05-30 21:00                        6.66 NA    NA                   
-#> 5     5 2019-05-30 22:00                        6.66 NA    NA                   
-#> 6     6 2019-05-30 23:00                        7.29 NA    NA                   
+#>     `#` `Date Time, GMT+00:00` `Temp, °C (LGR S/N: 1~ ...4  `Coupler Attached (~
+#>   <dbl> <chr>                                   <dbl> <lgl> <lgl>               
+#> 1     1 2019-05-30 18:00                        12.2  NA    NA                  
+#> 2     2 2019-05-30 19:00                         7.87 NA    NA                  
+#> 3     3 2019-05-30 20:00                         6.58 NA    NA                  
+#> 4     4 2019-05-30 21:00                         6.66 NA    NA                  
+#> 5     5 2019-05-30 22:00                         6.66 NA    NA                  
+#> 6     6 2019-05-30 23:00                         7.29 NA    NA                  
 #> # ... with 3 more variables: Host Connected (LGR S/N: 10755220) <lgl>,
-#> #   Stopped (LGR S/N: 10755220) <lgl>, End Of File (LGR S/N: 10755220) <lgl>
+#> #   Stopped (LGR S/N: 10755220) <chr>, End Of File (LGR S/N: 10755220) <chr>
 ```
 
 Raw aquaMeasure data
@@ -257,13 +207,13 @@ Raw aquaMeasure data
 head(aquaMeasure_raw)
 #> # A tibble: 6 x 5
 #>   `Timestamp(UTC)`        Sensor     `Record Type`  `Dissolved Oxyg~ Temperature
-#>   <chr>                   <chr>      <chr>                     <dbl> <lgl>      
-#> 1 352s after startup (ti~ aquaMeasu~ Dissolved Oxy~             101. NA         
-#> 2 1691s after startup (t~ aquaMeasu~ Dissolved Oxy~             100. NA         
-#> 3 3015s after startup (t~ aquaMeasu~ Dissolved Oxy~             100. NA         
-#> 4 4346s after startup (t~ aquaMeasu~ Dissolved Oxy~             101. NA         
-#> 5 5690s after startup (t~ aquaMeasu~ Dissolved Oxy~             101. NA         
-#> 6 364s after startup (ti~ aquaMeasu~ Dissolved Oxy~             101. NA
+#>   <chr>                   <chr>      <chr>                     <dbl>       <dbl>
+#> 1 352s after startup (ti~ aquaMeasu~ Dissolved Oxy~             101.          NA
+#> 2 1691s after startup (t~ aquaMeasu~ Dissolved Oxy~             100.          NA
+#> 3 3015s after startup (t~ aquaMeasu~ Dissolved Oxy~             100.          NA
+#> 4 4346s after startup (t~ aquaMeasu~ Dissolved Oxy~             101.          NA
+#> 5 5690s after startup (t~ aquaMeasu~ Dissolved Oxy~             101.          NA
+#> 6 364s after startup (ti~ aquaMeasu~ Dissolved Oxy~             101.          NA
 ```
 
 Raw Vemco data
@@ -304,9 +254,14 @@ ALL_data <- compile_all_data(path = path,
                              serial.table.aM = serial.table.aM,
                              # vemco
                              depth.vemco = depth.vemco)
-#> Warning: Missing column names filled in: 'X4' [4], 'X5' [5], 'X6' [6], 'X7' [7],
-#> 'X8' [8]
-#> Warning: Missing column names filled in: 'X4' [4]
+#> New names:
+#> * `` -> ...4
+#> * `` -> ...5
+#> * `` -> ...6
+#> * `` -> ...7
+#> * `` -> ...8
+#> New names:
+#> * `` -> ...4
 #> [1] "HOBO data compiled"
 #> [1] "found Temperature in file aquaMeasure-670364_2019-10-19_UTC.csv"     
 #> [2] "found Dissolved Oxygen in file aquaMeasure-670364_2019-10-19_UTC.csv"
@@ -365,13 +320,13 @@ head(tibble(ALL_tidy))
 
 `ALL_tidy` as 6 columns:
 
-  - `DEPLOYMENT_RANGE`: The deployment and retrieval dates (character)
-  - `SENSOR`: The sensor that recorded the measurement (character)
-  - `TIMESTAMP`: The timestamp of the measurement (POSIXct)
-  - `VARIABLE`: The parameter measured (Temperature, Dissolved Oxygen,
+-   `DEPLOYMENT_RANGE`: The deployment and retrieval dates (character)
+-   `SENSOR`: The sensor that recorded the measurement (character)
+-   `TIMESTAMP`: The timestamp of the measurement (POSIXct)
+-   `VARIABLE`: The parameter measured (Temperature, Dissolved Oxygen,
     or Salinity) (character)
-  - `DEPTH`: The depth of the sensor (ordered factor)
-  - `VALUE:` The value of the measurement (numeric)
+-   `DEPTH`: The depth of the sensor (ordered factor)
+-   `VALUE:` The value of the measurement (numeric)
 
 `ALL_tidy` can be plotted with `plot_variables_at_depth()`
 
