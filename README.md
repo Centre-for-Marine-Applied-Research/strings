@@ -3,7 +3,7 @@
 
 # strings: DRAFT README
 
-dev2 changes\!
+check check
 
 <!-- badges: start -->
 
