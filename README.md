@@ -3,7 +3,7 @@
 
 # strings: DRAFT README
 
-Nicole test test
+Nicole test test 2.0
 
 <!-- badges: start -->
 
