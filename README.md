@@ -3,8 +3,6 @@
 
 # strings: DRAFT README
 
-Nicole test test 3.0
-
 <!-- badges: start -->
 
 [![License: GPL
@@ -44,24 +42,31 @@ collected through this program.
 Water quality data (temperature, dissolved oxygen, and salinity) is
 collected using “sensor strings”. Each string is attached to the
 seafloor by an anchor and suspended by a sub-surface buoy, with
-autonomous sensors attached at various depths (Figure 1). A string
-typically includes sensors from three manufacturers: Hobo (Onset?),
-aquaMeasure (InnovaSea?), and Vemco (Table X?). Strings are deployed at
-a station for 6 – 12 months and data are measured every 1 minute to 1
-hour, resulting in tens- to hundreds- of thousands of observations for a
+autonomous sensors attached at various depths (). A string typically
+includes sensors from three manufacturers: Onset (Hobo), InnovaSea
+(aquaMeasure), and Vemco (Table X?). Strings are deployed at a station
+for 6 – 12 months and data are measured every 1 minute to 1 hour,
+resulting in tens- to hundreds- of thousands of observations for a
 single deployment.
 
 [](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png)
 
 [](man/figures/README-fig1.png)
 
-<img src="https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png" width="65%" style="display: block; margin: auto;" />
+<div class="figure" style="text-align: center">
 
-(After retrieval?) Data from each sensor is exported to a separate csv
-file (using manufacturer-specific software). Each type of sensor
-generates a data file with unique columns and header fields, which poses
-a significant challenge (for compiling all data from a deployment into a
-single format) for analysis.
+<img src="https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png" alt="\label{fig:figs}Typical sensor string" width="65%" />
+<p class="caption">
+Typical sensor string
+</p>
+
+</div>
+
+After retrieval, data from each sensor is exported to a separate csv
+file using manufacturer-specific software. Each type of sensor generates
+a data file with unique columns and header fields, which poses a
+significant challenge for compiling all data from a deployment into a
+single format for analysis.
 
 The strings package was originally built to address this challenge, and
 now offers functions to compile, format, convert units, and visualize
@@ -69,12 +74,13 @@ sensor string data.
 
 `strings` was developed specifically to streamline CMAR’s workflow, but
 is flexible enough that other users can apply it to process data from
-the accepted sensors (Table?). Refer to vignettes for more detail.
+the accepted sensors (Table? (Yes, lets make a table)). Refer to
+vignettes for more detail.
 
 Processed data from CMAR’s Coastal Monitoring Program can be viewed and
 downloaded from …. \[cheat sheet\].
 
-include example of compiled data here?
+include example of compiled data here? plot or csv?
 
 ## Example
 
@@ -138,7 +144,7 @@ VR2AR
 </tbody>
 </table>
 
-### Title for this section (Raw data? Sensor export? Separate data files?)
+### Raw data files
 
 The data from each sensor is exported to a separate csv file, each with
 manufacturer-specific columns.
