@@ -42,12 +42,11 @@ collected through this program.
 Water quality data (temperature, dissolved oxygen, and salinity) is
 collected using “sensor strings”. Each string is attached to the
 seafloor by an anchor and suspended by a sub-surface buoy, with
-autonomous sensors attached at various depths (). A string typically
-includes sensors from three manufacturers: Onset (Hobo), InnovaSea
-(aquaMeasure), and Vemco (Table X?). Strings are deployed at a station
-for 6 – 12 months and data are measured every 1 minute to 1 hour,
-resulting in tens- to hundreds- of thousands of observations for a
-single deployment.
+autonomous sensors attached at various depths (Figure 1). A string
+typically includes three sensor models: Hobo, aquaMeasure, and VR2AR
+(Table 1). Strings are deployed at a station for 6 – 12 months and data
+are measured every 1 minute to 1 hour, resulting in tens- to hundreds-
+of thousands of observations for a single deployment.
 
 [](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png)
 
@@ -55,9 +54,9 @@ single deployment.
 
 <div class="figure" style="text-align: center">
 
-<img src="https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png" alt="\label{fig:figs}Typical sensor string" width="65%" />
+<img src="https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png" alt="\label{fig:figs} Figure 1: Typical sensor string" width="65%" />
 <p class="caption">
-Typical sensor string
+Figure 1: Typical sensor string
 </p>
 
 </div>
@@ -74,13 +73,62 @@ sensor string data.
 
 `strings` was developed specifically to streamline CMAR’s workflow, but
 is flexible enough that other users can apply it to process data from
-the accepted sensors (Table? (Yes, lets make a table)). Refer to
-vignettes for more detail.
+the accepted sensors (Table 1). Refer to vignettes for more detail.
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+Sensor
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+[HOBO Pro V2](https://www.onsetcomp.com/datasheet/U22-001)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+[HOBO DO](https://www.onsetcomp.com/datasheet/U26-001)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+[aquaMeasure
+DOT](https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-Intelligence-Spec-Sheet-062221.pdf)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+[aquaMeasure
+SAL](https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-Intelligence-Spec-Sheet-062221.pdf)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+[VR2AR](https://www.innovasea.com/wp-content/uploads/2021/06/Innovasea-Fish-Tracking-vr2ar-data-sheet-0621.pdf)
+</td>
+</tr>
+</tbody>
+</table>
 
 Processed data from CMAR’s Coastal Monitoring Program can be viewed and
-downloaded from …. \[cheat sheet\].
+downloaded from several sources, as outlined below (Figure 2).
 
-include example of compiled data here? plot or csv?
+[](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/Data%20Access%20Cheat%20Sheet%2020210913.pdf)
+
+[](man/figures/Data%20Access%20Cheat%20Sheet%2020210913.pdf)
+
+<div class="figure" style="text-align: center">
+
+<img src="https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/Data Access Cheat Sheet 20210913.pdf" alt="\label{fig:figs}Figure 2: Data access cheat sheet" width="65%" />
+<p class="caption">
+Figure 2: Data access cheat sheet
+</p>
+
+</div>
 
 ## Example
 
@@ -100,7 +148,7 @@ three sensors:
 Sensor
 </th>
 <th style="text-align:center;">
-Serial\#
+Serial \#
 </th>
 <th style="text-align:center;">
 Depth
@@ -237,7 +285,9 @@ head(vemco_raw)
 #> 6 2019-05-31 0:22       VR2AR-547109 Temperature   4.6
 ```
 
-Something here about messy to work with
+Data from each sensor is exported in a slightly different layout, making
+it difficult to work with and analyze all of the data from a single
+deployment.
 
 ### Compile and format with `strings`
 
