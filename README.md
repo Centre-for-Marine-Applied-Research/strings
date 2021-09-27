@@ -117,13 +117,13 @@ SAL](https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-
 Processed data from CMAR’s Coastal Monitoring Program can be viewed and
 downloaded from several sources, as outlined below (Figure 2).
 
-[](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/Data%20Access%20Cheat%20Sheet%2020210913.pdf)
+[](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig3.pdf)
 
-[](man/figures/Data%20Access%20Cheat%20Sheet%2020210913.pdf)
+[](man/figures/README-fig3.pdf)
 
 <div class="figure" style="text-align: center">
 
-<img src="https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/Data Access Cheat Sheet 20210913.pdf" alt="\label{fig:figs}Figure 2: Data access cheat sheet" width="65%" />
+<img src="https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig3.pdf" alt="\label{fig:figs}Figure 2: Data access cheat sheet" width="65%" />
 <p class="caption">
 Figure 2: Data access cheat sheet
 </p>
