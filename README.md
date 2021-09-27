@@ -73,7 +73,7 @@ sensor string data.
 
 `strings` was developed specifically to streamline CMAR’s workflow, but
 is flexible enough that other users can apply it to process data from
-the accepted sensors (Table 1). Refer to vignettes for more detail.
+the accepted sensors (Table 1). Refer to the vignettes for more detail.
 
 <table>
 <thead>
