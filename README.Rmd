@@ -43,13 +43,13 @@ devtools::install_github("Centre-for-Marine-Applied-Research/strings")
 
 The Centre for Marine Applied Research ([CMAR](https://cmar.ca/)) coordinates an extensive [Coastal Monitoring Program](https://cmar.ca/2020/07/14/coastal-monitoring-program/) that measures [Essential Ocean Variables](https://www.goosocean.org/index.php?option=com_content&view=article&id=14&Itemid=114) (e.g., temperature, dissolved oxygen, salinity, sea state, currents), typically within 1 km of the coast of Nova Scotia, Canada. The `strings` package is used to compile, format, and visualize water quality data collected through this program.
 
-Water quality data (temperature, dissolved oxygen, and salinity) is collected using “sensor strings”. Each string is attached to the seafloor by an anchor and suspended by a sub-surface buoy, with autonomous sensors attached at various depths (\ref{fig:figs}). A string typically includes sensors from three manufacturers: Onset (Hobo), InnovaSea (aquaMeasure), and Vemco (Table X?). Strings are deployed at a station for 6 – 12 months and data are measured every 1 minute to 1 hour, resulting in tens- to hundreds- of thousands of observations for a single deployment. 
+Water quality data (temperature, dissolved oxygen, and salinity) is collected using “sensor strings”. Each string is attached to the seafloor by an anchor and suspended by a sub-surface buoy, with autonomous sensors attached at various depths (Figure 1). A string typically includes three sensor models: Hobo, aquaMeasure, and VR2AR (Table 1). Strings are deployed at a station for 6 – 12 months and data are measured every 1 minute to 1 hour, resulting in tens- to hundreds- of thousands of observations for a single deployment.
 
 [](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png)
 
 [](man/figures/README-fig1.png)
 
-```{r, echo=FALSE, out.width="65%", fig.align='center',fig.cap="\\label{fig:figs}Typical sensor string"}
+```{r, echo=FALSE, out.width="65%", fig.align='center',fig.cap="\\label{fig:figs} Figure 1: Typical sensor string"}
 
 knitr::include_graphics("https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png")
 
@@ -59,12 +59,29 @@ After retrieval, data from each sensor is exported to a separate csv file using 
 
 The strings package was originally built to address this challenge, and now offers functions to compile, format, convert units, and visualize sensor string data.
 
-`strings` was developed specifically to streamline CMAR’s workflow, but is flexible enough that other users can apply it to process data from the accepted sensors (Table? (Yes, lets make a table)). Refer to vignettes for more detail.
+`strings` was developed specifically to streamline CMAR’s workflow, but is flexible enough that other users can apply it to process data from the accepted sensors (Table 1). Refer to the vignettes for more detail.
 
-Processed data from CMAR’s Coastal Monitoring Program can be viewed and downloaded from …. [cheat sheet].
+```{r, echo=FALSE,caption= "Sensor Models included"}
 
+tibble(
+  "Sensor" = c("[HOBO Pro V2](https://www.onsetcomp.com/datasheet/U22-001)", "[HOBO DO](https://www.onsetcomp.com/datasheet/U26-001)", "[aquaMeasure DOT](https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-Intelligence-Spec-Sheet-062221.pdf)", "[aquaMeasure SAL](https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-Intelligence-Spec-Sheet-062221.pdf)", "[VR2AR](https://www.innovasea.com/wp-content/uploads/2021/06/Innovasea-Fish-Tracking-vr2ar-data-sheet-0621.pdf)")
+) %>% 
+kable(align = "lcc")
 
-include example of compiled data here? plot or csv? 
+```
+
+Processed data from CMAR’s Coastal Monitoring Program can be viewed and downloaded from several sources, as outlined below (Figure 2).
+
+[](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig3.pdf)
+
+[](man/figures/README-fig3.pdf)
+
+```{r, echo=FALSE, out.width="65%", fig.align='center',fig.cap="\\label{fig:figs}Figure 2: Data access cheat sheet"}
+
+knitr::include_graphics("https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig3.pdf")
+
+```
+
 
 
 
@@ -81,7 +98,7 @@ Consider a string deployed from May 31, 2019 to October 19, 2019 with three sens
 
 tibble(
   "Sensor" = c("HOBO Pro V2", "aquaMeasure DOT", "VR2AR"),
-  "Serial#" = c("10755220", "670364", "547109"),
+  "Serial #" = c("10755220", "670364", "547109"),
   "Depth" = c("2", "5", "15")
 ) %>% 
 kable(align = "lcc")
@@ -120,7 +137,7 @@ Raw Vemco data
 head(vemco_raw)
 ```
 
-Something here about messy to work with
+Data from each sensor is exported in a slightly different layout, making it difficult to work with and analyze all of the data from a single deployment.
 
 ### Compile and format with `strings`
 
