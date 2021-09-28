@@ -22,11 +22,6 @@ repo <- "centre-for-marine-applied-research/strings"
 
 # strings: DRAFT README
 
-<<<<<<< HEAD
-check check
-
-=======
->>>>>>> ffb9a263a37f44dab6e01babc94c80e31d0c53aa
 <!-- badges: start -->
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) `r badge_devel(repo, "blue")` `r badge_codefactor(repo)` `r badge_github_actions(repo)`
@@ -52,7 +47,6 @@ Water quality data (temperature, dissolved oxygen, and salinity) is collected us
 
 [](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png)
 
-[](man/figures/README-fig1.png)
 
 ```{r, echo=FALSE, out.width="65%", fig.align='center',fig.cap="\\label{fig:figs} Figure 1: Typical sensor string"}
 
@@ -69,9 +63,15 @@ The strings package was originally built to address this challenge, and now offe
 ```{r, echo=FALSE,caption= "Sensor Models included"}
 
 tibble(
-  "Sensor" = c("[HOBO Pro V2](https://www.onsetcomp.com/datasheet/U22-001)", "[HOBO DO](https://www.onsetcomp.com/datasheet/U26-001)", "[aquaMeasure DOT](https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-Intelligence-Spec-Sheet-062221.pdf)", "[aquaMeasure SAL](https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-Intelligence-Spec-Sheet-062221.pdf)", "[VR2AR](https://www.innovasea.com/wp-content/uploads/2021/06/Innovasea-Fish-Tracking-vr2ar-data-sheet-0621.pdf)")
+  "Sensor (link to spec sheet)" = 
+    c("[HOBO Pro V2](https://www.onsetcomp.com/datasheet/U22-001)", 
+      "[HOBO DO](https://www.onsetcomp.com/datasheet/U26-001)", 
+      "[aquaMeasure DOT](https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-Intelligence-Spec-Sheet-062221.pdf)", 
+      "[aquaMeasure SAL](https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-Intelligence-Spec-Sheet-062221.pdf)", "[VR2AR](https://www.innovasea.com/wp-content/uploads/2021/06/Innovasea-Fish-Tracking-vr2ar-data-sheet-0621.pdf)"),
+  
+  "Variable(s) Measured" = c("Temperature", "Temperature, Dissolved Oxygen", "Temperature, Dissolved Oxygen", "Temperature, Salinity", "Temperature" )
 ) %>% 
-kable(align = "lcc")
+kable(align = "ll")
 
 ```
 
@@ -79,16 +79,12 @@ Processed data from CMAR’s Coastal Monitoring Program can be viewed and downlo
 
 [](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig3.pdf)
 
-[](man/figures/README-fig3.pdf)
 
 ```{r, echo=FALSE, out.width="65%", fig.align='center',fig.cap="\\label{fig:figs}Figure 2: Data access cheat sheet"}
 
 knitr::include_graphics("https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig3.pdf")
 
 ```
-
-
-
 
 ## Example
 
@@ -194,7 +190,7 @@ head(tibble(ALL_tidy))
 
 `ALL_tidy` can be plotted with `plot_variables_at_depth()`
 
-```{r fig2}
+```{r fig3}
 plot_variables_at_depth(ALL_tidy, vars.to.plot = c("Temperature", "Dissolved Oxygen"))
 ```
 
