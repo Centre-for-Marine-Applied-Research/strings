@@ -187,9 +187,9 @@ Temperature
 </table>
 
 Processed data from CMAR’s Coastal Monitoring Program can be viewed and
-downloaded from several sources, as outlined below (Figure 2).
-
-<embed src="https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig2.pdf" width="65%" style="display: block; margin: auto;" type="application/pdf" />
+downloaded from several sources, as outlined in the [CMAR Data Cheat
+Sheet](%22https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig2.pdf%22)
+(download for clickable links).
 
 ## Example
 
