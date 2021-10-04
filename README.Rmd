@@ -20,7 +20,7 @@ library(usethis)
 repo <- "centre-for-marine-applied-research/strings"
 ```
 
-# strings: DRAFT README
+# strings
 
 <!-- badges: start -->
 
@@ -28,7 +28,7 @@ repo <- "centre-for-marine-applied-research/strings"
 
 <!-- badges: end -->
 
-Compile, format, and visualize water quality (temperature, dissolved oxygen, salinity) data measured by different sensors 
+Compile, format, and visualize water quality (temperature, dissolved oxygen, salinity) data measured by different sensors. 
 
 ## Installation
 

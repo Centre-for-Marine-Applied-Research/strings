@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# strings: DRAFT README
+# strings
 
 <!-- badges: start -->
 
@@ -15,7 +15,7 @@ status](https://github.com/centre-for-marine-applied-research/strings/workflows/
 <!-- badges: end -->
 
 Compile, format, and visualize water quality (temperature, dissolved
-oxygen, salinity) data measured by different sensors
+oxygen, salinity) data measured by different sensors.
 
 ## Installation
 
