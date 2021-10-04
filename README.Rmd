@@ -20,7 +20,7 @@ library(usethis)
 repo <- "centre-for-marine-applied-research/strings"
 ```
 
-# strings
+# strings: DRAFT README
 
 <!-- badges: start -->
 
