@@ -3,7 +3,7 @@
 
 # strings: DRAFT README
 
-CHANGE FOR NICOLE TO PULL FROM UPSTREAM
+FORKING AND BRANCHING
 
 <!-- badges: start -->
 
