@@ -26,33 +26,42 @@
 #'  and saveRDS. data.table::fwrite took an average of 12.9 seconds, while
 #'  saveRDS took an average of 10.5 seconds (1.2 times faster).
 #'  (readr::write_csv took an average of 350 seconds).
+#'
 #'@param input_path Path to the *.csv files to be assembled. Default is the Open
 #'  Data/Deployment Data folder on the CMAR Operations shared drive (user must
 #'  be connected to the Perennia VPN).
+#'
 #'@param output_path Path to where assembled file(s) should be exported. The
 #'  default will export the csv file to the Open Data/Submissions folder on the
 #'  CMAR Operations shared drive (for submission to the Open Data Portal) and
 #'  the rds file to the Open Data/County Datasets folder (for import ). For
 #'  custom \code{out_path} entries, the csv and rds files will be exported to
 #'  the same folder.
+#'
 #'@param county A character string. If \code{export_csv} and/or
 #'  \code{export_rds} is \code{TRUE}, \code{county} is used to name the exported
 #'  file(s). Additionally, if \code{input_path = NULL}, \code{county} is the
 #'  next folder on the path.
+#'
 #'@param export_csv Logical argument indicating whether the assembled data
 #'  should be exported as a *.csv file. File name will be
 #'  county_todays-date.csv. Default is \code{TRUE}. Note: \code{TIMESTAMP} is
 #'  converted to a character before exporting to remove UTC formatting
 #'  (2018-12-23T05:00:00Z). When re-imported into R, the UTC timezone should be
 #'  added using the \code{force_tz()} function from the lubridate package.
+#'
 #'@param export_rds Logical argument indicating whether the assembled data
 #'  should be exported as a *.rds file. File name will be
 #'  county_todays-date.rds. Default is \code{TRUE}.
+#'
 #'@param return_global Logical argument indicating whether the assembled data
 #'  should be returned to the global environment. Default is \code{FALSE}.
+#'
 #'@return Returns the assembled data as a .csv, and/or .rds, and/or as a
 #'  dataframe to the global environment.
+#'
 #'@family OpenData CMAR
+#'
 #'@author Danielle Dempsey
 #'
 #'@importFrom purrr map_dfr
@@ -84,14 +93,27 @@ assemble_opendata_submission <- function(input_path = NULL,
   dat <- list.files(input_path,
                     full.names = TRUE,
                     pattern = ".csv") %>%
-    purrr::map_dfr(data.table::fread,
-                   colClasses = list(
-                     character = c("STATION", "LEASE", "DEPLOYMENT_PERIOD",
-                                   "SENSOR", "DEPTH", "VARIABLE"),
-                     POSIXct = "TIMESTAMP")) %>%
-    mutate(LEASE = if_else(LEASE == "NA" | LEASE == "", NA_character_, LEASE),
-           # to explicitly assign TIMESTAMP the UTC timezone
-           TIMESTAMP = force_tz(TIMESTAMP, tzone = "UTC"))
+    purrr::map_dfr(
+      data.table::fread,
+      colClasses = list(
+        character = c("STATION", "LEASE", "DEPLOYMENT_PERIOD",
+                      "SENSOR", "DEPTH", "VARIABLE"),
+        POSIXct = "TIMESTAMP")
+    ) %>%
+    mutate(
+      LEASE = if_else(LEASE == "NA" | LEASE == "", NA_character_, LEASE),
+      # to explicitly assign TIMESTAMP the UTC timezone
+      TIMESTAMP = force_tz(TIMESTAMP, tzone = "UTC"),
+
+      UNITS = case_when(
+        VARIABLE == "Temperature" ~ "degrees Celsius",
+        VARIABLE == "Salinity" ~ "practical salinity units",
+
+        VARIABLE == "Dissolved Oxygen" & str_detect(SENSOR, "aquaMeasure") ~
+          "percent saturation",
+        VARIABLE == "Dissolved Oxygen" & str_detect(SENSOR, "HOBO") ~ "mg/L"
+      )
+    )
 
 # Export csv --------------------------------------------------------------
 
