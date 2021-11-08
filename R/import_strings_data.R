@@ -85,7 +85,8 @@ import_strings_data <- function(input_path = NULL,
       waterbody_distinct <- dat %>% distinct(WATERBODY)  %>%
         filter(!(WATERBODY %in% Area_Info$WATERBODY))
 
-      warning("Found WATERBODY in county data that is not in Area_Info: ", waterbody_distinct$WATERBODY)
+      warning("Found WATERBODY in county data that is not in Area_Info: ",
+              waterbody_distinct$WATERBODY)
     }
 
     if(any(!(unique(dat$STATION) %in% Area_Info$STATION))){
