@@ -110,11 +110,11 @@ calculate_cp <- function(dat.wide,
     A4_GG <- -2.56847E-1
     A5_GG <- 3.88767
 
-    B0_GG = -6.24523E-3
-    B1_GG = -7.37614E-3
-    B2_GG = -1.03410E-2
-    B3_GG = -8.17083E-3
-    C0_GG = -4.88682E-7
+    # B0_GG = -6.24523E-3
+    # B1_GG = -7.37614E-3
+    # B2_GG = -1.03410E-2
+    # B3_GG = -8.17083E-3
+    # C0_GG = -4.88682E-7
 
     mg_L <- 1.42905   # to convert from mL/L to mg/L
 
@@ -133,7 +133,7 @@ calculate_cp <- function(dat.wide,
           + A3_GG * T_s^3
           + A4_GG * T_s^4
           + A5_GG * T_s^5
-          # these terms are accounted for in DO_salinity_correction
+          # these terms are accounted for in DO_salinity_correction()
          # + Salinity * (B0_GG + B1_GG * T_s + B2_GG * T_s^2 + B3_GG * T_s^3)
          # + C0_GG * Salinity^2
         )
