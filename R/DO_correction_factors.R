@@ -208,6 +208,11 @@ DO_salinity_correction <- function(dat.wide,
 #'   there is a \code{Pressure} column in \code{dat.wide}, function will stop
 #'   with an error.
 #'
+#' @param Sal A single value of salinity (psu). This value must be specified if
+#'   there is no \code{Salinity} column in \code{dat.wide}. Default is \code{Sal
+#'   = NULL}. Note: if \code{Sal} is specified when there is a \code{Salinity}
+#'   column in \code{dat.wide}, the function will stop with an error.
+#'
 #' @return Returns \code{dat.wide} with additional column(s), \code{F_p} and
 #'   \code{Pressure}.
 #'
@@ -218,7 +223,7 @@ DO_salinity_correction <- function(dat.wide,
 #' @export
 
 
-DO_pressure_correction <- function(dat.wide, P_atm = NULL){
+DO_pressure_correction <- function(dat.wide, Sal = NULL, P_atm = NULL){
 
   # Error Messages ----------------------------------------------------------
 
@@ -231,11 +236,17 @@ DO_pressure_correction <- function(dat.wide, P_atm = NULL){
 
   }
 
+  if("Salinity" %in% cols & !is.null(Sal)){
+
+    stop("Conflicting salinity values.
+         \nHINT: Remove column Salinity or set Sal argument to NULL.")
+
+  }
 
 # Calculate F_p -----------------------------------------------------------
 
   if(!is.null(P_atm)) dat.wide <- mutate(dat.wide, Pressure = P_atm)
-
+  if(!is.null(Sal)) dat.wide <- mutate(dat.wide, Salinity = Sal)
 
   dat.wide %>%
     mutate(

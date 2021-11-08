@@ -4,12 +4,17 @@
 \alias{DO_pressure_correction}
 \title{Pressure correction factor for dissolved oxygen measurements}
 \usage{
-DO_pressure_correction(dat.wide, P_atm = NULL)
+DO_pressure_correction(dat.wide, Sal = NULL, P_atm = NULL)
 }
 \arguments{
 \item{dat.wide}{Dataframe with at least one column: \code{Temperature}.
 Corresponding pressure (atm) data may be included in column
 \code{Pressure}. Additional columns will be ignored and returned.}
+
+\item{Sal}{A single value of salinity (psu). This value must be specified if
+there is no \code{Salinity} column in \code{dat.wide}. Default is \code{Sal
+= NULL}. Note: if \code{Sal} is specified when there is a \code{Salinity}
+column in \code{dat.wide}, the function will stop with an error.}
 
 \item{P_atm}{A single value of barometric pressure (atm). This value should
 be specified if there is no \code{Pressure} column in \code{dat.wide}.
