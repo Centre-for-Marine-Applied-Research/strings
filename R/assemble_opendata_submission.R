@@ -97,7 +97,7 @@ assemble_opendata_submission <- function(input_path = NULL,
       data.table::fread,
       colClasses = list(
         character = c("STATION", "LEASE", "DEPLOYMENT_PERIOD",
-                      "SENSOR", "DEPTH", "VARIABLE"),
+                      "SENSOR", "DEPTH", "VARIABLE", "UNITS"),
         POSIXct = "TIMESTAMP")
     ) %>%
     mutate(
