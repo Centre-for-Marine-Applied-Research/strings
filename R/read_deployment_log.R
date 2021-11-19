@@ -165,18 +165,9 @@ read_deployment_log <- function(path.log){
             \nThis sensor is not recognized by the read_deployment_log() function")
   }
 
-  # HOBO & TidBit sensors
-  # hobo.sensors <- c("HOBO Pro V2", "HOBO pro V2", "HOBO_Pro_V2", "HOBO_PRO_V2",
-  #                   "HOBO DO",
-  #                   "TidbiT MX2303", "TidbiT MX2203")
 
   hobos <- sensors %>%
-    # mutate(Logger_Model = str_replace(Logger_Model, "_", " "),
-    #        Logger_Lower = tolower(Logger_Model),
-    #        detect_hobo = str_detect(Logger_Lower, "hobo"),
-    #        detect_tidbit = str_detect(Logger_Lower, "tidbit")) %>%
     filter(detect_hobo | detect_tidbit) %>%
-    # filter(Logger_Model %in% hobo.sensors) %>%
     select(Logger_Model, `Serial#`, Sensor_Depth) %>%
     separate(Logger_Model, into = c("sensor", NA, NA), sep = " ", fill = "right") %>%
     mutate(SENSOR = paste(sensor, `Serial#`, sep = "-"),
@@ -191,17 +182,9 @@ read_deployment_log <- function(path.log){
       message("No Hobo sensors found in log")
   }
 
-  # aquaMeasure sensors
-  # aM.sensors <- c("aquaMeasure DOT", "aquaMeasure_DOT", "aquaMeasure SAL",
-  #                 "aquaMeasure SST",
-  #                 "aquameasure DOT", "aquameasure SAL", "aquameasure SST")
 
   aquaMeasures <- sensors %>%
-    # mutate(Logger_Model = str_replace(Logger_Model, "_", " "),
-    #        Logger_Lower = tolower(Logger_Model),
-    #        detect = str_detect(Logger_Lower, "aquameasure")) %>%
     filter(detect_am) %>%
-    #filter(Logger_Model %in% aM.sensors) %>%
     select(Logger_Model, `Serial#`, Sensor_Depth) %>%
     mutate(Logger_Model = str_replace(Logger_Model, "_", " ")) %>%
     separate(Logger_Model, into = c("sensor", NA), sep = " ") %>%

@@ -26,7 +26,8 @@ Imports:
     data.table,
     tibble,
     magrittr,
-    openxlsx
+    openxlsx,
+    rcmdcheck
 Depends: 
     R (>= 2.10)
 Suggests: 
