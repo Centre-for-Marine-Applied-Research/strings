@@ -74,7 +74,6 @@ convert_depth_to_ordered_factor <- function(dat.tidy){
 
     }
 
-
     # standardize DEPTH values and assign levels
     dat.qual <- dat.qual %>%
       mutate(DEPTH = case_when(DEPTH == "bottom" ~ "Bottom",
