@@ -4,10 +4,12 @@
 \alias{ggplot_variables_at_depth}
 \title{Plot variables at depth with faceted ggplot}
 \usage{
-ggplot_variables_at_depth(dat.tidy)
+ggplot_variables_at_depth(dat.tidy, color.pal = NULL)
 }
 \arguments{
 \item{dat.tidy}{Tidy data}
+
+\item{color.pal}{Optional color palette.}
 }
 \value{
 ggplot object
