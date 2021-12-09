@@ -107,6 +107,9 @@ utils::globalVariables(c(
   "County",
   "COUNTY",
 
+  # read_opendata_csv
+  "Surface.Float.",
+
   # create_deployment_log & combine_deployment_logs
   "Acoustic_Release?",
   "Anchor_Wgt",
