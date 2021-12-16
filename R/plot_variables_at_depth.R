@@ -132,9 +132,6 @@ plot_variables_at_depth <- function(dat.tidy,
 
   n.vars <- length(vars.to.plot)  # number of variables to plot
 
-  if(n.vars == 1) stacked = FALSE # can't stack if there is only 1 variable (gives an error in the j for loop below)
-
-
   for(i in 1:n.vars){
 
     var.i <- vars.to.plot[i]
@@ -199,13 +196,17 @@ plot_variables_at_depth <- function(dat.tidy,
   figs[[1]] <- figs[[1]] + labs(title = plot.title)
 
   # remove x-axis title from all except the bottom plot (last variable in vars.to.plot)
-  for(j in 1:(n.vars - 1)){
+  if(n.vars > 1){
 
-    figs[[j]] <- figs[[j]] + theme(axis.title.x = element_blank())
+    for(j in 1:(n.vars - 1)) {
 
+      figs[[j]] <- figs[[j]] + theme(axis.title.x = element_blank())
+
+    }
   }
 
   # arrange figs using ggpubr::ggarrange
+  if(n.vars == 1) figs.stacked <- figs[[1]]
   if(n.vars == 2) figs.stacked <- ggarrange(figs[[1]], figs[[2]], ncol = 1, common.legend = TRUE, legend = legend.position)
   if(n.vars == 3) figs.stacked <- ggarrange(figs[[1]], figs[[2]], figs[[3]], ncol = 1, common.legend = TRUE, legend = legend.position)
   if(n.vars == 4) figs.stacked <- ggarrange(figs[[1]], figs[[2]], figs[[3]], figs[[4]], ncol = 1, common.legend = TRUE, legend = legend.position)
