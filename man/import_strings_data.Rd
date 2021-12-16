@@ -46,7 +46,8 @@ Future versions may include option to import csv files.
 }
 \seealso{
 Other OpenData CMAR: 
-\code{\link{assemble_opendata_submission}()}
+\code{\link{assemble_county_data}()},
+\code{\link{export_county_files}()}
 }
 \author{
 Danielle Dempsey

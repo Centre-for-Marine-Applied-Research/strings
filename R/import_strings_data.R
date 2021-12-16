@@ -99,6 +99,7 @@ import_strings_data <- function(input_path = NULL,
 
     # merge dat and Area_Info
     dat <- left_join(dat, Area_Info, by = c("WATERBODY", "STATION")) %>%
+      select(-Notes) %>%
       select(COUNTY, WATERBODY, STATION, everything())
 
   }
