@@ -99,6 +99,7 @@ utils::globalVariables(c(
   "Deployment Date",
   "Depth (m)",
   "Station",
+  "MOORING",
 
   # convert_depth_to_ordered_factor
   "DEPTH_QUAL",
