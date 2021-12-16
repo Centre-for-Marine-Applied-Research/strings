@@ -7,19 +7,14 @@
 plot_variables_at_depth(
   dat.tidy,
   plot.title = "",
-  vars.to.plot = c("Temperature", "Dissolved Oxygen", "Salinity"),
-  ylab.units = NULL,
-  color.palette = rev(viridis(6, option = "D")),
-  date.breaks.major = "2 month",
-  date.breaks.minor = "1 month",
-  date.labels.format = "\%y-\%b",
-  date.min = min(na.omit(dat.tidy$TIMESTAMP)),
-  date.max = max(na.omit(dat.tidy$TIMESTAMP)),
+  color.palette = NULL,
+  date.breaks.major = NULL,
+  date.breaks.minor = NULL,
+  date.labels.format = NULL,
   standard.DO.ylims = TRUE,
   alpha.points = 1,
   legend.name = "Depth (m)",
-  legend.position = "right",
-  stacked = TRUE
+  legend.position = "right"
 )
 }
 \arguments{
@@ -30,23 +25,12 @@ plot_variables_at_depth(
 
 \item{plot.title}{Title for plot. Default is no title.}
 
-\item{vars.to.plot}{A character vector of variables to plot. Each string must
-match an entry in the \code{VARIABLE} column of \code{dat.tidy}. Default is
-\code{vars.to.plot = c("Temperature", "Dissolved Oxygen", "Salinity")}.}
-
-\item{ylab.units}{Character vector of units as they will appear in the y-axis
-title. Must be in the same order as the associated variables in
-\code{vars.to.plot}. Only required when \code{vars.to.plot} is NOT some
-combination of "Temperature", "Dissolved Oxygen", and "salinity". Units for
-"Temperature", "Dissolved Oxygen", and "Salinity" are hard-coded ((degree
-C), (\%), and (PSU)).}
-
 \item{color.palette}{Color palette of hex colors onto which \code{DEPTH} will
-be mapped. Required if there are more than 6 levels in \code{DEPTH}. Default
-is \code{color.palette = rev(viridis(6, option = "D"))}.}
+be mapped. Required if there are more than 6 levels in \code{DEPTH}.
+Default is \code{color.palette = rev(viridis(6, option = "D"))}.}
 
-\item{date.breaks.major}{Intervals for major breaks. Default is
-\code{date.breaks.major = "2 month"}.}
+\item{date.breaks.major}{Intervals for major breaks. Default is selected by
+\code{get_xaxis_breaks()}.}
 
 \item{date.breaks.minor}{Intervals for minor breaks. Default is
 \code{date.breaks.minor = "1 month"}.}
@@ -54,40 +38,22 @@ is \code{color.palette = rev(viridis(6, option = "D"))}.}
 \item{date.labels.format}{Format for the date labels. Default is "\%y-\%b"
 (two-digit year-three-letter month).}
 
-\item{date.min}{First timestamp to include in the plot. Must be a POSIXct
-object. Default is the minimum value in the \code{TIMESTAMP} column.}
-
-\item{date.max}{Last timestamp to include in the plot. Must be a POSIXct
-object. Default is the maximum value in the \code{TIMESTAMP} column.}
-
-\item{standard.DO.ylims}{If \code{TRUE}, the y-limits for dissolved oxygen are
-set to c(60, 130) \%. If \code{FALSE}, the y-limits are set to the
+\item{standard.DO.ylims}{If \code{TRUE}, the y-limits for dissolved oxygen
+are set to c(60, 130) \%. If \code{FALSE}, the y-limits are set to the
 \code{ggplot} default.}
 
-\item{alpha.points}{Value indicating the transparency of the points. 0 is most
-transparent; 1 is opaque.}
+\item{alpha.points}{Value indicating the transparency of the points. 0 is
+most transparent; 1 is opaque.}
 
-\item{legend.name}{Name for the legend. Must be a character strings Default is
-\code{legend.name = "Depth (m)"}.}
+\item{legend.name}{Name for the legend. Must be a character string. Default
+is \code{legend.name = "Depth (m)"}.}
 
 \item{legend.position}{Position for the legend. Passed to \code{ggpubr}.
 Default is \code{legend.position = "right"}.}
-
-\item{stacked}{Logical value indicating what figures to return.  If
-\code{stacked = TRUE}, a single figure with the plots for each variable in
-\code{vars.to.plot} stacked in a column is returned. Plots will be stacked
-in the order the variables appear in \code{vars.to.plot}. \code{plot.title}
-will be placed on the top plot. If \code{stacked = FALSE}, a list of the
-individual plot for each variable will be returned. Default is \code{stacked
-= TRUE}.}
 }
 \value{
-Returns ggplot2 object(s). If \code{stacked = TRUE}, a single figure
- with the plots for each variable in \code{vars.to.plot} stacked in a column
- is returned. Plots will be stacked in the order the variables appear in
- \code{vars.to.plot}. \code{plot.title} will be placed on the top plot. If
- \code{stacked = FALSE}, a list of the individual plot for each variable will
- be returned.
+Returns ggplot2 object, a single figure with the plots for each
+  variable in \code{tidy.data} stacked in a column is returned.
 }
 \description{
 Exports ggplot2 object(s) of variables at depth over time
