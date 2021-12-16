@@ -4,10 +4,11 @@
 \alias{read_mooring_csv}
 \title{Read mooring table}
 \usage{
-read_mooring_csv(path)
+read_mooring_csv(path.mooring)
 }
 \arguments{
-\item{path}{Path to mooring table (including file name and extension).}
+\item{path.mooring}{Path to mooring type table (including file name and
+extension).}
 }
 \value{
 Mooring table with standardized WATERBODY and STATION columns.
