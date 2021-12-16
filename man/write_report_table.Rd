@@ -4,13 +4,16 @@
 \alias{write_report_table}
 \title{Writes deployment table for county report}
 \usage{
-write_report_table(dat.tidy, keep.waterbody = FALSE)
+write_report_table(dat.tidy, keep.waterbody = FALSE, keep.units = FALSE)
 }
 \arguments{
 \item{dat.tidy}{Tidy data as formatted by \code{format_for_opendata()}.}
 
 \item{keep.waterbody}{Logical value indicating whether to keep the
 \code{Waterbody} column.}
+
+\item{keep.units}{Logical value indicating whether to keep the
+\code{Units} column.}
 }
 \description{
 Writes deployment table for county report
