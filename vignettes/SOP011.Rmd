@@ -197,14 +197,13 @@ dat_raw <- read_csv(paste(path, "/", file.name, "_raw.csv", sep = ""),
 dat_raw <- wide_data
 ```
 
-Convert to long (tidy) format and plot to get a feel for where to trim the data. Modify `vars.to.plot` for the variables included in the data. In our example, sensors measured temperature, dissolved oxygen, and salinity.
+Convert to long (tidy) format and plot to get a feel for where to trim the data. In our example, sensors measured temperature, dissolved oxygen, and salinity.
 
 ```{r, fig.width = 8.5, fig.height = 6}
 dat_raw <- convert_to_tidydata(dat_raw)
 
 # plot raw data
-plot_variables_at_depth(dat_raw,
-                        vars.to.plot = c("Temperature", "Dissolved Oxygen"))
+plot_variables_at_depth(dat_raw)
 
 ```
 
@@ -267,8 +266,7 @@ Use the `plot_variables_at_depth()` function to see if the outliers are removed.
 
 ```{r,  fig.width = 8.5, fig.height = 6}
 # plot trimmed data
-plot_variables_at_depth(dat_trim,
-                        vars.to.plot = c("Temperature", "Dissolved Oxygen"))
+plot_variables_at_depth(dat_trim)
 
 ```
 
@@ -317,16 +315,16 @@ dat_trim <- dat_raw %>%
 we can plot all three trimmed variables again to check that there are no outliers:
 ```{r, fig.width = 8.5, fig.height = 6}
 # plot trimmed data
-plot_variables_at_depth(dat_trim,
-                        vars.to.plot = c("Temperature", "Dissolved Oxygen"))
+plot_variables_at_depth(dat_trim)
 
 ```
 
 We can also plot dissolved oxygen and add a `geom_vline` to double-check the trim date:
 ```{r, fig.width = 8.5, fig.height = 3}
 # check where DO cutoff is
-DO <- plot_variables_at_depth(dat_raw,
-                              vars.to.plot = "Dissolved Oxygen")
+DO <- dat_trim %>% 
+  filter(VARIABLE == "Dissolved Oxygen")
+  plot_variables_at_depth(dat_raw)
 
 DO[[1]] + geom_vline(xintercept = as_datetime(start.DO))
 

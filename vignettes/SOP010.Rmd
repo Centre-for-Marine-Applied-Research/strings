@@ -227,7 +227,7 @@ The naming convention for the csv is Station Name_Deployment-Date_Variable_raw, 
 ![Figure 2. The csv of compiled data will be saved to the deployment folder](SOP010_figure2.PNG)
 
 **Section 4:**
-This section is meant as a check to ensure the data compiled properly (don't worry if the figure is not pretty). Compare the variables and depths in the figure to those recorded in the log. You may need to modify some of the arguments in the `plot_variables_at_depth()` function, for example `vars.to.plot` and `ylab.units` will need to be updated if the only variable in the data is temperature. `color.palette` will need to be updated for deployments with sensors at more than six depths. See the help files for more detail.
+This section is meant as a check to ensure the data compiled properly (don't worry if the figure is not pretty). Compare the variables and depths in the figure to those recorded in the log. 
 
 ```{r, echo=FALSE}
 ALL_raw <- wide_data 
@@ -246,9 +246,7 @@ ALL_raw_tidy <- convert_to_tidydata(ALL_raw)
 
 # Update vars.to.plot and ylab.units as necessary. 
 # Remove any variables and their associated units if they aren't present in your data.
-plot_variables_at_depth(ALL_raw_tidy,
-                        plot.title = area,
-                        vars.to.plot = c("Temperature", "Dissolved Oxygen"))
+plot_variables_at_depth(ALL_raw_tidy, plot.title = area)
 
 ```
 
