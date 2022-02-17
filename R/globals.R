@@ -101,6 +101,7 @@ utils::globalVariables(c(
   "Station",
   "MOORING",
   "Units",
+  "UNITS",
 
   # convert_depth_to_ordered_factor
   "DEPTH_QUAL",

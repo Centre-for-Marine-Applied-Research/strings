@@ -13,25 +13,31 @@
 #' @author Danielle Dempsey
 
 #' @importFrom tidyr separate
+#' @importFrom lubridate as_date
 #' @import dplyr
 #' @export
 
 write_report_table <- function(dat.tidy, keep.waterbody = FALSE, keep.units = FALSE){
 
   table.out <- dat.tidy %>%
-    select(Waterbody = WATERBODY,
-           Station = STATION,
-           DEPLOYMENT_PERIOD,
-           Latitude = LATITUDE,
-           Longitude = LONGITUDE,
-           Variable = VARIABLE,
-           DEPTH,
-           Units = UNITS,
-           Mooring = MOORING) %>%
+    select(
+      Waterbody = WATERBODY,
+      Station = STATION,
+      DEPLOYMENT_PERIOD,
+      Latitude = LATITUDE,
+      Longitude = LONGITUDE,
+      Variable = VARIABLE,
+      DEPTH,
+      Units = UNITS,
+      Mooring = MOORING
+    ) %>%
     distinct() %>%
     convert_depth_to_ordered_factor() %>%
     rename(`Depth (m)` = DEPTH) %>%
-    separate(col = DEPLOYMENT_PERIOD, into = c("Deployment Date", "Retrieval Date"), sep = " to ")
+    separate(col = DEPLOYMENT_PERIOD,
+             into = c("Deployment Date", "Retrieval Date"), sep = " to ") %>%
+    mutate(`Depth (m)` = as.numeric(as.character(`Depth (m)`)),
+           `Deployment Date` = as_date(`Deployment Date`))
 
   if(keep.waterbody) table.out <- table.out %>% arrange(Waterbody, Station, `Deployment Date`, `Depth (m)`)
 
@@ -43,6 +49,6 @@ write_report_table <- function(dat.tidy, keep.waterbody = FALSE, keep.units = FA
 
   if(!keep.units) table.out <- table.out %>% select(-Units)
 
-  table.out
+  table.out %>% mutate(`Deployment Date` = format(`Deployment Date`, "%Y-%b-%d"))
 
 }
