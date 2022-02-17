@@ -3,6 +3,7 @@
 #'
 #' @param dat.tidy Tidy data
 #' @param color.pal Optional color palette.
+#' @param legend.name Legend title. Default is "Depth (m)".
 
 #' @return ggplot object
 #' @import ggplot2
@@ -12,7 +13,8 @@
 #'
 
 
-ggplot_variables_at_depth <- function(dat.tidy, color.pal = NULL){
+ggplot_variables_at_depth <- function(dat.tidy, color.pal = NULL,
+                                      legend.name = "Depth (m)"){
 
   dat.tidy <- dat.tidy %>%
     convert_depth_to_ordered_factor()
@@ -28,7 +30,7 @@ ggplot_variables_at_depth <- function(dat.tidy, color.pal = NULL){
       minor_breaks = axis.breaks$date.breaks.minor,
       date_labels =  axis.breaks$date.labels.format
     ) +
-    scale_colour_manual(name = "Depth",
+    scale_colour_manual(name = legend.name,
                         values = color.pal,
                         drop = FALSE) +
     guides(color = guide_legend(override.aes = list(size = 4))) +

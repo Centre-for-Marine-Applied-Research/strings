@@ -4,12 +4,18 @@
 \alias{ggplot_variables_at_depth}
 \title{Plot variables at depth with faceted ggplot}
 \usage{
-ggplot_variables_at_depth(dat.tidy, color.pal = NULL)
+ggplot_variables_at_depth(
+  dat.tidy,
+  color.pal = NULL,
+  legend.name = "Depth (m)"
+)
 }
 \arguments{
 \item{dat.tidy}{Tidy data}
 
 \item{color.pal}{Optional color palette.}
+
+\item{legend.name}{Legend title. Default is "Depth (m)".}
 }
 \value{
 ggplot object
