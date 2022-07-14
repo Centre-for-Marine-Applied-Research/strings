@@ -210,13 +210,12 @@ compile_HOBO_data <- function(path.HOBO,
     }
 
     # use serial number to identify the variable and depth (from serial.table)
-    depth <- serial.table.HOBO %>%
-      dplyr::filter(SERIAL == serial.i)  %>%
-      select(DEPTH)
-    depth <- depth$DEPTH
+    sensor_info.i <- serial.table.HOBO %>%
+      dplyr::filter(SERIAL == serial.i) %>%
+      dplyr::mutate(SENSOR = paste(SENSOR, SERIAL, sep = "-"))
 
-    # sensor type and serial number
-    sensor.i <- paste(serial.table.HOBO$SENSOR[i], serial.table.HOBO$SERIAL[i], sep = "-")
+    depth <- sensor_info.i$DEPTH
+    sensor.i <- sensor_info.i$SENSOR
 
     # extract date column header (includes GMT offset)
     date_ref <- names(hobo.i_dat)[2]
