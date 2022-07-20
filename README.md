@@ -3,6 +3,8 @@
 
 # strings
 
+[](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/strings_hex.png)
+
 <!-- badges: start -->
 
 [![License: GPL
@@ -43,12 +45,6 @@ Sheet](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master
 
 The `strings` package is used to compile, format, and visualize data
 from the *Water Quality* branch of the Coastal Monitoring Program.
-
-*Current* is collected with Acoustic Doppler Current Profilers (ADCPs)
-deployed on the seafloor. An ADCP is a hydroacoustic current meter that
-measures water velocities over a range of depths. These sensors measure
-soundwaves scattered back from moving particles in the water column and
-use the Doppler effect to estimate speed and direction (Figure 1).
 
 *Water Quality* data (temperature, dissolved oxygen, and salinity) is
 collected using “sensor strings”. Each sensor string is attached to the
