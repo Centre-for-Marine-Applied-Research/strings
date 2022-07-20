@@ -206,8 +206,8 @@ head(tibble(ALL_tidy))
 
 `ALL_tidy` can be plotted with `plot_variables_at_depth()`: 
 
-```{r fig2}
-plot_variables_at_depth(ALL_tidy)
+```{r README-fig2}
+plot_variables_at_depth(ALL_tidy)  
 ```
 
 If the figure needs to be modified, it may be more convenient to plot using `ggplot_variables_at_depth`:
