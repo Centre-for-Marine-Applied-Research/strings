@@ -20,9 +20,7 @@ library(usethis)
 repo <- "centre-for-marine-applied-research/strings"
 ```
 
-# strings: DRAFT README
-
-FORKING AND BRANCHING
+# strings
 
 <!-- badges: start -->
 
@@ -65,13 +63,13 @@ The strings package was originally built to address this challenge, and now offe
 ```{r, echo=FALSE,caption= "Sensor Models included"}
 
 tibble(
-  "Sensor (link to spec sheet)" = 
+  `Sensor (link to spec sheet)` = 
     c("[HOBO Pro V2](https://www.onsetcomp.com/datasheet/U22-001)", 
       "[HOBO DO](https://www.onsetcomp.com/datasheet/U26-001)", 
       "[aquaMeasure DOT](https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-Intelligence-Spec-Sheet-062221.pdf)", 
       "[aquaMeasure SAL](https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-Intelligence-Spec-Sheet-062221.pdf)", "[VR2AR](https://www.innovasea.com/wp-content/uploads/2021/06/Innovasea-Fish-Tracking-vr2ar-data-sheet-0621.pdf)"),
   
-  "Variable(s) Measured" = c("Temperature", "Temperature, Dissolved Oxygen", "Temperature, Dissolved Oxygen", "Temperature, Salinity", "Temperature" )
+  `Variable(s) Measured` = c("Temperature", "Temperature, Dissolved Oxygen", "Temperature, Dissolved Oxygen", "Temperature, Salinity", "Temperature" )
 ) %>% 
 kable(align = "ll")
 
@@ -191,7 +189,7 @@ head(tibble(ALL_tidy))
 `ALL_tidy` can be plotted with `plot_variables_at_depth()`
 
 ```{r fig3}
-plot_variables_at_depth(ALL_tidy, vars.to.plot = c("Temperature", "Dissolved Oxygen"))
+plot_variables_at_depth(ALL_tidy)
 ```
 
 
