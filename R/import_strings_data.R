@@ -120,21 +120,21 @@ import_strings_data <- function(input_path = NULL,
 
 
 
-if(FALSE){
-
-  library(dplyr)
-  library(stringr)
-  library(googlesheets4)
-
-  ALL <- import_strings_data()
-  ALL %>% distinct(COUNTY)
-
-  hali <- import_strings_data(add_county_col = FALSE, county = "Halifax")
-  hali %>% distinct(WATERBODY)
-
-  hali_lun <- import_strings_data(county = c("Halifax", "Lunenburg"))
-  hali_lun %>% distinct(COUNTY)
-}
+# if(FALSE){
+#
+#   library(dplyr)
+#   library(stringr)
+#   library(googlesheets4)
+#
+#   ALL <- import_strings_data()
+#   ALL %>% distinct(COUNTY)
+#
+#   hali <- import_strings_data(add_county_col = FALSE, county = "Halifax")
+#   hali %>% distinct(WATERBODY)
+#
+#   hali_lun <- import_strings_data(county = c("Halifax", "Lunenburg"))
+#   hali_lun %>% distinct(COUNTY)
+# }
 
 
 
