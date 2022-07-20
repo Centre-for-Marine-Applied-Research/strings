@@ -3,7 +3,11 @@
 
 # strings
 
+<img src="https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-strings_hex.png" width="65%" style="display: block; margin: auto;" />
+
 [](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-strings_hex.png)
+
+[](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-strings_hex-min.png)
 
 <!-- badges: start -->
 
@@ -55,8 +59,6 @@ typically includes three sensor models: Hobo, aquaMeasure, and VR2AR
 are measured every 1 minute to 1 hour, depending on the sensor.
 
 [](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png)
-
-<img src="https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png" title="\label{fig:figs} Figure 1: Typical sensor string" alt="\label{fig:figs} Figure 1: Typical sensor string" width="65%" style="display: block; margin: auto;" />
 
 After retrieval, data from each sensor is exported to a separate csv
 file using manufacturer-specific software. Each type of sensor generates

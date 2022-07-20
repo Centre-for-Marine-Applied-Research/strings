@@ -23,7 +23,17 @@ repo <- "centre-for-marine-applied-research/strings"
 
 # strings
 
+
+```{r, echo=FALSE, out.width="65%", fig.align='center'}
+
+ knitr::include_graphics("https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-strings_hex.png")
+
+```
+
+
 [](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-strings_hex.png)
+
+[](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-strings_hex-min.png)
 
 
 <!-- badges: start -->
@@ -56,7 +66,7 @@ _Water Quality_ data (temperature, dissolved oxygen, and salinity) is collected 
 
 ```{r, echo=FALSE, out.width="65%", fig.align='center',fig.cap="\\label{fig:figs} Figure 1: Typical sensor string"}
 
-knitr::include_graphics("https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png")
+# knitr::include_graphics("https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png")
 
 ```
 
