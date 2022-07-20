@@ -3,7 +3,7 @@
 
 # strings
 
-[](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/strings_hex.png)
+[](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-strings_hex.png)
 
 <!-- badges: start -->
 
