@@ -70,10 +70,7 @@ the accepted sensors (Table 1). Refer to the vignettes for more detail.
 <thead>
 <tr>
 <th style="text-align:left;">
-Sensor (link to spec sheet)
-</th>
-<th style="text-align:left;">
-Variable(s) Measured
+SENSORS
 </th>
 </tr>
 </thead>
@@ -82,42 +79,10 @@ Variable(s) Measured
 <td style="text-align:left;">
 [HOBO Pro V2](https://www.onsetcomp.com/datasheet/U22-001)
 </td>
-<td style="text-align:left;">
-Temperature
-</td>
 </tr>
 <tr>
 <td style="text-align:left;">
 [HOBO DO](https://www.onsetcomp.com/datasheet/U26-001)
-</td>
-<td style="text-align:left;">
-Temperature, Dissolved Oxygen
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-[aquaMeasure
-DOT](https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-Intelligence-Spec-Sheet-062221.pdf)
-</td>
-<td style="text-align:left;">
-Temperature, Dissolved Oxygen
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-[aquaMeasure
-SAL](https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-Intelligence-Spec-Sheet-062221.pdf)
-</td>
-<td style="text-align:left;">
-Temperature, Salinity
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-[VR2AR](https://www.innovasea.com/wp-content/uploads/2021/06/Innovasea-Fish-Tracking-vr2ar-data-sheet-0621.pdf)
-</td>
-<td style="text-align:left;">
-Temperature
 </td>
 </tr>
 </tbody>

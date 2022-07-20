@@ -62,16 +62,31 @@ The strings package was originally built to address this challenge, and now offe
 
 ```{r, echo=FALSE,caption= "Sensor Models included"}
 
-tibble(
-  `Sensor (link to spec sheet)` = 
-    c("[HOBO Pro V2](https://www.onsetcomp.com/datasheet/U22-001)", 
-      "[HOBO DO](https://www.onsetcomp.com/datasheet/U26-001)", 
-      "[aquaMeasure DOT](https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-Intelligence-Spec-Sheet-062221.pdf)", 
-      "[aquaMeasure SAL](https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-Intelligence-Spec-Sheet-062221.pdf)", "[VR2AR](https://www.innovasea.com/wp-content/uploads/2021/06/Innovasea-Fish-Tracking-vr2ar-data-sheet-0621.pdf)"),
+
+sensors <- tibble(SENSORS = c("HOBO Pro V2", "HOBO DO"))
+
+urls <- c(
+  "https://www.onsetcomp.com/datasheet/U22-001",
+  "https://www.onsetcomp.com/datasheet/U26-001"
   
-  `Variable(s) Measured` = c("Temperature", "Temperature, Dissolved Oxygen", "Temperature, Dissolved Oxygen", "Temperature, Salinity", "Temperature" )
-) %>% 
-kable(align = "ll")
+)
+
+sensors$SENSORS <- paste0("[", sensors$SENSORS, "](", urls, ")") 
+
+sensors %>% 
+  kable(align = "ll")
+
+# 
+# tibble(
+#   `Sensor (link to spec sheet)` = 
+#     c("[HOBO Pro V2](https://www.onsetcomp.com/datasheet/U22-001)", 
+#       "[HOBO DO](https://www.onsetcomp.com/datasheet/U26-001)", 
+#       "[aquaMeasure DOT](https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-Intelligence-Spec-Sheet-062221.pdf)", 
+#       "[aquaMeasure SAL](https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-Intelligence-Spec-Sheet-062221.pdf)", "[VR2AR](https://www.innovasea.com/wp-content/uploads/2021/06/Innovasea-Fish-Tracking-vr2ar-data-sheet-0621.pdf)"),
+#   
+#   `Variable(s) Measured` = c("Temperature", "Temperature, Dissolved Oxygen", "Temperature, Dissolved Oxygen", "Temperature, Salinity", "Temperature" )
+# ) %>% 
+# kable(align = "ll")
 
 ```
 
