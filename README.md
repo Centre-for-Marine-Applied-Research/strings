@@ -54,10 +54,9 @@ typically includes three sensor models: Hobo, aquaMeasure, and VR2AR
 (Table 1). Strings are deployed at a station for several months and data
 are measured every 1 minute to 1 hour, depending on the sensor.
 
-<img src="https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png" width="65%" />
-Figure 1: Typical sensor string configuration (not to scale).
+<img src="https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png" title="Figure 1: Typical sensor string configuration (not to scale)." alt="Figure 1: Typical sensor string configuration (not to scale)." width="65%" />
 
-<br>
+<br> <br>
 
 After retrieval, data from each sensor is exported to a separate csv
 file using manufacturer-specific software. Each type of sensor generates
