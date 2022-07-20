@@ -352,7 +352,7 @@ plot_variables_at_depth(ALL_tidy)
 #> Warning: Removed 7 rows containing missing values (geom_point).
 ```
 
-![](man/figures/README-README-fig2-1.png)<!-- -->
+![](man/figures/README-fig2-1.png)<!-- -->
 
 If the figure needs to be modified, it may be more convenient to plot
 using `ggplot_variables_at_depth`:
