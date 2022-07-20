@@ -57,6 +57,8 @@ are measured every 1 minute to 1 hour, depending on the sensor.
 <img src="https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png" width="65%" />
 Figure 1: Typical sensor string configuration (not to scale).
 
+<br>
+
 After retrieval, data from each sensor is exported to a separate csv
 file using manufacturer-specific software. Each type of sensor generates
 a data file with unique columns and header fields, which poses a

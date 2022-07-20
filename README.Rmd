@@ -65,6 +65,8 @@ Figure 1: Typical sensor string configuration (not to scale).
 
 `r cat('\n')`
 
+<br>
+
 After retrieval, data from each sensor is exported to a separate csv file using manufacturer-specific software. Each type of sensor generates a data file with unique columns and header fields, which poses a significant challenge for compiling all data from a deployment into a single format for analysis.
 
 The `strings` package was originally built to address this challenge, and now offers functions to compile, format, convert units, and visualize sensor string data.
