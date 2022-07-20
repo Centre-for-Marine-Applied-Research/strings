@@ -73,34 +73,28 @@ The `strings` package was originally built to address this challenge, and now of
 
 ```{r, echo=FALSE,caption= "Sensor Models included"}
 
-
-sensors <- tibble(SENSORS = c("HOBO Pro V2", "HOBO DO"))
-
-urls <- c(
-  "https://www.onsetcomp.com/datasheet/U22-001",
-  "https://www.onsetcomp.com/datasheet/U26-001"
-)
-
-
-sensor_table <- sensors %>% 
-  cbind(urls) %>% 
-  mutate(`Sensor (link to spec sheet)` = glue::glue("[{SENSORS}]({urls})"))
-
-
-sensor_table %>% 
-  kable(align = "ll")
-
-# 
-# tibble(
-#   `Sensor (link to spec sheet)` = 
-#     c("[HOBO Pro V2](https://www.onsetcomp.com/datasheet/U22-001)", 
-#       "[HOBO DO](https://www.onsetcomp.com/datasheet/U26-001)", 
-#       "[aquaMeasure DOT](https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-Intelligence-Spec-Sheet-062221.pdf)", 
-#       "[aquaMeasure SAL](https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-Intelligence-Spec-Sheet-062221.pdf)", "[VR2AR](https://www.innovasea.com/wp-content/uploads/2021/06/Innovasea-Fish-Tracking-vr2ar-data-sheet-0621.pdf)"),
-#   
-#   `Variable(s) Measured` = c("Temperature", "Temperature, Dissolved Oxygen", "Temperature, Dissolved Oxygen", "Temperature, Salinity", "Temperature" )
-# ) %>% 
-# kable(align = "ll")
+tibble(
+  SENSORS = c(
+    "HOBO Pro V2", "HOBO DO",
+    "aquaMeasure DOT", "aquaMeasure SAL",
+    "VR2AR"
+  ),
+  urls = c(
+    "https://www.onsetcomp.com/datasheet/U22-001",
+    "https://www.onsetcomp.com/datasheet/U26-001",
+    "https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-Intelligence-Spec-Sheet-062221.pdf",
+    "https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-Intelligence-Spec-Sheet-062221.pdf",
+    "https://www.innovasea.com/wp-content/uploads/2021/06/Innovasea-Fish-Tracking-vr2ar-data-sheet-0621.pdf"
+  ),
+  
+  `Variable(s) Measured` = c(
+    "Temperature", "Temperature, Dissolved Oxygen", 
+    "Temperature, Dissolved Oxygen", "Temperature, Salinity", 
+    "Temperature" )
+) %>% 
+  mutate(`Sensor (link to spec sheet)` = glue::glue("[{SENSORS}]({urls})")) %>% 
+  select(`Sensor (link to spec sheet)`, `Variable(s) Measured`) %>% 
+  kable(align = "ll", format = "pipe")
 
 ```
 
@@ -191,7 +185,7 @@ The data is compiled in a "wide" format, with metadata in the first four rows in
 
 The remaining columns alternate between timestamp (in the format "Y-m-d H:M:S") and variable value (rounded to three decimal places). Sensors can be initialized at different times and record on different intervals, so values in a single row do not necessarily correspond to the same timestamp. 
 
-This format is convenient for human readers, who can quickly scan the metadata to determine the number of sensors deployed, the depths of deployment, etc. However, this format is less convenient for analysis. The dataframe should be converted to a "tidy" format using `strings::convert_to_tidydata()` prior to analysis.
+This format is an artifact of the former compiling process and will be removed for future versions of the package. The format is convenient for human readers, who can quickly scan the metadata to determine the number of sensors deployed, the depths of deployment, etc. However, this format is less convenient for analysis. The data frame should be converted to a "tidy" format using `strings::convert_to_tidydata()` prior to analysis.
 
 ```{r}
 ALL_tidy <- convert_to_tidydata(ALL_data)
@@ -210,12 +204,21 @@ head(tibble(ALL_tidy))
 * `DEPTH`: The depth of the sensor (ordered factor)
 * `VALUE:` The value of the measurement (numeric)
 
-`ALL_tidy` can be plotted with `plot_variables_at_depth()`
+`ALL_tidy` can be plotted with `plot_variables_at_depth()`: 
 
-```{r fig3}
+```{r fig2}
 plot_variables_at_depth(ALL_tidy)
 ```
 
+If the figure needs to be modified, it may be more convenient to plot using `ggplot_variables_at_depth`:
+
+```{r fig3}
+library(ggplot2)
+library(lubridate)
+
+ggplot_variables_at_depth(ALL_tidy) +
+  geom_vline(xintercept = as_datetime("2019-07-01"), colour = "red")
+```
 
 
 

@@ -76,45 +76,13 @@ visualize sensor string data.
 is flexible enough that other users can apply it to process data from
 the accepted sensors (Table 1). Refer to the vignettes for more detail.
 
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">
-SENSORS
-</th>
-<th style="text-align:left;">
-urls
-</th>
-<th style="text-align:left;">
-Sensor (link to spec sheet)
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-HOBO Pro V2
-</td>
-<td style="text-align:left;">
-<https://www.onsetcomp.com/datasheet/U22-001>
-</td>
-<td style="text-align:left;">
-[HOBO Pro V2](https://www.onsetcomp.com/datasheet/U22-001)
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-HOBO DO
-</td>
-<td style="text-align:left;">
-<https://www.onsetcomp.com/datasheet/U26-001>
-</td>
-<td style="text-align:left;">
-[HOBO DO](https://www.onsetcomp.com/datasheet/U26-001)
-</td>
-</tr>
-</tbody>
-</table>
+| Sensor (link to spec sheet)                                                                                                      | Variable(s) Measured          |
+|:---------------------------------------------------------------------------------------------------------------------------------|:------------------------------|
+| [HOBO Pro V2](https://www.onsetcomp.com/datasheet/U22-001)                                                                       | Temperature                   |
+| [HOBO DO](https://www.onsetcomp.com/datasheet/U26-001)                                                                           | Temperature, Dissolved Oxygen |
+| [aquaMeasure DOT](https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-Intelligence-Spec-Sheet-062221.pdf) | Temperature, Dissolved Oxygen |
+| [aquaMeasure SAL](https://www.innovasea.com/wp-content/uploads/2021/07/Innovasea-Aquaculture-Intelligence-Spec-Sheet-062221.pdf) | Temperature, Salinity         |
+| [VR2AR](https://www.innovasea.com/wp-content/uploads/2021/06/Innovasea-Fish-Tracking-vr2ar-data-sheet-0621.pdf)                  | Temperature                   |
 
 For more information on *Water Quality* data collection and processing,
 visit the [CMAR Water Quality Data Collection & Processing Cheat
@@ -344,11 +312,12 @@ can be initialized at different times and record on different intervals,
 so values in a single row do not necessarily correspond to the same
 timestamp.
 
-This format is convenient for human readers, who can quickly scan the
-metadata to determine the number of sensors deployed, the depths of
-deployment, etc. However, this format is less convenient for analysis.
-The dataframe should be converted to a “tidy” format using
-`strings::convert_to_tidydata()` prior to analysis.
+This format is an artifact of the former compiling process and will be
+removed for future versions of the package. The format is convenient for
+human readers, who can quickly scan the metadata to determine the number
+of sensors deployed, the depths of deployment, etc. However, this format
+is less convenient for analysis. The data frame should be converted to a
+“tidy” format using `strings::convert_to_tidydata()` prior to analysis.
 
 ``` r
 ALL_tidy <- convert_to_tidydata(ALL_data)
@@ -376,11 +345,29 @@ head(tibble(ALL_tidy))
 -   `DEPTH`: The depth of the sensor (ordered factor)
 -   `VALUE:` The value of the measurement (numeric)
 
-`ALL_tidy` can be plotted with `plot_variables_at_depth()`
+`ALL_tidy` can be plotted with `plot_variables_at_depth()`:
 
 ``` r
 plot_variables_at_depth(ALL_tidy)
 #> Warning: Removed 7 rows containing missing values (geom_point).
+```
+
+![](man/figures/README-fig2-1.png)<!-- -->
+
+If the figure needs to be modified, it may be more convenient to plot
+using `ggplot_variables_at_depth`:
+
+``` r
+library(ggplot2)
+library(lubridate)
+#> 
+#> Attaching package: 'lubridate'
+#> The following objects are masked from 'package:base':
+#> 
+#>     date, intersect, setdiff, union
+
+ggplot_variables_at_depth(ALL_tidy) +
+  geom_vline(xintercept = as_datetime("2019-07-01"), colour = "red")
 ```
 
 ![](man/figures/README-fig3-1.png)<!-- -->
