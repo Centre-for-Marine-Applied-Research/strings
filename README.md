@@ -3,11 +3,7 @@
 
 # strings
 
-<img src="https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-strings_hex-min.png" width="65%" style="display: block; margin: auto;" />
-
-[](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-strings_hex.png)
-
-[](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-strings_hex-min.png)
+<img src="https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-strings_hex.png" width="10%" style="display: block; margin: auto;" />
 
 <!-- badges: start -->
 
@@ -58,7 +54,8 @@ typically includes three sensor models: Hobo, aquaMeasure, and VR2AR
 (Table 1). Strings are deployed at a station for several months and data
 are measured every 1 minute to 1 hour, depending on the sensor.
 
-<img src="https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png" title="\label{fig:figs} Figure 1: Typical sensor string" alt="\label{fig:figs} Figure 1: Typical sensor string" width="65%" style="display: block; margin: auto;" />
+<img src="https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png" width="65%" />
+Figure 1: Typical sensor string configuration (not to scale).
 
 After retrieval, data from each sensor is exported to a separate csv
 file using manufacturer-specific software. Each type of sensor generates
