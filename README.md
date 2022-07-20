@@ -3,7 +3,7 @@
 
 # strings
 
-<img src="https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-strings_hex.png" width="10%" style="display: block; margin: auto;" />
+<img src="https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-strings_hex.png" width="25%" style="display: block; margin: auto;" />
 
 <!-- badges: start -->
 

@@ -24,7 +24,7 @@ repo <- "centre-for-marine-applied-research/strings"
 # strings
 
 
-```{r, echo=FALSE, out.width="10%", fig.align='center'}
+```{r, echo=FALSE, out.width="25%", fig.align='center'}
 
  knitr::include_graphics("https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-strings_hex.png")
 
@@ -62,6 +62,8 @@ knitr::include_graphics("https://github.com/Centre-for-Marine-Applied-Research/s
 
 ```
 Figure 1: Typical sensor string configuration (not to scale).
+
+`r cat('\n')`
 
 After retrieval, data from each sensor is exported to a separate csv file using manufacturer-specific software. Each type of sensor generates a data file with unique columns and header fields, which poses a significant challenge for compiling all data from a deployment into a single format for analysis.
 
