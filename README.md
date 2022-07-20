@@ -31,22 +31,26 @@ devtools::install_github("Centre-for-Marine-Applied-Research/strings")
 
 The Centre for Marine Applied Research ([CMAR](https://cmar.ca/))
 coordinates an extensive [Coastal Monitoring
-Program](https://cmar.ca/2020/07/14/coastal-monitoring-program/) that
-measures [Essential Ocean
+Program](https://cmar.ca/coastal-monitoring-program/) to measure
+[Essential Ocean
 Variables](https://www.goosocean.org/index.php?option=com_content&view=article&id=14&Itemid=114)
-(e.g., temperature, dissolved oxygen, salinity, sea state, currents),
-typically within 1 km of the coast of Nova Scotia, Canada. The `strings`
-package is used to compile, format, and visualize water quality data
-collected through this program.
+from around the coast of Nova Scotia, Canada. There are three main
+branches of the program: *Water Quality*, *Currents*, and *Waves*.
+Processed data for each branch can be viewed and downloaded from several
+sources, as outlined in the [CMAR Report & Data Access Cheat
+Sheet](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-access-cheatsheet.pdf)
+(download for clickable links).
 
-Water quality data (temperature, dissolved oxygen, and salinity) is
-collected using “sensor strings”. Each string is attached to the
+The `strings` package is used to compile, format, and visualize data
+from the *Water Quality* branch of the Coastal Monitoring Program.
+
+*Water Quality* data (temperature, dissolved oxygen, and salinity) is
+collected using “sensor strings”. Each sensor string is attached to the
 seafloor by an anchor and suspended by a sub-surface buoy, with
 autonomous sensors attached at various depths (Figure 1). A string
 typically includes three sensor models: Hobo, aquaMeasure, and VR2AR
-(Table 1). Strings are deployed at a station for 6 – 12 months and data
-are measured every 1 minute to 1 hour, resulting in tens- to hundreds-
-of thousands of observations for a single deployment.
+(Table 1). Strings are deployed at a station for several months and data
+are measured every 1 minute to 1 hour, depending on the sensor.
 
 [](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png)
 
@@ -58,9 +62,9 @@ a data file with unique columns and header fields, which poses a
 significant challenge for compiling all data from a deployment into a
 single format for analysis.
 
-The strings package was originally built to address this challenge, and
-now offers functions to compile, format, convert units, and visualize
-sensor string data.
+The `strings` package was originally built to address this challenge,
+and now offers functions to compile, format, convert units, and
+visualize sensor string data.
 
 `strings` was developed specifically to streamline CMAR’s workflow, but
 is flexible enough that other users can apply it to process data from
@@ -106,12 +110,10 @@ HOBO DO
 </tbody>
 </table>
 
-Processed data from CMAR’s Coastal Monitoring Program can be viewed and
-downloaded from several sources, as outlined in the [CMAR Data Cheat
-Sheet](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig2.pdf)
+For more information on *Water Quality* data collection and processing,
+visit the [CMAR Water Quality Data Collection & Processing Cheat
+Sheet](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-workflow-cheatsheet.pdf)
 (download for clickable links).
-
-## Example
 
 ``` r
 library(strings)
