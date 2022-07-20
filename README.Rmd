@@ -14,6 +14,7 @@ knitr::opts_chunk$set(
 
 library(badger)
 library(dplyr)
+library(glue)
 library(kableExtra)
 library(usethis)
 
@@ -68,12 +69,15 @@ sensors <- tibble(SENSORS = c("HOBO Pro V2", "HOBO DO"))
 urls <- c(
   "https://www.onsetcomp.com/datasheet/U22-001",
   "https://www.onsetcomp.com/datasheet/U26-001"
-  
 )
 
-sensors$SENSORS <- paste0("[", sensors$SENSORS, "](", urls, ")") 
 
-sensors %>% 
+sensor_table <- sensors %>% 
+  cbind(urls) %>% 
+  mutate(`Sensor (link to spec sheet)` = glue("[{SENSORS}]({urls})"))
+
+
+sensor_table %>% 
   kable(align = "ll")
 
 # 
@@ -89,6 +93,8 @@ sensors %>%
 # kable(align = "ll")
 
 ```
+
+
 
 Processed data from CMAR’s Coastal Monitoring Program can be viewed and downloaded from several sources, as outlined in the [CMAR Data Cheat Sheet](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig2.pdf) (download for clickable links).
 

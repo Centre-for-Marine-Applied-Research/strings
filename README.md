@@ -72,15 +72,33 @@ the accepted sensors (Table 1). Refer to the vignettes for more detail.
 <th style="text-align:left;">
 SENSORS
 </th>
+<th style="text-align:left;">
+urls
+</th>
+<th style="text-align:left;">
+Sensor (link to spec sheet)
+</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:left;">
+HOBO Pro V2
+</td>
+<td style="text-align:left;">
+<https://www.onsetcomp.com/datasheet/U22-001>
+</td>
+<td style="text-align:left;">
 [HOBO Pro V2](https://www.onsetcomp.com/datasheet/U22-001)
 </td>
 </tr>
 <tr>
+<td style="text-align:left;">
+HOBO DO
+</td>
+<td style="text-align:left;">
+<https://www.onsetcomp.com/datasheet/U26-001>
+</td>
 <td style="text-align:left;">
 [HOBO DO](https://www.onsetcomp.com/datasheet/U26-001)
 </td>
