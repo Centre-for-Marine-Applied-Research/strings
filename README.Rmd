@@ -29,7 +29,7 @@ repo <- "centre-for-marine-applied-research/strings"
 
 <!-- badges: end -->
 
-Compile, format, and visualize water quality (temperature, dissolved oxygen, salinity) data measured by different sensors. 
+Compile, format, and visualize Water Quality (temperature, dissolved oxygen, salinity) data measured by different sensors. 
 
 ## Installation
 
@@ -45,6 +45,14 @@ devtools::install_github("Centre-for-Marine-Applied-Research/strings")
 The Centre for Marine Applied Research ([CMAR](https://cmar.ca/)) coordinates an extensive [Coastal Monitoring Program](https://cmar.ca/coastal-monitoring-program/) to measure [Essential Ocean Variables](https://www.goosocean.org/index.php?option=com_content&view=article&id=14&Itemid=114) from around the coast of Nova Scotia, Canada. There are three main branches of the program: _Water Quality_, _Currents_, and _Waves_. Processed data for each branch can be viewed and downloaded from several sources, as outlined in the [CMAR Report & Data Access Cheat Sheet](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-access-cheatsheet.pdf) (download for clickable links).
 
 The `strings` package is used to compile, format, and visualize data from the _Water Quality_ branch of the Coastal Monitoring Program. 
+
+
+_Current_ is collected with Acoustic Doppler Current Profilers (ADCPs) deployed on the seafloor. An ADCP is a hydroacoustic current meter that measures water velocities over a range of depths. These sensors measure soundwaves scattered back from moving particles in the water column and use the Doppler effect to estimate speed and direction (Figure 1). 
+
+
+
+
+
 
 _Water Quality_ data (temperature, dissolved oxygen, and salinity) is collected using “sensor strings”. Each sensor string is attached to the seafloor by an anchor and suspended by a sub-surface buoy, with autonomous sensors attached at various depths (Figure 1). A string typically includes three sensor models: Hobo, aquaMeasure, and VR2AR (Table 1). Strings are deployed at a station for several months and data are measured every 1 minute to 1 hour, depending on the sensor.
 
@@ -98,6 +106,7 @@ sensor_table %>%
 
 For more information on _Water Quality_ data collection and processing, visit the [CMAR Water Quality Data Collection & Processing Cheat Sheet](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-workflow-cheatsheet.pdf) (download for clickable links).
 
+## Example
 
 ```{r example}
 library(strings)
@@ -156,22 +165,24 @@ Data from each sensor is exported in a slightly different layout, making it diff
 Compile data from the 3 sensors using `strings::compile_all_data()`:
 
 ```{r}
-deployment <- data.frame("START" = "2019-05-30", "END" = "2019-10-19")
+deployment <- data.frame(START = "2019-05-30", END = "2019-10-19")
 
-serial.table.HOBO <- data.frame("SENSOR" = "HOBO-10755220", "DEPTH" = "2m")
-serial.table.aM <- data.frame("SENSOR" = "aquaMeasure-670364", "DEPTH" = "5m")
+serial.table.HOBO <- data.frame(SENSOR = "HOBO-10755220", DEPTH = "2m")
+serial.table.aM <- data.frame(SENSOR = "aquaMeasure-670364", DEPTH = "5m")
 depth.vemco <- "15m"
 
 #Compile data from a single deployment
-ALL_data <- compile_all_data(path = path,
-                             deployment.range = deployment,
-                             area.name = area,
-                             # hobo
-                             serial.table.HOBO = serial.table.HOBO,
-                             # aquaMeasure
-                             serial.table.aM = serial.table.aM,
-                             # vemco
-                             depth.vemco = depth.vemco)
+ALL_data <- compile_all_data(
+  path = path,
+  deployment.range = deployment,
+  area.name = area,
+  # hobo
+  serial.table.HOBO = serial.table.HOBO,
+  # aquaMeasure
+  serial.table.aM = serial.table.aM,
+  # vemco
+  depth.vemco = depth.vemco
+)
 
 head(tibble(ALL_data), n = 10)
 ```

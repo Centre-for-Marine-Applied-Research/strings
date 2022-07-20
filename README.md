@@ -14,7 +14,7 @@ status](https://github.com/centre-for-marine-applied-research/strings/workflows/
 
 <!-- badges: end -->
 
-Compile, format, and visualize water quality (temperature, dissolved
+Compile, format, and visualize Water Quality (temperature, dissolved
 oxygen, salinity) data measured by different sensors.
 
 ## Installation
@@ -43,6 +43,12 @@ Sheet](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master
 
 The `strings` package is used to compile, format, and visualize data
 from the *Water Quality* branch of the Coastal Monitoring Program.
+
+*Current* is collected with Acoustic Doppler Current Profilers (ADCPs)
+deployed on the seafloor. An ADCP is a hydroacoustic current meter that
+measures water velocities over a range of depths. These sensors measure
+soundwaves scattered back from moving particles in the water column and
+use the Doppler effect to estimate speed and direction (Figure 1).
 
 *Water Quality* data (temperature, dissolved oxygen, and salinity) is
 collected using “sensor strings”. Each sensor string is attached to the
@@ -114,6 +120,8 @@ For more information on *Water Quality* data collection and processing,
 visit the [CMAR Water Quality Data Collection & Processing Cheat
 Sheet](https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-workflow-cheatsheet.pdf)
 (download for clickable links).
+
+## Example
 
 ``` r
 library(strings)
@@ -276,22 +284,24 @@ deployment.
 Compile data from the 3 sensors using `strings::compile_all_data()`:
 
 ``` r
-deployment <- data.frame("START" = "2019-05-30", "END" = "2019-10-19")
+deployment <- data.frame(START = "2019-05-30", END = "2019-10-19")
 
-serial.table.HOBO <- data.frame("SENSOR" = "HOBO-10755220", "DEPTH" = "2m")
-serial.table.aM <- data.frame("SENSOR" = "aquaMeasure-670364", "DEPTH" = "5m")
+serial.table.HOBO <- data.frame(SENSOR = "HOBO-10755220", DEPTH = "2m")
+serial.table.aM <- data.frame(SENSOR = "aquaMeasure-670364", DEPTH = "5m")
 depth.vemco <- "15m"
 
 #Compile data from a single deployment
-ALL_data <- compile_all_data(path = path,
-                             deployment.range = deployment,
-                             area.name = area,
-                             # hobo
-                             serial.table.HOBO = serial.table.HOBO,
-                             # aquaMeasure
-                             serial.table.aM = serial.table.aM,
-                             # vemco
-                             depth.vemco = depth.vemco)
+ALL_data <- compile_all_data(
+  path = path,
+  deployment.range = deployment,
+  area.name = area,
+  # hobo
+  serial.table.HOBO = serial.table.HOBO,
+  # aquaMeasure
+  serial.table.aM = serial.table.aM,
+  # vemco
+  depth.vemco = depth.vemco
+)
 #> New names:
 #> * `` -> ...4
 #> * `` -> ...5
