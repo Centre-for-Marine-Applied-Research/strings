@@ -56,11 +56,12 @@ The `strings` package is used to compile, format, and visualize data from the _W
 
 _Water Quality_ data (temperature, dissolved oxygen, and salinity) is collected using “sensor strings”. Each sensor string is attached to the seafloor by an anchor and suspended by a sub-surface buoy, with autonomous sensors attached at various depths (Figure 1). A string typically includes three sensor models: Hobo, aquaMeasure, and VR2AR (Table 1). Strings are deployed at a station for several months and data are measured every 1 minute to 1 hour, depending on the sensor.
 
-```{r, echo=FALSE, out.width="65%", fig.cap="Figure 1: Typical sensor string configuration (not to scale)."}
+```{r, echo=FALSE, out.width="65%"}
 
 knitr::include_graphics("https://github.com/Centre-for-Marine-Applied-Research/strings/blob/master/man/figures/README-fig1.png")
 
 ```
+Figure 1: Typical sensor string configuration (not to scale).
 
 <br>
 <br>
