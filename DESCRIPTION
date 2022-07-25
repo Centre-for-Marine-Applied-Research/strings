@@ -1,38 +1,42 @@
-Package: strings
 Type: Package
+Package: strings
 Title: Compile, Format, and Visualize Sensor String Data
 Version: 2.1.0
 Author: Danielle Dempsey, Nicole Torrie, Leah Lewis-McCrea
 Maintainer: Danielle Dempsey <ddempsey@perennia.ca>
-Description: Facilitates analysis of oceanographic data collected as part of the Centre for Marine Applied Research's Coastal Monitoring Program. (Compatiable sensors: HOBO Pro V2, TidbiT MX2303, TidbiT MX2203, aquaMeasure DOT, aquaMeasure SAL, aquaMeasure SST, VR2AR.)
+Description: Facilitates analysis of oceanographic data collected as part
+    of the Centre for Marine Applied Research's Coastal Monitoring
+    Program. (Compatiable sensors: HOBO Pro V2, TidbiT MX2303, TidbiT
+    MX2203, aquaMeasure DOT, aquaMeasure SAL, aquaMeasure SST, VR2AR.)
 License: GPL-3
-Encoding: UTF-8
-LazyData: true
-RoxygenNote: 7.1.2
-Imports: 
-    janitor,
-    lubridate,
-    readxl,
-    readr,
-    tidyr,
-    dplyr,
-    ggplot2,
-    viridis,
-    stringr,
-    ggpubr,
-    tidyselect,
-    googlesheets4,
-    purrr,
-    data.table,
-    tibble,
-    magrittr,
-    openxlsx,
-    rcmdcheck,
-    glue
 Depends: 
     R (>= 2.10)
+Imports: 
+    data.table,
+    dplyr,
+    ggplot2,
+    ggpubr,
+    glue,
+    googlesheets4,
+    janitor,
+    lubridate,
+    magrittr,
+    openxlsx,
+    purrr,
+    rcmdcheck,
+    readr,
+    readxl,
+    stringr,
+    tibble,
+    tidyr,
+    tidyselect,
+    viridis
 Suggests: 
     knitr,
     rmarkdown,
     testthat
-VignetteBuilder: knitr
+VignetteBuilder: 
+    knitr
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.2
