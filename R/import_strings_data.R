@@ -106,7 +106,7 @@ import_strings_data <- function(input_path = NULL,
 
   # export as csv and/or return to global environment -----------------------
 
-  if(export_csv == TRUE){
+  if(isTRUE(export_csv)){
 
     message("exporting data for ",  county)
     # today's date (for file name)
@@ -115,7 +115,7 @@ import_strings_data <- function(input_path = NULL,
     data.table::fwrite(dat, file = output_path, showProgress = TRUE)
   }
 
-  if(return_global == TRUE) dat
+  if(isTRUE(return_global)) dat
 }
 
 
