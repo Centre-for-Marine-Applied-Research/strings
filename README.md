@@ -16,6 +16,9 @@ status](https://github.com/centre-for-marine-applied-research/strings/workflows/
 
 <!-- badges: end -->
 
+**This package will soon be deprecated in favor of the `sensorstrings`
+package located [here](https://github.com/dempsey-CMAR/sensorstrings).**
+
 Compile, format, and visualize Water Quality (temperature, dissolved
 oxygen, salinity) data measured by different sensors.
 
