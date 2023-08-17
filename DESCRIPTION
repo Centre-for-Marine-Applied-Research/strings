@@ -1,7 +1,7 @@
 Type: Package
 Package: strings
 Title: Compile, Format, and Visualize Sensor String Data
-Version: 2.1.0
+Version: 2.1.1
 Author: Danielle Dempsey, Nicole Torrie, Leah Lewis-McCrea
 Maintainer: Danielle Dempsey <ddempsey@perennia.ca>
 Description: Facilitates analysis of oceanographic data collected as part
@@ -23,7 +23,6 @@ Imports:
     magrittr,
     openxlsx,
     purrr,
-    rcmdcheck,
     readr,
     readxl,
     stringr,
@@ -39,4 +38,4 @@ VignetteBuilder:
     knitr
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
