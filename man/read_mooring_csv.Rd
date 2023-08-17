@@ -4,10 +4,10 @@
 \alias{read_mooring_csv}
 \title{Read mooring table}
 \usage{
-read_mooring_csv(path.mooring)
+read_mooring_csv(path_mooring)
 }
 \arguments{
-\item{path.mooring}{Path to mooring type table (including file name and
+\item{path_mooring}{Path to mooring type table (including file name and
 extension).}
 }
 \value{

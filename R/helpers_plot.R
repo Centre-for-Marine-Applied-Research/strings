@@ -44,11 +44,24 @@ get_xaxis_breaks <- function(dat.tidy){
     date.labels.format = "%y-%b"
   }
 
-  if(timespan > 240){
+  if(timespan > 240 & timespan <= 1095){
     date.breaks.major = "4 month"
     date.breaks.minor = "1 month"
     date.labels.format = "%y-%b"
   }
+
+  if(timespan > 1095 & timespan <= 2555){
+    date.breaks.major = "6 month"
+    date.breaks.minor = "1 month"
+    date.labels.format = "%y-%b"
+  }
+
+  if(timespan > 2555){
+    date.breaks.major = "1 year"
+    date.breaks.minor = "2 month"
+    date.labels.format = "%Y-%b"
+  }
+
 
   data.frame(date.breaks.major = date.breaks.major,
              date.breaks.minor = date.breaks.minor,

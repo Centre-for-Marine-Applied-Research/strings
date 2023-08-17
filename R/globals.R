@@ -23,6 +23,7 @@ utils::globalVariables(c(
   "Dissolved Oxygen",
   "Temperature",
   "Temp(Water)",
+  "Sensor",
 
   # compile_vemco_data()
   "Description",
@@ -109,6 +110,9 @@ utils::globalVariables(c(
   # import_strings_data
   "County",
   "COUNTY",
+  "county",
+  "waterbody",
+  "station",
 
   # read_opendata_csv
   "Surface.Float.",

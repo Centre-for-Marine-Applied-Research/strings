@@ -217,6 +217,14 @@ compile_HOBO_data <- function(path.HOBO,
     depth <- sensor_info.i$DEPTH
     sensor.i <- sensor_info.i$SENSOR
 
+
+    # OLD way - can cause a bug
+    # depth <- serial.table.HOBO %>%
+    #   dplyr::filter(SERIAL == serial.i)  %>%
+    #   select(DEPTH)
+    # depth <- depth$DEPTH
+    # sensor.i <- paste(serial.table.HOBO$SENSOR[i], serial.table.HOBO$SERIAL[i], sep = "-")
+
     # extract date column header (includes GMT offset)
     date_ref <- names(hobo.i_dat)[2]
 

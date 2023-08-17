@@ -4,22 +4,12 @@
 \alias{import_strings_data}
 \title{Import string data from rds files}
 \usage{
-import_strings_data(
-  input_path = NULL,
-  output_path = "",
-  county = "ALL",
-  add_county_col = TRUE,
-  export_csv = FALSE,
-  return_global = TRUE
-)
+import_strings_data(input_path = NULL, county = "ALL", add_county_col = TRUE)
 }
 \arguments{
 \item{input_path}{Path to the *.rds files to be assembled. Default is the Open
 Data/County Datasets folder on the CMAR Operations shared drive (user must
 be connected to the Perennia VPN).}
-
-\item{output_path}{Path to where the imported data will be exported if
-\code{export_csv = TRUE}.}
 
 \item{county}{Vector of character string(s) indicating which county or
 counties for which to import data. For efficiency, the filter is applied to
@@ -28,15 +18,9 @@ the name of the file). Defaults to all counties.}
 
 \item{add_county_col}{Logical argument indicating whether to include a
 "COUNTY" column in the output. If \code{TRUE}, the imported data must have
-"WATERBODY" and "STATION" columns (which are used to join with the Area Info
-tab of the STRINGS TRACKING sheet so the COUNTY column can be added.
+"WATERBODY" and "STATION" columns (which are used to join with the Area
+Info tab of the STRINGS TRACKING sheet so the COUNTY column can be added.
 Default is \code{TRUE}.}
-
-\item{export_csv}{Logical argument indicating whether the data
-should be exported as a *.csv file. Default is \code{FALSE}.}
-
-\item{return_global}{Logical argument indicating whether the imported data
-should be returned to the global environment. Default is \code{TRUE}.}
 }
 \description{
 Import string data from rds files
